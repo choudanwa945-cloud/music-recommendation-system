@@ -885,7 +885,14 @@ def about():
         "about.html"
     )
 
+@app.route("/robots.txt")
+def robots():
+    return app.send_static_file("robots.txt")
 
+
+@app.route("/sitemap.xml")
+def sitemap():
+    return app.send_static_file("sitemap.xml")
 # =========================
 # 启动程序
 # =========================
