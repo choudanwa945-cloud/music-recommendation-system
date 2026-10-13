@@ -1,0 +1,12 @@
+.idea/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+.venv/
+venv/
+
+.DS_Store
+Thumbs.db
+music.db
