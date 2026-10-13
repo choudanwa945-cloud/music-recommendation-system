@@ -893,6 +893,9 @@ def robots():
 @app.route("/sitemap.xml")
 def sitemap():
     return app.send_static_file("sitemap.xml")
+@app.route("/googlebd10ec1f502b5bde.html")
+def google_verify():
+    return app.send_static_file("googlebd10ec1f502b5bde.html")
 # =========================
 # 启动程序
 # =========================
