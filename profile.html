@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}个人中心{% endblock %}
+
+{% block content %}
+
+<h1>个人中心</h1>
+
+<div class="profile-card">
+
+    <div class="profile-header">
+
+        <div class="profile-avatar">
+            {{ username[0] | upper }}
+        </div>
+
+        <div>
+            <h2>{{ username }}</h2>
+
+            <p>
+                用户编号：{{ user_id }}
+            </p>
+        </div>
+
+    </div>
+
+
+    <div class="profile-stats">
+
+        <div class="profile-stat">
+
+            <h3>{{ rating_count }}</h3>
+
+            <p>
+                已评分歌曲
+            </p>
+
+        </div>
+
+        <div class="profile-stat">
+
+            <h3>{{ user_id }}</h3>
+
+            <p>
+                用户编号
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="profile-actions">
+
+        <a class="profile-button"
+           href="{{ url_for('recommend') }}">
+            个性化推荐
+        </a>
+
+        <a class="profile-button"
+           href="{{ url_for('my_ratings') }}">
+            我的评分
+        </a>
+
+        <a class="profile-button"
+           href="{{ url_for('library') }}">
+            浏览歌曲库
+        </a>
+
+        <a class="profile-button"
+           href="{{ url_for('change_password') }}">
+            修改密码
+        </a>
+
+        <a class="profile-button logout-button"
+           href="{{ url_for('logout') }}">
+            退出登录
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

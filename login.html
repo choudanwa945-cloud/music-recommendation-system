@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}用户登录{% endblock %}
+
+{% block content %}
+
+<div class="box" style="max-width: 420px; margin: 50px auto;">
+
+    <h2 style="text-align: center;">
+        用户登录
+    </h2>
+    <form method="post">
+
+        <p>
+            用户名
+        </p>
+
+        <input type="text"
+               name="username"
+               placeholder="请输入用户名"
+               required
+               style="width: 100%; box-sizing: border-box; padding: 10px;">
+
+        <p>
+            密码
+        </p>
+
+        <input type="password"
+               name="password"
+               placeholder="请输入密码"
+               required
+               style="width: 100%; box-sizing: border-box; padding: 10px;">
+
+        <br><br>
+
+        <button type="submit"
+                style="width: 100%; padding: 10px;">
+            登录
+        </button>
+
+    </form>
+
+    <p style="text-align: center; margin-top: 20px;">
+        还没有账号？
+        <a href="{{ url_for('register') }}">
+            去注册
+        </a>
+    </p>
+
+</div>
+
+{% endblock %}

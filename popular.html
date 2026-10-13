@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}热门音乐{% endblock %}
+
+{% block content %}
+
+<h1>热门音乐推荐</h1>
+
+<p class="help">
+    热门得分 = 平均评分 × log(评分人数 + 1)
+</p>
+
+{% for song in songs %}
+
+<div class="song">
+
+    <div class="rank">
+        {{ loop.index }}
+    </div>
+
+    {% if song.cover_file %}
+    <img class="cover"
+         src="{{ url_for('static', filename=song.cover_file) }}"
+         alt="{{ song.title }}">
+    {% endif %}
+
+    <div class="song-info">
+        <h3>{{ song.title }}</h3>
+
+        <p>
+            歌手：{{ song.artist }}
+            &nbsp;&nbsp;
+            类型：{{ song.genre }}
+        </p>
+
+        <p>
+            标签：{{ song.tags }}
+        </p>
+
+        <p>
+            平均评分：
+            {{ "%.2f"|format(song.average_rating) }}
+            ，评分人数：
+            {{ song.rating_count }}
+        </p>
+
+        {% if song.audio_file %}
+        <audio controls preload="none">
+            <source src="{{ url_for('static', filename=song.audio_file) }}">
+        </audio>
+        {% endif %}
+    </div>
+
+</div>
+
+{% endfor %}
+
+{% endblock %}

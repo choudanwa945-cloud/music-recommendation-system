@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block title %}歌曲库{% endblock %}
+
+{% block content %}
+
+<h1>歌曲库</h1>
+
+<div class="box">
+
+    <form method="get">
+
+        <input type="text"
+               name="q"
+               value="{{ keyword }}"
+               placeholder="输入歌曲名、歌手或标签">
+
+        <select name="genre">
+
+            <option value="">
+                全部类型
+            </option>
+
+            {% for item in genres %}
+
+            <option value="{{ item }}"
+                {% if item == genre %}selected{% endif %}>
+                {{ item }}
+            </option>
+
+            {% endfor %}
+
+        </select>
+
+        <button type="submit">
+            搜索
+        </button>
+
+        <a class="small-link"
+           href="{{ url_for('library') }}">
+            清空
+        </a>
+
+    </form>
+
+</div>
+
+<p>
+    共找到 {{ songs|length }} 首歌曲
+</p>
+
+{% for song in songs %}
+
+<div class="song">
+
+    <div class="rank">
+        {{ song.music_id }}
+    </div>
+
+    {% if song.cover_file %}
+    <img class="cover"
+         src="{{ url_for('static', filename=song.cover_file) }}"
+         alt="{{ song.title }}">
+    {% endif %}
+
+    <div class="song-info">
+
+        <h3>{{ song.title }}</h3>
+
+        <p>
+            歌手：{{ song.artist }}
+            &nbsp;&nbsp;
+            类型：{{ song.genre }}
+        </p>
+
+        <p>
+            标签：{{ song.tags }}
+        </p>
+
+        {% if song.audio_file %}
+
+        <audio controls preload="none">
+            <source src="{{ url_for('static', filename=song.audio_file) }}">
+        </audio>
+
+        {% else %}
+
+        <p class="gray">
+            暂无试听文件
+        </p>
+
+        {% endif %}
+
+    </div>
+
+    <div class="rate-area">
+
+    {% if session.get('user_id') %}
+
+    <form action="{{ url_for('rate') }}"
+          method="post">
+
+        <input type="hidden"
+               name="music_id"
+               value="{{ song.music_id }}">
+
+        <input type="hidden"
+               name="next"
+               value="{{ request.full_path }}">
+
+        <select name="rating" required>
+
+            <option value="">
+                评分
+            </option>
+
+            <option value="5">5 分</option>
+            <option value="4">4 分</option>
+            <option value="3">3 分</option>
+            <option value="2">2 分</option>
+            <option value="1">1 分</option>
+
+        </select>
+
+        <button type="submit">
+            保存
+        </button>
+
+    </form>
+
+    {% else %}
+
+    <p class="gray">
+        登录后可评分
+    </p>
+
+    {% endif %}
+
+</div>
+
+</div>
+
+{% endfor %}
+
+{% endblock %}

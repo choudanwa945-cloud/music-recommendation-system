@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}数据统计{% endblock %}
+
+{% block content %}
+
+<h1>数据统计</h1>
+
+<table>
+
+    <tr>
+        <th>统计项目</th>
+        <th>数值</th>
+    </tr>
+
+    <tr>
+        <td>用户数量</td>
+        <td>{{ stats.user_count }}</td>
+    </tr>
+
+    <tr>
+        <td>音乐数量</td>
+        <td>{{ stats.music_count }}</td>
+    </tr>
+
+    <tr>
+        <td>评分数量</td>
+        <td>{{ stats.rating_count }}</td>
+    </tr>
+
+    <tr>
+        <td>平均评分</td>
+        <td>{{ stats.average_rating }}</td>
+    </tr>
+
+    <tr>
+        <td>最高评分</td>
+        <td>{{ stats.max_rating }}</td>
+    </tr>
+
+    <tr>
+        <td>最低评分</td>
+        <td>{{ stats.min_rating }}</td>
+    </tr>
+
+    <tr>
+        <td>评分矩阵大小</td>
+        <td>
+            {{ stats.matrix_rows }}
+            ×
+            {{ stats.matrix_cols }}
+        </td>
+    </tr>
+
+    <tr>
+        <td>评分矩阵密度</td>
+        <td>
+            {{ stats.matrix_density }}%
+        </td>
+    </tr>
+
+</table>
+
+{% endblock %}
