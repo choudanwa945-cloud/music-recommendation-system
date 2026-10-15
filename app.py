@@ -1,9 +1,24 @@
 # -*- coding: utf-8 -*-
-import os
 
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+import os
 import sqlite3
-from werkzeug.security import generate_password_hash, check_password_hash
+
+from flask import (
+    Flask,
+    render_template,
+    request,
+    redirect,
+    url_for,
+    session,
+    flash
+)
+
+from werkzeug.security import (
+    generate_password_hash,
+    check_password_hash
+)
+
+from werkzeug.utils import secure_filename
 
 from recommender import (
     load_all_data,
@@ -16,21 +31,84 @@ from recommender import (
 )
 
 
+# =========================
+# Flask 应用
+# =========================
 app = Flask(__name__)
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-DB_FILENAME = os.environ.get("MUSIC_DB", "music.db")
-DB_PATH = os.path.join(BASE_DIR, DB_FILENAME)
+# =========================
+# 项目路径
+# =========================
+BASE_DIR = os.path.dirname(
+    os.path.abspath(__file__)
+)
 
-import os
-app.secret_key = os.environ.get("SECRET_KEY", "music123")
+
+# =========================
+# 数据库配置
+# =========================
+DB_FILENAME = os.environ.get(
+    "MUSIC_DB",
+    "music.db"
+)
+
+DB_PATH = os.path.join(
+    BASE_DIR,
+    DB_FILENAME
+)
+
+
+# =========================
+# Flask Session 密钥
+# =========================
+app.secret_key = os.environ.get(
+    "SECRET_KEY",
+    "music123"
+)
+
+
+# =========================
+# 用户背景上传配置
+# =========================
+UPLOAD_FOLDER = os.path.join(
+    app.root_path,
+    "static",
+    "backgrounds"
+)
+
+# 允许作为背景上传的文件格式
+ALLOWED_BACKGROUND_EXTENSIONS = {
+    "jpg",
+    "jpeg",
+    "png",
+    "webp",
+    "gif",
+    "mp4",
+    "webm"
+}
+
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+
+# 最大上传文件大小：50MB
+app.config["MAX_CONTENT_LENGTH"] = (
+    50 * 1024 * 1024
+)
+
+# 如果 backgrounds 文件夹不存在，
+# 程序启动时自动创建
+os.makedirs(
+    UPLOAD_FOLDER,
+    exist_ok=True
+)
 
 
 # =========================
 # 程序启动时加载数据
 # =========================
-music_df, ratings_df, rating_matrix, similarity = load_all_data()
+music_df, ratings_df, rating_matrix, similarity = (
+    load_all_data()
+)
 
 
 # =========================
@@ -50,15 +128,83 @@ def refresh_data():
     ) = load_all_data()
 
 
+# =========================
+# 检查背景文件格式
+# =========================
+def allowed_background_file(filename):
+    return (
+        "." in filename
+        and
+        filename.rsplit(
+            ".",
+            1
+        )[1].lower()
+        in ALLOWED_BACKGROUND_EXTENSIONS
+    )
+
+
+# =========================
+# 每次请求刷新推荐数据
+# =========================
 @app.before_request
 def auto_refresh_data():
     refresh_data()
+
+    # 默认背景
+    session["background_type"] = "default"
+    session["background_file"] = ""
+
+    # 登录用户读取自己的背景设置
+    if "user_id" in session:
+
+        conn = sqlite3.connect(
+            DB_PATH
+        )
+
+        cursor = conn.cursor()
+
+        cursor.execute(
+            """
+            SELECT
+                background_type,
+                background_file
+            FROM users
+            WHERE user_id = ?
+            """,
+            (
+                int(
+                    session["user_id"]
+                ),
+            )
+        )
+
+        row = cursor.fetchone()
+
+        conn.close()
+
+        if row is not None:
+
+            session["background_type"] = (
+                row[0]
+                or "default"
+            )
+
+            session["background_file"] = (
+                row[1]
+                or ""
+            )
+
+
 # =========================
 # 注册
 # 数据保存到 SQLite
 # =========================
-@app.route('/register', methods=['GET', 'POST'])
+@app.route(
+    '/register',
+    methods=['GET', 'POST']
+)
 def register():
+
     if request.method == 'POST':
 
         username = request.form.get(
@@ -73,6 +219,7 @@ def register():
 
         # 用户名和密码不能为空
         if username == '' or password == '':
+
             flash(
                 '用户名和密码不能为空',
                 'error'
@@ -83,7 +230,10 @@ def register():
             )
 
         # 连接数据库
-        conn = sqlite3.connect(DB_PATH)
+        conn = sqlite3.connect(
+            DB_PATH
+        )
+
         cursor = conn.cursor()
 
         # 检查用户名是否已经存在
@@ -96,9 +246,12 @@ def register():
             (username,)
         )
 
-        existing_user = cursor.fetchone()
+        existing_user = (
+            cursor.fetchone()
+        )
 
         if existing_user is not None:
+
             conn.close()
 
             flash(
@@ -118,21 +271,27 @@ def register():
             """
         )
 
-        max_user_id = cursor.fetchone()[0]
+        max_user_id = (
+            cursor.fetchone()[0]
+        )
 
         # 1～30号保留给原测试用户
         if max_user_id is None:
+
             new_user_id = 31
 
         else:
+
             new_user_id = max(
                 max_user_id + 1,
                 31
             )
 
         # 密码加密
-        password_hash = generate_password_hash(
-            password
+        password_hash = (
+            generate_password_hash(
+                password
+            )
         )
 
         # 写入数据库
@@ -175,8 +334,12 @@ def register():
 # 登录
 # 从 SQLite 查询用户
 # =========================
-@app.route('/login', methods=['GET', 'POST'])
+@app.route(
+    '/login',
+    methods=['GET', 'POST']
+)
 def login():
+
     if request.method == 'POST':
 
         username = request.form.get(
@@ -190,7 +353,10 @@ def login():
         ).strip()
 
         # 连接数据库
-        conn = sqlite3.connect(DB_PATH)
+        conn = sqlite3.connect(
+            DB_PATH
+        )
+
         cursor = conn.cursor()
 
         # 根据用户名查询用户
@@ -212,6 +378,7 @@ def login():
 
         # 用户不存在
         if user is None:
+
             flash(
                 '用户名不存在',
                 'error'
@@ -230,6 +397,7 @@ def login():
             password_hash,
             password
         ):
+
             flash(
                 '密码错误',
                 'error'
@@ -240,8 +408,13 @@ def login():
             )
 
         # 登录成功
-        session['user_id'] = user_id
-        session['username'] = db_username
+        session['user_id'] = (
+            user_id
+        )
+
+        session['username'] = (
+            db_username
+        )
 
         return redirect(
             url_for('index')
@@ -257,6 +430,7 @@ def login():
 # =========================
 @app.route('/logout')
 def logout():
+
     session.clear()
 
     return redirect(
@@ -269,7 +443,12 @@ def logout():
 # =========================
 @app.route("/")
 def index():
-    users = rating_matrix.index.tolist()
+
+    users = (
+        rating_matrix
+        .index
+        .tolist()
+    )
 
     stats = get_statistics(
         music_df,
@@ -289,6 +468,7 @@ def index():
 # =========================
 @app.route("/popular")
 def popular():
+
     result = get_popular_music(
         ratings_df,
         music_df,
@@ -297,7 +477,9 @@ def popular():
 
     return render_template(
         "popular.html",
-        songs=result.to_dict("records")
+        songs=result.to_dict(
+            "records"
+        )
     )
 
 
@@ -309,6 +491,7 @@ def recommend():
 
     # 没有登录时先去登录
     if 'user_id' not in session:
+
         return redirect(
             url_for('login')
         )
@@ -320,6 +503,7 @@ def recommend():
 
     # 如果还没有评分记录
     if user_id not in rating_matrix.index:
+
         return render_template(
             "recommend.html",
             users=[],
@@ -329,17 +513,22 @@ def recommend():
         )
 
     # 生成推荐
-    result, similar = recommend_music(
-        user_id,
-        rating_matrix,
-        similarity,
-        music_df,
-        top_n=5
+    result, similar = (
+        recommend_music(
+            user_id,
+            rating_matrix,
+            similarity,
+            music_df,
+            top_n=5
+        )
     )
 
     similar_users = []
 
-    for uid, score in similar.items():
+    for uid, score in (
+        similar.items()
+    ):
+
         similar_users.append({
             "user_id": int(uid),
             "score": round(
@@ -352,8 +541,12 @@ def recommend():
         "recommend.html",
         users=[],
         user_id=user_id,
-        songs=result.to_dict("records"),
-        similar_users=similar_users
+        songs=result.to_dict(
+            "records"
+        ),
+        similar_users=(
+            similar_users
+        )
     )
 
 
@@ -369,7 +562,10 @@ def interest():
     genres = sorted(
         music_df[
             "genre"
-        ].dropna().unique().tolist()
+        ]
+        .dropna()
+        .unique()
+        .tolist()
     )
 
     tag_set = set()
@@ -378,30 +574,44 @@ def interest():
         "tags"
     ].fillna(""):
 
-        for tag in str(text).split():
-            tag_set.add(tag)
+        for tag in str(
+            text
+        ).split():
 
-    tags = sorted(tag_set)
+            tag_set.add(
+                tag
+            )
+
+    tags = sorted(
+        tag_set
+    )
 
     songs = None
+
     selected_genres = []
     selected_tags = []
 
     if request.method == "POST":
 
-        selected_genres = request.form.getlist(
-            "genres"
+        selected_genres = (
+            request.form.getlist(
+                "genres"
+            )
         )
 
-        selected_tags = request.form.getlist(
-            "tags"
+        selected_tags = (
+            request.form.getlist(
+                "tags"
+            )
         )
 
-        result = recommend_by_interest(
-            music_df,
-            ratings_df,
-            selected_genres,
-            selected_tags
+        result = (
+            recommend_by_interest(
+                music_df,
+                ratings_df,
+                selected_genres,
+                selected_tags
+            )
         )
 
         songs = result.to_dict(
@@ -413,8 +623,12 @@ def interest():
         genres=genres,
         tags=tags,
         songs=songs,
-        selected_genres=selected_genres,
-        selected_tags=selected_tags
+        selected_genres=(
+            selected_genres
+        ),
+        selected_tags=(
+            selected_tags
+        )
     )
 
 
@@ -443,12 +657,17 @@ def library():
     genres = sorted(
         music_df[
             "genre"
-        ].dropna().unique().tolist()
+        ]
+        .dropna()
+        .unique()
+        .tolist()
     )
 
     return render_template(
         "library.html",
-        songs=result.to_dict("records"),
+        songs=result.to_dict(
+            "records"
+        ),
         keyword=keyword,
         genre=genre,
         genres=genres
@@ -463,6 +682,7 @@ def my_ratings():
 
     # 没有登录时先去登录
     if 'user_id' not in session:
+
         return redirect(
             url_for('login')
         )
@@ -472,27 +692,36 @@ def my_ratings():
     )
 
     # 当前用户评分
-    user_ratings = ratings_df[
-        ratings_df["user_id"] == user_id
-    ].copy()
+    user_ratings = (
+        ratings_df[
+            ratings_df[
+                "user_id"
+            ] == user_id
+        ].copy()
+    )
 
     # 没有评分
     if user_ratings.empty:
+
         return render_template(
             "my_ratings.html",
             ratings=[]
         )
 
     # 和歌曲信息合并
-    result = user_ratings.merge(
-        music_df,
-        on="music_id",
-        how="left"
+    result = (
+        user_ratings.merge(
+            music_df,
+            on="music_id",
+            how="left"
+        )
     )
 
     return render_template(
         "my_ratings.html",
-        ratings=result.to_dict("records")
+        ratings=result.to_dict(
+            "records"
+        )
     )
 
 
@@ -504,6 +733,7 @@ def profile():
 
     # 没有登录时先去登录
     if 'user_id' not in session:
+
         return redirect(
             url_for('login')
         )
@@ -519,7 +749,9 @@ def profile():
     # 已评分歌曲数量
     rating_count = len(
         ratings_df[
-            ratings_df["user_id"] == user_id
+            ratings_df[
+                "user_id"
+            ] == user_id
         ]
     )
 
@@ -533,11 +765,6 @@ def profile():
 
 # =========================
 # 修改密码
-# 目前仍然使用 users.csv
-# 下一步再迁移到 SQLite
-# =========================
-# =========================
-# 修改密码
 # 使用 SQLite
 # =========================
 @app.route(
@@ -548,47 +775,68 @@ def change_password():
 
     # 没有登录时先去登录
     if 'user_id' not in session:
+
         return redirect(
             url_for('login')
         )
 
     if request.method == "POST":
 
-        old_password = request.form.get(
-            "old_password",
-            ""
-        ).strip()
+        old_password = (
+            request.form.get(
+                "old_password",
+                ""
+            ).strip()
+        )
 
-        new_password = request.form.get(
-            "new_password",
-            ""
-        ).strip()
+        new_password = (
+            request.form.get(
+                "new_password",
+                ""
+            ).strip()
+        )
 
-        confirm_password = request.form.get(
-            "confirm_password",
-            ""
-        ).strip()
+        confirm_password = (
+            request.form.get(
+                "confirm_password",
+                ""
+            ).strip()
+        )
 
         # 检查是否为空
-        if old_password == "" or new_password == "":
+        if (
+            old_password == ""
+            or
+            new_password == ""
+        ):
+
             flash(
                 "密码不能为空",
                 "error"
             )
 
             return redirect(
-                url_for("change_password")
+                url_for(
+                    "change_password"
+                )
             )
 
         # 两次新密码必须一致
-        if new_password != confirm_password:
+        if (
+            new_password
+            !=
+            confirm_password
+        ):
+
             flash(
                 "两次输入的新密码不一致",
                 "error"
             )
 
             return redirect(
-                url_for("change_password")
+                url_for(
+                    "change_password"
+                )
             )
 
         user_id = int(
@@ -596,7 +844,10 @@ def change_password():
         )
 
         # 连接数据库
-        conn = sqlite3.connect(DB_PATH)
+        conn = sqlite3.connect(
+            DB_PATH
+        )
+
         cursor = conn.cursor()
 
         # 查询当前用户密码
@@ -613,6 +864,7 @@ def change_password():
 
         # 用户不存在
         if user is None:
+
             conn.close()
 
             flash(
@@ -621,16 +873,21 @@ def change_password():
             )
 
             return redirect(
-                url_for("change_password")
+                url_for(
+                    "change_password"
+                )
             )
 
-        old_password_hash = user[0]
+        old_password_hash = (
+            user[0]
+        )
 
         # 验证原密码
         if not check_password_hash(
             old_password_hash,
             old_password
         ):
+
             conn.close()
 
             flash(
@@ -639,12 +896,16 @@ def change_password():
             )
 
             return redirect(
-                url_for("change_password")
+                url_for(
+                    "change_password"
+                )
             )
 
         # 生成新的加密密码
-        new_password_hash = generate_password_hash(
-            new_password
+        new_password_hash = (
+            generate_password_hash(
+                new_password
+            )
         )
 
         # 更新数据库
@@ -681,8 +942,309 @@ def change_password():
 
 
 # =========================
-# 保存评分
+# 个性化背景设置
 # =========================
+@app.route(
+    "/background-settings",
+    methods=["GET", "POST"]
+)
+def background_settings():
+
+    # 未登录不能设置背景
+    if "user_id" not in session:
+        return redirect(
+            url_for("login")
+        )
+
+    user_id = int(
+        session["user_id"]
+    )
+
+    conn = sqlite3.connect(
+        DB_PATH
+    )
+    cursor = conn.cursor()
+
+    # =========================
+    # 保存背景
+    # =========================
+    if request.method == "POST":
+
+        action = request.form.get(
+            "action",
+            "upload"
+        )
+
+        # -------------------------
+        # 恢复默认背景
+        # -------------------------
+        if action == "reset":
+
+            cursor.execute(
+                """
+                SELECT background_file
+                FROM users
+                WHERE user_id = ?
+                """,
+                (user_id,)
+            )
+
+            old_row = cursor.fetchone()
+
+            # 删除旧背景文件
+            if old_row is not None:
+                old_file = old_row[0]
+
+                if old_file:
+                    old_path = os.path.join(
+                        app.config[
+                            "UPLOAD_FOLDER"
+                        ],
+                        old_file
+                    )
+
+                    if os.path.isfile(
+                        old_path
+                    ):
+                        try:
+                            os.remove(
+                                old_path
+                            )
+                        except OSError:
+                            pass
+
+            # 清空数据库背景设置
+            cursor.execute(
+                """
+                UPDATE users
+                SET background_type = 'default',
+                    background_file = ''
+                WHERE user_id = ?
+                """,
+                (user_id,)
+            )
+
+            conn.commit()
+            conn.close()
+
+            flash(
+                "已恢复默认背景",
+                "success"
+            )
+
+            return redirect(
+                url_for(
+                    "background_settings"
+                )
+            )
+
+        # -------------------------
+        # 获取用户上传文件
+        # -------------------------
+        background = (
+            request.files.get(
+                "background_file"
+            )
+        )
+
+        if (
+            background is None
+            or
+            background.filename == ""
+        ):
+            conn.close()
+
+            flash(
+                "请先选择一个背景文件",
+                "error"
+            )
+
+            return redirect(
+                url_for(
+                    "background_settings"
+                )
+            )
+
+        # -------------------------
+        # 检查文件格式
+        # -------------------------
+        if not allowed_background_file(
+            background.filename
+        ):
+            conn.close()
+
+            flash(
+                "文件格式不支持，请上传 JPG、PNG、WEBP、GIF、MP4 或 WEBM 文件",
+                "error"
+            )
+
+            return redirect(
+                url_for(
+                    "background_settings"
+                )
+            )
+
+        # -------------------------
+        # 获取扩展名
+        # -------------------------
+        extension = (
+            background.filename
+            .rsplit(".", 1)[1]
+            .lower()
+        )
+
+        # 判断背景类型
+        if extension == "gif":
+            background_type = "gif"
+
+        elif extension in {
+            "mp4",
+            "webm"
+        }:
+            background_type = "video"
+
+        else:
+            background_type = "image"
+
+        # -------------------------
+        # 生成安全、唯一的文件名
+        # -------------------------
+        filename = secure_filename(
+            f"user_{user_id}_background.{extension}"
+        )
+
+        save_path = os.path.join(
+            app.config[
+                "UPLOAD_FOLDER"
+            ],
+            filename
+        )
+
+        # -------------------------
+        # 查询旧背景
+        # -------------------------
+        cursor.execute(
+            """
+            SELECT background_file
+            FROM users
+            WHERE user_id = ?
+            """,
+            (user_id,)
+        )
+
+        old_row = cursor.fetchone()
+
+        old_file = ""
+
+        if old_row is not None:
+            old_file = (
+                old_row[0]
+                or ""
+            )
+
+        # -------------------------
+        # 保存新背景文件
+        # -------------------------
+        background.save(
+            save_path
+        )
+
+        # -------------------------
+        # 如果扩展名发生变化，
+        # 删除旧背景文件
+        # -------------------------
+        if (
+            old_file
+            and
+            old_file != filename
+        ):
+
+            old_path = os.path.join(
+                app.config[
+                    "UPLOAD_FOLDER"
+                ],
+                old_file
+            )
+
+            if os.path.isfile(
+                old_path
+            ):
+                try:
+                    os.remove(
+                        old_path
+                    )
+                except OSError:
+                    pass
+
+        # -------------------------
+        # 更新数据库
+        # -------------------------
+        cursor.execute(
+            """
+            UPDATE users
+            SET background_type = ?,
+                background_file = ?
+            WHERE user_id = ?
+            """,
+            (
+                background_type,
+                filename,
+                user_id
+            )
+        )
+
+        conn.commit()
+        conn.close()
+
+        flash(
+            "背景上传成功",
+            "success"
+        )
+
+        return redirect(
+            url_for(
+                "background_settings"
+            )
+        )
+
+    # =========================
+    # GET：读取当前背景
+    # =========================
+    cursor.execute(
+        """
+        SELECT
+            background_type,
+            background_file
+        FROM users
+        WHERE user_id = ?
+        """,
+        (user_id,)
+    )
+
+    row = cursor.fetchone()
+
+    conn.close()
+
+    if row is None:
+        background_type = "default"
+        background_file = ""
+
+    else:
+        background_type = (
+            row[0]
+            or "default"
+        )
+
+        background_file = (
+            row[1]
+            or ""
+        )
+
+    return render_template(
+        "background_settings.html",
+        background_type=background_type,
+        background_file=background_file
+    )
 # =========================
 # 保存 / 修改评分
 # 使用 SQLite
@@ -695,6 +1257,7 @@ def rate():
 
     # 未登录不能评分
     if 'user_id' not in session:
+
         return redirect(
             url_for('login')
         )
@@ -703,27 +1266,39 @@ def rate():
         session['user_id']
     )
 
-    music_id = request.form.get(
-        "music_id",
-        type=int
+    music_id = (
+        request.form.get(
+            "music_id",
+            type=int
+        )
     )
 
-    rating = request.form.get(
-        "rating",
-        type=float
+    rating = (
+        request.form.get(
+            "rating",
+            type=float
+        )
     )
 
-    next_page = request.form.get(
-        "next"
+    next_page = (
+        request.form.get(
+            "next"
+        )
     )
 
     if next_page is None:
+
         next_page = url_for(
             "library"
         )
 
     # 基础检查
-    if music_id is None or rating is None:
+    if (
+        music_id is None
+        or
+        rating is None
+    ):
+
         flash(
             "评分数据不完整",
             "error"
@@ -733,7 +1308,12 @@ def rate():
             next_page
         )
 
-    if rating < 1 or rating > 5:
+    if (
+        rating < 1
+        or
+        rating > 5
+    ):
+
         flash(
             "评分必须在 1 到 5 分之间",
             "error"
@@ -744,8 +1324,12 @@ def rate():
         )
 
     try:
+
         # 连接数据库
-        conn = sqlite3.connect(DB_PATH)
+        conn = sqlite3.connect(
+            DB_PATH
+        )
+
         cursor = conn.cursor()
 
         # 有评分就更新，没有就新增
@@ -758,7 +1342,10 @@ def rate():
             )
             VALUES (?, ?, ?)
 
-            ON CONFLICT(user_id, music_id)
+            ON CONFLICT(
+                user_id,
+                music_id
+            )
             DO UPDATE SET
                 rating = excluded.rating
             """,
@@ -791,9 +1378,6 @@ def rate():
 
 # =========================
 # 删除评分
-# =========================
-# =========================
-# 删除评分
 # 使用 SQLite
 # =========================
 @app.route(
@@ -804,6 +1388,7 @@ def delete_rating():
 
     # 没有登录时先去登录
     if 'user_id' not in session:
+
         return redirect(
             url_for('login')
         )
@@ -812,14 +1397,20 @@ def delete_rating():
         session['user_id']
     )
 
-    music_id = request.form.get(
-        "music_id",
-        type=int
+    music_id = (
+        request.form.get(
+            "music_id",
+            type=int
+        )
     )
 
     try:
+
         # 连接数据库
-        conn = sqlite3.connect(DB_PATH)
+        conn = sqlite3.connect(
+            DB_PATH
+        )
+
         cursor = conn.cursor()
 
         # 删除当前用户对这首歌的评分
@@ -847,6 +1438,7 @@ def delete_rating():
         )
 
     except Exception as e:
+
         flash(
             f"评分删除失败：{e}",
             "error"
@@ -885,17 +1477,42 @@ def about():
         "about.html"
     )
 
+
+# =========================
+# robots.txt
+# =========================
 @app.route("/robots.txt")
 def robots():
-    return app.send_static_file("robots.txt")
+
+    return app.send_static_file(
+        "robots.txt"
+    )
 
 
+# =========================
+# sitemap.xml
+# =========================
 @app.route("/sitemap.xml")
 def sitemap():
-    return app.send_static_file("sitemap.xml")
-@app.route("/googlebd10ec1f502b5bde.html")
+
+    return app.send_static_file(
+        "sitemap.xml"
+    )
+
+
+# =========================
+# Google Search Console 验证
+# =========================
+@app.route(
+    "/googlebd10ec1f502b5bde.html"
+)
 def google_verify():
-    return app.send_static_file("googlebd10ec1f502b5bde.html")
+
+    return app.send_static_file(
+        "googlebd10ec1f502b5bde.html"
+    )
+
+
 # =========================
 # 启动程序
 # =========================
