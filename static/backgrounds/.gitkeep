@@ -1,1 +1,3 @@
 
+static/backgrounds/*
+!static/backgrounds/.gitkeep
