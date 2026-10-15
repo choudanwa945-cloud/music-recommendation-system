@@ -12,3 +12,5 @@ Thumbs.db
 music.db
 static/backgrounds/*
 !static/backgrounds/.gitkeep
+music_public.db
+music_public_backup_before_untrack.db
