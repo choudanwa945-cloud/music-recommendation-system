@@ -381,3 +381,37 @@ pre {
 .logout-button {
     background: #e74c3c;
 }
+/* =========================
+   自定义视频背景
+   ========================= */
+
+/* =========================
+   自定义视频背景
+   ========================= */
+
+body.has-video-background {
+    background: transparent;
+}
+
+.custom-video-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    z-index: 0;
+
+    pointer-events: none;
+}
+
+/* 让网页内容显示在视频上面 */
+body.has-video-background .header,
+body.has-video-background .main,
+body.has-video-background .footer {
+    position: relative;
+    z-index: 1;
+}
