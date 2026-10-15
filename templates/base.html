@@ -51,6 +51,20 @@
 <div class="footer">
     个性化音乐推荐系统 - 毕业设计
 </div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const audioPlayers = document.querySelectorAll("audio");
 
+    audioPlayers.forEach(function (currentAudio) {
+        currentAudio.addEventListener("play", function () {
+            audioPlayers.forEach(function (otherAudio) {
+                if (otherAudio !== currentAudio) {
+                    otherAudio.pause();
+                }
+            });
+        });
+    });
+});
+</script>
 </body>
 </html>
