@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}音乐推荐系统{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="header">
+    <div class="container">
+        <h2>个性化音乐推荐系统</h2>
+
+        <div class="nav">
+            <a href="{{ url_for('index') }}">首页</a>
+            <a href="{{ url_for('popular') }}">热门音乐</a>
+            <a href="{{ url_for('recommend') }}">个性化推荐</a>
+            <a href="{{ url_for('interest') }}">兴趣推荐</a>
+            <a href="{{ url_for('library') }}">歌曲库</a>
+            <a href="{{ url_for('statistics') }}">数据统计</a>
+            <a href="{{ url_for('about') }}">系统说明</a>
+        {% if session.get('username') %}
+    <a href="/profile">个人中心</a>
+    <a href="/my-ratings">我的评分</a>
+    <span>欢迎，{{ session.get('username') }}</span>
+    <a href="/logout">退出登录</a>
+{% else %}
+    <a href="/register">注册</a>
+    <a href="/login">登录</a>
+{% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="container main">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="message {{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+</div>
+
+<div class="footer">
+    个性化音乐推荐系统 - 毕业设计
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const audioPlayers = document.querySelectorAll("audio");
+
+    audioPlayers.forEach(function (currentAudio) {
+        currentAudio.addEventListener("play", function () {
+            audioPlayers.forEach(function (otherAudio) {
+                if (otherAudio !== currentAudio) {
+                    otherAudio.pause();
+                }
+            });
+        });
+    });
+});
+</script>
+</body>
+</html>
