@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}
+背景设置
+{% endblock %}
+
+{% block content %}
+
+<div class="background-settings-card">
+
+    <h2>个性化背景设置</h2>
+
+    <p>
+        你可以从自己的电脑中选择图片、GIF 动图或视频作为网站背景。
+    </p>
+
+    <form
+        method="POST"
+        enctype="multipart/form-data"
+    >
+
+        <input
+            type="hidden"
+            name="action"
+            value="upload"
+        >
+
+        <div class="form-group">
+
+            <label for="background_file">
+                选择背景文件
+            </label>
+
+            <input
+                type="file"
+                id="background_file"
+                name="background_file"
+                accept=".jpg,.jpeg,.png,.webp,.gif,.mp4,.webm"
+                required
+            >
+
+        </div>
+
+        <div class="background-help">
+
+            <p>
+                支持格式：
+            </p>
+
+            <p>
+                JPG、JPEG、PNG、WEBP
+            </p>
+
+            <p>
+                GIF 动态图片
+            </p>
+
+            <p>
+                MP4、WEBM 视频
+            </p>
+
+            <p>
+                单个文件最大 50MB
+            </p>
+
+        </div>
+
+        <button
+            type="submit"
+            class="btn"
+        >
+            上传并设置为背景
+        </button>
+
+    </form>
+
+
+    {% if background_type != "default" and background_file %}
+
+    <hr>
+
+    <p>
+        当前背景类型：
+        {{ background_type }}
+    </p>
+
+    <p>
+        当前背景文件：
+        {{ background_file }}
+    </p>
+
+    <form method="POST">
+
+        <input
+            type="hidden"
+            name="action"
+            value="reset"
+        >
+
+        <button
+            type="submit"
+            class="btn"
+        >
+            恢复默认背景
+        </button>
+
+    </form>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
