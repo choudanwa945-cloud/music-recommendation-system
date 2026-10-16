@@ -441,26 +441,42 @@ def logout():
 # =========================
 # 首页
 # =========================
+
+# =========================
+# 首页
+# =========================
 @app.route("/")
 def index():
 
-    users = (
-        rating_matrix
-        .index
-        .tolist()
-    )
+    # 原有用户数据
+    users = rating_matrix.index.tolist()
 
+    # 原有系统统计数据
     stats = get_statistics(
         music_df,
         ratings_df,
         rating_matrix
     )
 
+    # 获取评分数据中排名靠前的4首歌曲
+    featured_music = get_popular_music(
+        ratings_df,
+        music_df,
+        top_n=4
+    )
+
+    # 转换为模板可以使用的数据
+    featured_songs = featured_music.to_dict(
+        "records"
+    )
+
     return render_template(
         "index.html",
         users=users,
-        stats=stats
+        stats=stats,
+        featured_songs=featured_songs
     )
+
 
 
 # =========================
