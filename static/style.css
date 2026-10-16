@@ -415,3 +415,8278 @@ body.has-video-background .footer {
     position: relative;
     z-index: 1;
 }
+
+/* =========================================
+   首页美化：深色沉浸式音乐平台
+   ========================================= */
+
+/* 仅让首页使用深色主题 */
+body:has(.music-home) {
+    background-color: #0b1020;
+    color: #e9ecf7;
+}
+
+/* 保持视频背景可见 */
+body.has-video-background:has(.music-home) {
+    background-color: transparent;
+}
+
+/* 首页顶部导航栏 */
+body:has(.music-home) .header {
+    background: rgba(14, 20, 39, 0.96);
+    border-bottom: 1px solid rgba(155, 140, 255, 0.15);
+}
+
+body:has(.music-home) .header h2 {
+    color: #f6f3ff;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+body:has(.music-home) .nav a {
+    color: #c5c8e0;
+    transition: color 0.25s ease;
+}
+
+body:has(.music-home) .nav a:hover {
+    color: #ad9aff;
+}
+
+body:has(.music-home) .footer {
+    color: #929bb6;
+}
+
+/* 首页整体 */
+.music-home {
+    color: #eef0fa;
+    padding-bottom: 45px;
+}
+
+.music-home * {
+    box-sizing: border-box;
+}
+
+/* =========================================
+   1. 首页欢迎横幅
+   ========================================= */
+
+.music-home .home-hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 25px;
+
+    min-height: 330px;
+    padding: 46px 50px;
+    margin-bottom: 45px;
+
+    overflow: hidden;
+    border-radius: 22px;
+
+    background:
+        radial-gradient(
+            circle at 85% 40%,
+            rgba(150, 85, 255, 0.28),
+            transparent 43%
+        ),
+        linear-gradient(
+            115deg,
+            #172245 0%,
+            #29205a 55%,
+            #432071 100%
+        );
+
+    border: 1px solid rgba(185, 157, 255, 0.23);
+
+    box-shadow:
+        0 18px 55px rgba(0, 0, 0, 0.24);
+}
+
+.music-home .home-hero-content {
+    position: relative;
+    z-index: 2;
+    flex: 1;
+    min-width: 0;
+}
+
+.music-home .home-hero-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+
+    margin-bottom: 23px;
+
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #c4b5fd;
+}
+
+.music-home .home-status-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+    background: #75e7c0;
+
+    box-shadow: 0 0 12px rgba(117, 231, 192, 0.7);
+}
+
+.music-home .home-hero h1 {
+    margin: 0 0 20px;
+
+    font-size: clamp(30px, 4vw, 46px);
+    line-height: 1.25;
+    font-weight: 800;
+    letter-spacing: -1px;
+    color: #ffffff;
+}
+
+.music-home .home-gradient-text {
+    display: block;
+
+    background: linear-gradient(
+        90deg,
+        #e9c8ff,
+        #9ba9ff,
+        #75d9ff
+    );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.music-home .home-hero-description {
+    max-width: 510px;
+    margin: 0 0 28px;
+
+    color: #d2d2e8;
+    font-size: 15px;
+    line-height: 1.9;
+}
+
+.music-home .home-hero-buttons {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+/* 欢迎横幅按钮 */
+
+.music-home .home-btn-primary,
+.music-home .home-btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 44px;
+    padding: 11px 20px;
+
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        background 0.25s ease;
+}
+
+.music-home .home-btn-primary {
+    color: #ffffff;
+
+    background: linear-gradient(
+        120deg,
+        #7c5cff,
+        #a15cff
+    );
+
+    box-shadow: 0 7px 22px rgba(126, 91, 255, 0.3);
+}
+
+.music-home .home-btn-primary:hover {
+    color: #ffffff;
+    transform: translateY(-3px);
+
+    box-shadow: 0 12px 28px rgba(126, 91, 255, 0.45);
+}
+
+.music-home .home-btn-secondary {
+    color: #e6e0ff;
+    background: rgba(255, 255, 255, 0.09);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.music-home .home-btn-secondary:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.17);
+    transform: translateY(-3px);
+}
+
+/* =========================================
+   2. CSS 唱片装饰
+   ========================================= */
+
+.music-home .home-hero-art {
+    position: relative;
+
+    width: 270px;
+    height: 270px;
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    pointer-events: none;
+}
+
+.music-home .home-record-glow {
+    position: absolute;
+    width: 260px;
+    height: 260px;
+
+    border-radius: 50%;
+
+    background: #9b5cff;
+    opacity: 0.25;
+    filter: blur(65px);
+}
+
+.music-home .home-vinyl-record {
+    position: relative;
+
+    width: 238px;
+    height: 238px;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        repeating-radial-gradient(
+            circle,
+            #191b30 0px,
+            #191b30 3px,
+            #25283e 4px,
+            #111424 6px
+        );
+
+    border: 8px solid #0e1225;
+
+    box-shadow:
+        0 12px 40px rgba(0, 0, 0, 0.55),
+        0 0 0 2px rgba(211, 189, 255, 0.12);
+
+    animation: home-record-spin 18s linear infinite;
+}
+
+.music-home .home-vinyl-record::before {
+    content: "";
+    position: absolute;
+    inset: 14px;
+
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 50%;
+}
+
+.music-home .home-vinyl-label {
+    width: 100px;
+    height: 100px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: linear-gradient(
+        135deg,
+        #ad7aff,
+        #5d59ce,
+        #352b74
+    );
+
+    border: 5px solid #1a173a;
+
+    box-shadow: 0 0 28px rgba(151, 99, 255, 0.35);
+}
+
+.music-home .home-vinyl-label span {
+    color: white;
+    font-size: 46px;
+}
+
+.music-home .home-floating-note {
+    position: absolute;
+    color: #d5aaff;
+
+    text-shadow: 0 0 20px rgba(178, 112, 255, 0.7);
+
+    animation: home-note-float 4s ease-in-out infinite;
+}
+
+.music-home .home-note-one {
+    top: 3px;
+    right: 12px;
+    font-size: 36px;
+}
+
+.music-home .home-note-two {
+    bottom: 16px;
+    left: 2px;
+    font-size: 28px;
+    animation-delay: 1.5s;
+}
+
+@keyframes home-record-spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes home-note-float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-13px);
+    }
+}
+
+/* =========================================
+   3. 首页板块标题
+   ========================================= */
+
+.music-home .home-section {
+    margin-bottom: 45px;
+}
+
+.music-home .home-section-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+
+    margin-bottom: 22px;
+}
+
+.music-home .home-section-subtitle {
+    display: block;
+    margin-bottom: 9px;
+
+    color: #a995ff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.music-home .home-section-heading h2 {
+    margin: 0;
+    font-size: 26px;
+    color: #f5f3ff;
+}
+
+.music-home .home-section-description {
+    margin: 10px 0 0;
+    color: #a7acc7;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+/* =========================================
+   4. 系统数据统计卡片
+   ========================================= */
+
+.music-home .home-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 15px;
+}
+
+.music-home .home-stat-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    padding: 23px;
+    min-width: 0;
+
+    border-radius: 16px;
+
+    background: rgba(27, 34, 60, 0.91);
+    border: 1px solid rgba(159, 146, 255, 0.13);
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease;
+}
+
+.music-home .home-stat-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(159, 146, 255, 0.45);
+}
+
+.music-home .home-stat-icon {
+    color: #b19cff;
+    font-size: 25px;
+    margin-bottom: 14px;
+}
+
+.music-home .home-stat-number {
+    font-size: 29px;
+    font-weight: 800;
+    color: white;
+    overflow-wrap: anywhere;
+}
+
+.music-home .home-stat-label {
+    margin-top: 8px;
+    color: #a8afc9;
+    font-size: 13px;
+}
+
+/* =========================================
+   5. 音乐功能卡片
+   ========================================= */
+
+.music-home .home-feature-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.music-home .home-feature-card {
+    display: block;
+    position: relative;
+    overflow: hidden;
+
+    min-height: 208px;
+    padding: 27px;
+
+    border-radius: 17px;
+    text-decoration: none;
+
+    color: #edf0fa;
+
+    background: linear-gradient(
+        135deg,
+        rgba(36, 43, 74, 0.96),
+        rgba(21, 27, 49, 0.96)
+    );
+
+    border: 1px solid rgba(152, 146, 225, 0.16);
+
+    transition:
+        transform 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.music-home .home-feature-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(166, 130, 255, 0.55);
+
+    box-shadow: 0 16px 38px rgba(0, 0, 0, 0.25);
+}
+
+.music-home .home-feature-icon {
+    width: 49px;
+    height: 49px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 18px;
+
+    border-radius: 13px;
+    font-size: 25px;
+}
+
+.music-home .home-icon-purple {
+    color: #d2b3ff;
+    background: rgba(147, 91, 255, 0.19);
+}
+
+.music-home .home-icon-blue {
+    color: #8abaff;
+    background: rgba(74, 143, 255, 0.19);
+}
+
+.music-home .home-icon-pink {
+    color: #ffa2cd;
+    background: rgba(255, 102, 166, 0.18);
+}
+
+.music-home .home-icon-cyan {
+    color: #80e8eb;
+    background: rgba(67, 208, 211, 0.16);
+}
+
+.music-home .home-icon-orange {
+    color: #ffbf84;
+    background: rgba(255, 155, 84, 0.17);
+}
+
+.music-home .home-feature-card h3 {
+    margin: 0 0 10px;
+
+    font-size: 19px;
+    color: #ffffff;
+}
+
+.music-home .home-feature-card p {
+    margin: 0 0 20px;
+
+    color: #aeb6d0;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.music-home .home-feature-link {
+    display: inline-block;
+
+    margin-top: 4px;
+    color: #b3a0ff;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.music-home .home-feature-card:hover .home-feature-link {
+    color: #d3c8ff;
+}
+
+/* =========================================
+   6. 底部引导横幅
+   ========================================= */
+
+.music-home .home-bottom-banner {
+    position: relative;
+    overflow: hidden;
+
+    padding: 43px 45px;
+
+    border-radius: 20px;
+
+    background: linear-gradient(
+        120deg,
+        #20244c,
+        #30235a,
+        #472367
+    );
+
+    border: 1px solid rgba(176, 142, 255, 0.23);
+}
+
+.music-home .home-bottom-banner::after {
+    content: "♫";
+    position: absolute;
+
+    right: 35px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    font-size: 160px;
+    color: rgba(255, 255, 255, 0.065);
+
+    pointer-events: none;
+}
+
+.music-home .home-bottom-content {
+    position: relative;
+    z-index: 1;
+}
+
+.music-home .home-bottom-banner h2 {
+    margin: 0 0 13px;
+
+    font-size: 25px;
+    color: white;
+}
+
+.music-home .home-bottom-banner p {
+    margin: 0 0 23px;
+
+    font-size: 14px;
+    line-height: 1.8;
+    color: #d0cbea;
+}
+
+/* =========================================
+   7. 手机与平板适配
+   ========================================= */
+
+@media (max-width: 760px) {
+
+    .music-home .home-hero {
+        flex-direction: column;
+        align-items: flex-start;
+
+        padding: 32px 25px;
+    }
+
+    .music-home .home-hero-art {
+        align-self: center;
+
+        width: 210px;
+        height: 210px;
+    }
+
+    .music-home .home-vinyl-record {
+        width: 195px;
+        height: 195px;
+    }
+
+    .music-home .home-stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .music-home .home-feature-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .music-home .home-bottom-banner {
+        padding: 32px 25px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .music-home .home-hero h1 {
+        font-size: 30px;
+    }
+
+    .music-home .home-stat-card {
+        padding: 16px;
+    }
+
+    .music-home .home-stat-number {
+        font-size: 24px;
+    }
+
+    .music-home .home-feature-card {
+        padding: 22px;
+    }
+
+    .music-home .home-bottom-banner::after {
+        font-size: 95px;
+        right: 8px;
+    }
+}
+
+/* 减少动画偏好：关闭装饰动画 */
+@media (prefers-reduced-motion: reduce) {
+
+    .music-home .home-vinyl-record,
+    .music-home .home-floating-note {
+        animation: none;
+    }
+}
+
+/* =========================================
+   首页：热门歌曲精选 TOP 4
+   ========================================= */
+
+/* 查看全部热门音乐 */
+.music-home .home-view-all {
+    color: #b5a0ff;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+
+    transition: color 0.25s ease;
+}
+
+.music-home .home-view-all:hover {
+    color: #e0d5ff;
+}
+
+/* 四列歌曲展示 */
+.music-home .home-tracks-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+}
+
+/* 歌曲卡片 */
+.music-home .home-track-card {
+    min-width: 0;
+    overflow: hidden;
+
+    border-radius: 17px;
+
+    background: linear-gradient(
+        155deg,
+        #242b48 0%,
+        #191e35 100%
+    );
+
+    border: 1px solid rgba(160, 145, 255, 0.16);
+
+    box-shadow: 0 8px 26px rgba(0, 0, 0, 0.15);
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease,
+        border-color 0.3s ease;
+}
+
+.music-home .home-track-card:hover {
+    transform: translateY(-7px);
+
+    border-color: rgba(172, 141, 255, 0.55);
+
+    box-shadow:
+        0 18px 40px rgba(0, 0, 0, 0.32);
+}
+
+/* =========================================
+   歌曲封面
+   ========================================= */
+
+.music-home .home-track-cover {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 1 / 1;
+
+    background: #302b57;
+}
+
+.music-home .home-track-cover img {
+    display: block;
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    transition: transform 0.45s ease;
+}
+
+.music-home .home-track-card:hover .home-track-cover img {
+    transform: scale(1.07);
+}
+
+/* 没有封面时的默认占位图 */
+.music-home .home-track-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 100%;
+
+    background: linear-gradient(
+        135deg,
+        #5946a0,
+        #252b5c
+    );
+
+    color: #d9c9ff;
+    font-size: 72px;
+}
+
+/* TOP 1 / TOP 2 等排名标签 */
+.music-home .home-track-rank {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+
+    padding: 7px 11px;
+
+    border-radius: 8px;
+
+    background: rgba(14, 15, 32, 0.78);
+
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+
+    backdrop-filter: blur(8px);
+}
+
+/* 第一名特殊显示 */
+.music-home .home-track-card:first-child .home-track-rank {
+    background: linear-gradient(
+        120deg,
+        #8155ed,
+        #c05de7
+    );
+
+    box-shadow: 0 3px 15px rgba(156, 88, 240, 0.4);
+}
+
+/* =========================================
+   歌曲名称、歌手、评分
+   ========================================= */
+
+.music-home .home-track-info {
+    padding: 18px 15px 20px;
+    min-width: 0;
+}
+
+.music-home .home-track-info h3 {
+    margin: 0 0 8px;
+
+    color: #ffffff;
+    font-size: 17px;
+    font-weight: 700;
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.music-home .home-track-artist {
+    margin: 0 0 15px;
+
+    color: #a8b0cd;
+    font-size: 13px;
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.music-home .home-track-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    margin-bottom: 16px;
+}
+
+/* 音乐类型标签 */
+.music-home .home-track-genre {
+    display: inline-block;
+
+    padding: 5px 9px;
+
+    border-radius: 7px;
+
+    background: rgba(137, 108, 255, 0.16);
+
+    color: #c4b3ff;
+    font-size: 11px;
+}
+
+/* 平均评分 */
+.music-home .home-track-rating {
+    color: #ffc675;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+/* =========================================
+   歌曲试听播放器
+   ========================================= */
+
+.music-home .home-track-player {
+    width: 100%;
+    min-width: 0;
+    margin: 0 0 16px;
+}
+
+.music-home .home-track-player audio {
+    display: block;
+
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+
+    height: 38px;
+}
+
+/* =========================================
+   查看歌曲按钮
+   ========================================= */
+
+.music-home .home-track-link {
+    display: block;
+
+    padding: 11px 10px;
+
+    border-radius: 9px;
+
+    background: rgba(139, 105, 255, 0.16);
+
+    border: 1px solid rgba(158, 130, 255, 0.20);
+
+    color: #c9baff;
+
+    text-align: center;
+    text-decoration: none;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    transition:
+        background 0.25s ease,
+        color 0.25s ease;
+}
+
+.music-home .home-track-link:hover {
+    background: #7659d9;
+    color: #ffffff;
+}
+
+/* 无热门歌曲数据时 */
+.music-home .home-tracks-empty {
+    grid-column: 1 / -1;
+
+    padding: 35px;
+
+    border-radius: 14px;
+
+    background: #202641;
+    color: #aeb6d0;
+
+    text-align: center;
+}
+
+/* =========================================
+   响应式布局
+   ========================================= */
+
+/* 平板：每行两首 */
+@media (max-width: 900px) {
+
+    .music-home .home-tracks-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+/* 手机：每行一首 */
+@media (max-width: 480px) {
+
+    .music-home .home-tracks-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .music-home .home-featured-section
+    .home-section-heading {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .music-home .home-track-info {
+        padding: 18px;
+    }
+
+}
+
+/* 减少动画偏好 */
+@media (prefers-reduced-motion: reduce) {
+
+    .music-home .home-track-card,
+    .music-home .home-track-cover img {
+        transition: none;
+    }
+
+    .music-home .home-track-card:hover {
+        transform: none;
+    }
+
+}
+
+/* =========================================
+   全站深色主题：非首页页面
+   ========================================= */
+
+/* 页面背景 */
+body:not(:has(.music-home)) {
+    background-color: #0b1020;
+    color: #e9ecf7;
+}
+
+/* 保留视频背景功能 */
+body.has-video-background:not(:has(.music-home)) {
+    background-color: transparent;
+}
+
+/* 顶部导航栏 */
+body:not(:has(.music-home)) .header {
+    background: rgba(14, 20, 39, 0.96);
+    border-bottom: 1px solid rgba(155, 140, 255, 0.16);
+}
+
+body:not(:has(.music-home)) .header h2 {
+    color: #ffffff;
+}
+
+body:not(:has(.music-home)) .nav a {
+    color: #c5c8e0;
+    transition: color 0.25s ease;
+}
+
+body:not(:has(.music-home)) .nav a:hover {
+    color: #bbabff;
+}
+
+/* 页面标题 */
+body:not(:has(.music-home)) .main h1,
+body:not(:has(.music-home)) .main h2,
+body:not(:has(.music-home)) .main h3 {
+    color: #f5f3ff;
+}
+
+/* 通用内容卡片 */
+body:not(:has(.music-home)) .welcome,
+body:not(:has(.music-home)) .card,
+body:not(:has(.music-home)) .box,
+body:not(:has(.music-home)) .song,
+body:not(:has(.music-home)) .profile-card {
+    background: rgba(29, 36, 65, 0.94);
+    border: 1px solid rgba(155, 140, 255, 0.19);
+    color: #e9ecf7;
+    border-radius: 14px;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.14);
+}
+
+/* 音乐列表卡片 */
+body:not(:has(.music-home)) .song {
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease;
+}
+
+body:not(:has(.music-home)) .song:hover {
+    transform: translateY(-3px);
+    border-color: rgba(165, 136, 255, 0.5);
+}
+
+/* 排名数字 */
+body:not(:has(.music-home)) .rank {
+    background: #805beb;
+    border-radius: 8px;
+}
+
+/* 普通文本链接 */
+body:not(:has(.music-home)) .main
+a:not(.button):not(.profile-button) {
+    color: #b8a6ff;
+}
+
+body:not(:has(.music-home)) .main
+a:not(.button):not(.profile-button):hover {
+    color: #ded4ff;
+}
+
+/* 常规按钮 */
+body:not(:has(.music-home)) .main button,
+body:not(:has(.music-home)) .main .button {
+    background: linear-gradient(120deg, #7058db, #9965f0);
+    color: #ffffff;
+    border-radius: 8px;
+    border: none;
+    transition: opacity 0.25s ease;
+}
+
+body:not(:has(.music-home)) .main button:hover,
+body:not(:has(.music-home)) .main .button:hover {
+    opacity: 0.88;
+}
+
+/* 表格 */
+body:not(:has(.music-home)) .main table {
+    background: #1c2340;
+    color: #e9ecf7;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+body:not(:has(.music-home)) .main th {
+    background: #30305a;
+    color: #ffffff;
+    border-color: #454366;
+}
+
+body:not(:has(.music-home)) .main td {
+    background: #1c2340;
+    color: #d8ddf0;
+    border-color: #353d5d;
+}
+
+/* 输入框和下拉选择框 */
+body:not(:has(.music-home)) .main
+input[type="text"],
+body:not(:has(.music-home)) .main
+input[type="password"],
+body:not(:has(.music-home)) .main
+input[type="number"],
+body:not(:has(.music-home)) .main
+select,
+body:not(:has(.music-home)) .main
+textarea {
+    background: #171d34;
+    color: #ffffff;
+    border: 1px solid #44466f;
+    border-radius: 7px;
+    padding: 9px;
+}
+
+body:not(:has(.music-home)) .main
+input::placeholder,
+body:not(:has(.music-home)) .main
+textarea::placeholder {
+    color: #939bb7;
+}
+
+/* 兴趣标签和歌曲标签 */
+body:not(:has(.music-home)) .tag,
+body:not(:has(.music-home)) .options label {
+    background: #302b55;
+    color: #d8ceff;
+    border-radius: 8px;
+}
+
+/* 辅助说明文字 */
+body:not(:has(.music-home)) .help,
+body:not(:has(.music-home)) .gray {
+    color: #aeb5d0;
+}
+
+/* 个人中心数据卡片 */
+body:not(:has(.music-home)) .profile-stat {
+    background: #252e4b;
+}
+
+body:not(:has(.music-home)) .profile-stat p,
+body:not(:has(.music-home)) .profile-header p {
+    color: #b4bbd0;
+}
+
+/* 个人中心按钮 */
+body:not(:has(.music-home)) .profile-button {
+    background: #765bde;
+    color: #ffffff;
+}
+
+body:not(:has(.music-home)) .profile-button:hover {
+    background: #9477f2;
+}
+
+/* 退出登录仍保留红色 */
+body:not(:has(.music-home)) .logout-button {
+    background: #d94c5c;
+}
+
+body:not(:has(.music-home)) .logout-button:hover {
+    background: #e76473;
+}
+
+/* 页脚 */
+body:not(:has(.music-home)) .footer {
+    color: #949cba;
+}
+
+/* 移动设备适配 */
+@media (max-width: 700px) {
+
+    body:not(:has(.music-home)) .profile-card {
+        padding: 20px;
+    }
+
+    body:not(:has(.music-home)) .profile-stats {
+        gap: 10px;
+    }
+
+    body:not(:has(.music-home)) .profile-stat {
+        padding: 14px;
+    }
+
+    body:not(:has(.music-home)) .profile-actions {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* =========================================
+   热门音乐排行榜：深色音乐平台风格
+   ========================================= */
+
+.popular-page {
+    color: #eef0fa;
+    padding-bottom: 40px;
+}
+
+.popular-page * {
+    box-sizing: border-box;
+}
+
+/* =========================================
+   1. 榜单顶部横幅
+   ========================================= */
+
+.popular-page .popular-hero {
+    position: relative;
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    min-height: 220px;
+    padding: 38px 42px;
+    margin-bottom: 38px;
+
+    border-radius: 20px;
+
+    background:
+        radial-gradient(
+            circle at 85% 40%,
+            rgba(171, 104, 255, 0.3),
+            transparent 45%
+        ),
+        linear-gradient(
+            115deg,
+            #172344,
+            #292052,
+            #47216d
+        );
+
+    border: 1px solid rgba(180, 147, 255, 0.25);
+
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.2);
+}
+
+.popular-page .popular-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 690px;
+}
+
+.popular-page .popular-subtitle {
+    display: block;
+    margin-bottom: 12px;
+
+    color: #c0aaff;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.popular-page .popular-hero h1 {
+    margin: 0 0 16px;
+
+    color: #ffffff;
+    font-size: clamp(27px, 4vw, 38px);
+    line-height: 1.3;
+}
+
+.popular-page .popular-hero p {
+    margin: 0 0 18px;
+    max-width: 540px;
+
+    color: #d0d2e9;
+    font-size: 14px;
+    line-height: 1.9;
+}
+
+.popular-page .popular-formula {
+    display: inline-block;
+
+    padding: 9px 14px;
+    border-radius: 9px;
+
+    background: rgba(255, 255, 255, 0.09);
+    border: 1px solid rgba(255, 255, 255, 0.13);
+
+    color: #e1d8ff;
+    font-size: 12px;
+}
+
+/* 横幅右侧装饰 */
+
+.popular-page .popular-hero-decoration {
+    position: absolute;
+    right: 55px;
+    top: 50%;
+
+    transform: translateY(-50%) rotate(-12deg);
+
+    font-size: 145px;
+    line-height: 1;
+    color: rgba(210, 168, 255, 0.15);
+
+    text-shadow: 0 0 55px rgba(156, 102, 255, 0.4);
+
+    pointer-events: none;
+}
+
+/* =========================================
+   2. 榜单标题
+   ========================================= */
+
+.popular-page .popular-section-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 18px;
+
+    margin-bottom: 22px;
+}
+
+.popular-page .popular-section-heading h2 {
+    margin: 0;
+
+    color: #ffffff;
+    font-size: 25px;
+}
+
+.popular-page .popular-list-tip {
+    color: #9fa8c7;
+    font-size: 13px;
+}
+
+/* =========================================
+   3. 音乐排行榜列表
+   ========================================= */
+
+.popular-page .popular-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* 覆盖原来的普通歌曲卡片样式 */
+
+.popular-page .song.popular-song {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+
+    margin: 0;
+    padding: 22px;
+
+    min-width: 0;
+    min-height: 160px;
+
+    background: linear-gradient(
+        125deg,
+        #222944,
+        #181e34
+    );
+
+    border: 1px solid rgba(153, 143, 235, 0.18);
+    border-radius: 16px;
+
+    box-shadow: 0 7px 25px rgba(0, 0, 0, 0.13);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease;
+}
+
+.popular-page .song.popular-song:hover {
+    transform: translateY(-4px);
+
+    border-color: rgba(165, 134, 255, 0.55);
+
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.24);
+}
+
+/* =========================================
+   4. 排名数字
+   ========================================= */
+
+.popular-page .rank.popular-rank {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 52px;
+    height: 52px;
+    flex: 0 0 52px;
+
+    line-height: 1;
+
+    border-radius: 12px;
+
+    background: #343153;
+    color: #c8c5e2;
+
+    font-size: 23px;
+    font-weight: 800;
+}
+
+/* 第一名：金色 */
+
+.popular-page .popular-top-one .popular-rank {
+    background: linear-gradient(135deg, #f9ce73, #b97929);
+    color: #38230c;
+    box-shadow: 0 5px 18px rgba(250, 188, 80, 0.24);
+}
+
+/* 第二名：银色 */
+
+.popular-page .popular-top-two .popular-rank {
+    background: linear-gradient(135deg, #dce4f2, #8794b2);
+    color: #263147;
+}
+
+/* 第三名：铜色 */
+
+.popular-page .popular-top-three .popular-rank {
+    background: linear-gradient(135deg, #e8ad84, #ad6c46);
+    color: #3e241a;
+}
+
+/* 前三名卡片增加细微边框强调 */
+
+.popular-page .song.popular-top-one {
+    border-color: rgba(244, 192, 92, 0.37);
+}
+
+.popular-page .song.popular-top-two {
+    border-color: rgba(183, 199, 233, 0.3);
+}
+
+.popular-page .song.popular-top-three {
+    border-color: rgba(221, 148, 107, 0.3);
+}
+
+/* =========================================
+   5. 歌曲封面
+   ========================================= */
+
+.popular-page .popular-cover-wrap {
+    width: 112px;
+    height: 112px;
+    flex: 0 0 112px;
+
+    overflow: hidden;
+    border-radius: 12px;
+
+    background: #343052;
+}
+
+.popular-page .cover.popular-cover {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    border: none;
+    object-fit: cover;
+
+    transition: transform 0.35s ease;
+}
+
+.popular-page .popular-song:hover .popular-cover {
+    transform: scale(1.07);
+}
+
+.popular-page .popular-cover-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 100%;
+
+    background: linear-gradient(135deg, #6146ac, #28345c);
+    color: #e0d0ff;
+    font-size: 44px;
+}
+
+/* =========================================
+   6. 歌曲名称与信息
+   ========================================= */
+
+.popular-page .song-info.popular-song-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.popular-page .popular-song-heading {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+
+    margin-bottom: 8px;
+}
+
+.popular-page .popular-song-heading h3 {
+    margin: 0;
+
+    color: #ffffff;
+    font-size: 21px;
+}
+
+.popular-page .popular-top-badge {
+    display: inline-block;
+
+    padding: 5px 10px;
+    border-radius: 7px;
+
+    background: rgba(149, 110, 255, 0.19);
+    color: #c5afff;
+
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.popular-page .popular-top-one .popular-top-badge {
+    background: rgba(255, 191, 90, 0.15);
+    color: #ffd087;
+}
+
+.popular-page .popular-artist {
+    margin: 0 0 12px;
+
+    color: #aeb9d5;
+    font-size: 14px;
+}
+
+.popular-page .popular-song-tags {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 9px;
+
+    margin-bottom: 14px;
+}
+
+.popular-page .popular-genre {
+    display: inline-block;
+
+    padding: 5px 10px;
+    border-radius: 7px;
+
+    background: rgba(146, 104, 255, 0.19);
+    color: #c8b5ff;
+
+    font-size: 12px;
+}
+
+.popular-page .popular-tags {
+    color: #99a4c2;
+    font-size: 12px;
+    overflow-wrap: anywhere;
+}
+
+/* =========================================
+   7. 平均评分与评分人数
+   ========================================= */
+
+.popular-page .popular-song-stats {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 18px;
+
+    margin-bottom: 15px;
+}
+
+.popular-page .popular-score {
+    color: #ffca77;
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.popular-page .popular-rating-count {
+    color: #aeb5d0;
+    font-size: 13px;
+}
+
+/* =========================================
+   8. 音乐播放器
+   ========================================= */
+
+.popular-page .popular-audio {
+    width: 100%;
+    max-width: 340px;
+}
+
+.popular-page .popular-audio audio {
+    display: block;
+
+    width: 100%;
+    height: 39px;
+
+    margin: 0;
+}
+
+/* =========================================
+   9. 底部引导区域
+   ========================================= */
+
+.popular-page .popular-bottom {
+    margin-top: 38px;
+    padding: 34px;
+
+    text-align: center;
+
+    border-radius: 18px;
+
+    background: linear-gradient(
+        115deg,
+        #20284d,
+        #35225f
+    );
+
+    border: 1px solid rgba(161, 132, 255, 0.2);
+}
+
+.popular-page .popular-bottom h3 {
+    margin: 0 0 12px;
+
+    color: #ffffff;
+    font-size: 23px;
+}
+
+.popular-page .popular-bottom p {
+    margin: 0 0 22px;
+
+    color: #b6bed8;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.popular-page .popular-explore-button {
+    display: inline-block;
+    padding: 12px 24px;
+
+    background: linear-gradient(
+        120deg,
+        #7455e8,
+        #a467f0
+    );
+
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+
+    font-weight: 700;
+}
+
+/* =========================================
+   10. 手机适配
+   ========================================= */
+
+@media (max-width: 650px) {
+
+    .popular-page .popular-hero {
+        padding: 30px 24px;
+    }
+
+    .popular-page .popular-hero-decoration {
+        right: 5px;
+        font-size: 90px;
+    }
+
+    .popular-page .popular-section-heading {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .popular-page .song.popular-song {
+        display: grid;
+        grid-template-columns: 52px minmax(0, 1fr);
+        align-items: center;
+        gap: 15px;
+        padding: 18px;
+    }
+
+    .popular-page .popular-cover-wrap {
+        width: 95px;
+        height: 95px;
+        flex-basis: auto;
+    }
+
+    .popular-page .song-info.popular-song-info {
+        grid-column: 1 / -1;
+        width: 100%;
+    }
+
+    .popular-page .popular-audio {
+        max-width: 100%;
+    }
+
+    .popular-page .popular-bottom {
+        padding: 28px 20px;
+    }
+}
+
+/* 减少动画偏好 */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .popular-page .song.popular-song,
+    .popular-page .popular-cover {
+        transition: none;
+    }
+
+    .popular-page .song.popular-song:hover {
+        transform: none;
+    }
+}
+
+/* =========================================
+   个性化推荐页面：顶部横幅
+   ========================================= */
+
+.recommend-page {
+    color: #eef0fa;
+    padding-bottom: 40px;
+}
+
+/* 蓝紫渐变横幅 */
+body:not(:has(.music-home)) .recommend-page .recommend-hero {
+    position: relative;
+    overflow: hidden;
+
+    min-height: 240px;
+    padding: 42px;
+    margin-bottom: 40px;
+
+    border-radius: 20px;
+
+    background:
+        radial-gradient(
+            circle at 85% 40%,
+            rgba(151, 92, 255, 0.34),
+            transparent 45%
+        ),
+        linear-gradient(
+            115deg,
+            #172344,
+            #272052,
+            #452170
+        );
+
+    border: 1px solid rgba(183, 151, 255, 0.25);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* 横幅内容 */
+.recommend-page .recommend-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 680px;
+}
+
+/* 英文小标题 */
+.recommend-page .recommend-subtitle {
+    display: block;
+    margin-bottom: 12px;
+
+    color: #bca7ff;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+/* 主标题 */
+.recommend-page .recommend-hero h1 {
+    margin: 0 0 16px;
+    color: #ffffff;
+    font-size: 36px;
+}
+
+/* 描述文字 */
+.recommend-page .recommend-hero p {
+    max-width: 560px;
+    margin: 0 0 20px;
+
+    color: #d0d2e9;
+    font-size: 14px;
+    line-height: 1.9;
+}
+
+/* 当前登录用户徽章 */
+.recommend-page .recommend-user-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 10px 16px;
+    border-radius: 25px;
+
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+
+    color: #e5dcff;
+    font-size: 13px;
+}
+
+/* 右侧音符装饰 */
+.recommend-page .recommend-hero-decoration {
+    position: absolute;
+    top: 50%;
+    right: 55px;
+
+    transform: translateY(-50%) rotate(-15deg);
+
+    color: rgba(205, 170, 255, 0.17);
+    font-size: 155px;
+
+    pointer-events: none;
+}
+
+/* 手机适配 */
+@media (max-width: 700px) {
+    .recommend-page .recommend-hero {
+        padding: 30px 24px;
+    }
+
+    .recommend-page .recommend-hero h1 {
+        font-size: 28px;
+    }
+
+    .recommend-page .recommend-hero-decoration {
+        right: 10px;
+        font-size: 90px;
+    }
+}
+
+/* =========================================
+   个性化推荐：相似用户区域
+   ========================================= */
+
+/* 页面板块间距 */
+.recommend-page .recommend-section {
+    margin-bottom: 40px;
+}
+
+/* 板块标题 */
+.recommend-page .recommend-section-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
+
+    margin-bottom: 22px;
+}
+
+.recommend-page .recommend-section-heading h2 {
+    margin: 0;
+    color: #ffffff;
+    font-size: 26px;
+}
+
+.recommend-page .recommend-section-description {
+    margin: 10px 0 0;
+
+    color: #aeb6d0;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+/* 相似用户区域外层卡片 */
+body:not(:has(.music-home))
+.recommend-page .recommend-similar-box {
+    padding: 25px;
+    border-radius: 17px;
+
+    background: linear-gradient(
+        135deg,
+        #222944,
+        #1a2038
+    );
+
+    border: 1px solid rgba(155, 140, 255, 0.22);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.16);
+}
+
+/* 多个相似用户网格 */
+.recommend-page .recommend-similar-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 15px;
+}
+
+/* 单个相似用户 */
+.recommend-page .recommend-similar-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    min-width: 0;
+    padding: 18px;
+
+    border-radius: 13px;
+
+    background: rgba(135, 105, 255, 0.09);
+    border: 1px solid rgba(162, 136, 255, 0.2);
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease;
+}
+
+.recommend-page .recommend-similar-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(175, 145, 255, 0.55);
+}
+
+/* 用户头像图标 */
+.recommend-page .recommend-similar-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: linear-gradient(
+        135deg,
+        #7256dd,
+        #a16bf5
+    );
+
+    color: white;
+    font-size: 24px;
+}
+
+/* 用户信息 */
+.recommend-page .recommend-similar-info {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    min-width: 0;
+}
+
+.recommend-page .recommend-similar-info strong {
+    color: #ffffff;
+    font-size: 14px;
+}
+
+.recommend-page .recommend-similar-info span {
+    color: #b7bcda;
+    font-size: 12px;
+    overflow-wrap: anywhere;
+}
+
+/* 没有相似用户时的提示 */
+.recommend-page .recommend-similar-empty {
+    padding: 30px 15px;
+    text-align: center;
+}
+
+.recommend-page .recommend-empty-icon {
+    display: block;
+
+    margin-bottom: 14px;
+
+    color: #b8a0ff;
+    font-size: 48px;
+}
+
+.recommend-page .recommend-similar-empty p {
+    margin: 8px 0;
+    color: #e7e5f7;
+    line-height: 1.8;
+}
+
+.recommend-page .recommend-muted {
+    color: #aeb6d0 !important;
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+/* 推荐结果数量 */
+.recommend-page .recommend-result-count {
+    display: inline-block;
+
+    padding: 8px 14px;
+    border-radius: 20px;
+
+    background: rgba(139, 105, 255, 0.17);
+    border: 1px solid rgba(156, 128, 255, 0.25);
+
+    color: #c9baff;
+    font-size: 12px;
+}
+
+/* 平板适配 */
+@media (max-width: 760px) {
+    .recommend-page .recommend-similar-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* 手机适配 */
+@media (max-width: 480px) {
+    .recommend-page .recommend-similar-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .recommend-page .recommend-section-heading h2 {
+        font-size: 22px;
+    }
+}
+
+/* =========================================
+   个性化推荐：推荐歌曲与底部区域
+   ========================================= */
+
+/* 推荐歌曲列表 */
+.recommend-page .recommend-song-list {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* 单首推荐歌曲卡片 */
+body:not(:has(.music-home))
+.recommend-page .song.recommend-song {
+    display: grid;
+    grid-template-columns: 46px 116px minmax(0, 1fr);
+    align-items: start;
+    gap: 22px;
+
+    margin: 0;
+    padding: 24px;
+    min-width: 0;
+
+    background: linear-gradient(
+        125deg,
+        #222944,
+        #181e34
+    );
+
+    border: 1px solid rgba(155, 143, 235, 0.22);
+    border-radius: 17px;
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+body:not(:has(.music-home))
+.recommend-page .song.recommend-song:hover {
+    transform: translateY(-4px);
+    border-color: rgba(170, 139, 255, 0.55);
+    box-shadow: 0 14px 35px rgba(0, 0, 0, 0.25);
+}
+
+/* 推荐序号 */
+.recommend-page .rank.recommend-rank {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 46px;
+    height: 46px;
+    line-height: 1;
+
+    background: linear-gradient(
+        135deg,
+        #7657dd,
+        #a16bf5
+    );
+
+    color: #ffffff;
+    border-radius: 11px;
+
+    font-size: 20px;
+    font-weight: 800;
+}
+
+/* 歌曲封面 */
+.recommend-page .recommend-cover-wrap {
+    width: 116px;
+    height: 116px;
+    overflow: hidden;
+
+    border-radius: 12px;
+    background: #343052;
+}
+
+.recommend-page .cover.recommend-cover {
+    display: block;
+    width: 100%;
+    height: 100%;
+
+    border: none;
+    object-fit: cover;
+
+    transition: transform 0.3s ease;
+}
+
+.recommend-page .recommend-song:hover
+.recommend-cover {
+    transform: scale(1.06);
+}
+
+.recommend-page .recommend-cover-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 100%;
+
+    background: linear-gradient(
+        135deg,
+        #5946a0,
+        #252b5c
+    );
+
+    color: #e0d0ff;
+    font-size: 45px;
+}
+
+/* 歌曲文字信息 */
+.recommend-page .recommend-song-info {
+    min-width: 0;
+}
+
+.recommend-page .recommend-song-heading {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+
+    margin-bottom: 9px;
+}
+
+.recommend-page .recommend-song-heading h3 {
+    margin: 0;
+    font-size: 21px;
+    color: #ffffff;
+}
+
+.recommend-page .recommend-song-badge {
+    padding: 5px 10px;
+    border-radius: 7px;
+
+    background: rgba(150, 110, 255, 0.2);
+    color: #cdb7ff;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.recommend-page .recommend-artist {
+    margin: 0 0 14px;
+
+    color: #b3bdd9;
+    font-size: 14px;
+}
+
+/* 歌曲类型与标签 */
+.recommend-page .recommend-song-tags {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    margin-bottom: 16px;
+}
+
+.recommend-page .recommend-genre {
+    padding: 6px 11px;
+    border-radius: 7px;
+
+    background: rgba(145, 103, 255, 0.18);
+    color: #c8b5ff;
+
+    font-size: 12px;
+}
+
+.recommend-page .recommend-tags {
+    color: #aab3d0;
+    font-size: 12px;
+}
+
+/* 推荐方式和推荐评分 */
+.recommend-page .recommend-score-area {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px 22px;
+
+    margin-bottom: 18px;
+}
+
+.recommend-page .recommend-method {
+    color: #b9b4db;
+    font-size: 13px;
+}
+
+.recommend-page .recommend-score {
+    color: #ffca77;
+    font-size: 16px;
+    font-weight: 800;
+}
+
+/* 音频播放器 */
+.recommend-page .recommend-audio {
+    width: 100%;
+    max-width: 360px;
+    margin-bottom: 20px;
+}
+
+.recommend-page .recommend-audio audio {
+    display: block;
+    width: 100%;
+    height: 40px;
+    margin: 0;
+}
+
+/* =========================================
+   推荐歌曲评分区域
+   ========================================= */
+
+.recommend-page .recommend-rate-form {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+
+    margin-top: 0;
+    padding-top: 17px;
+
+    border-top: 1px solid rgba(165, 155, 228, 0.18);
+}
+
+.recommend-page .recommend-rate-form label {
+    color: #cbd0e5;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.recommend-page .recommend-rate-form select {
+    min-height: 40px;
+    min-width: 165px;
+    margin: 0;
+
+    background: #171d34;
+    color: #ffffff;
+
+    border: 1px solid #4d477a;
+    border-radius: 8px;
+
+    padding: 9px 12px;
+}
+
+.recommend-page .recommend-rate-form button {
+    min-height: 40px;
+    padding: 10px 20px;
+
+    background: linear-gradient(
+        120deg,
+        #7657dd,
+        #a16bf5
+    );
+
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.recommend-page .recommend-rate-form button:hover {
+    opacity: 0.88;
+}
+
+/* =========================================
+   暂无推荐结果时的卡片
+   ========================================= */
+
+body:not(:has(.music-home))
+.recommend-page .recommend-empty-state {
+    padding: 48px 30px;
+    text-align: center;
+
+    background: linear-gradient(
+        135deg,
+        #222945,
+        #292049
+    );
+
+    border: 1px solid rgba(160, 140, 255, 0.22);
+    border-radius: 18px;
+}
+
+.recommend-page .recommend-empty-symbol {
+    margin-bottom: 18px;
+
+    color: #b59cff;
+    font-size: 70px;
+}
+
+.recommend-page .recommend-empty-state h3 {
+    margin: 0 0 16px;
+
+    color: #ffffff;
+    font-size: 23px;
+}
+
+.recommend-page .recommend-empty-state p {
+    max-width: 570px;
+    margin: 0 auto 14px;
+
+    color: #b9c0d8;
+    line-height: 1.9;
+}
+
+.recommend-page .recommend-explore-button {
+    display: inline-block;
+
+    margin-top: 20px;
+    padding: 12px 24px;
+
+    text-decoration: none;
+    border-radius: 9px;
+}
+
+/* =========================================
+   页面底部引导横幅
+   ========================================= */
+
+body:not(:has(.music-home))
+.recommend-page .recommend-bottom {
+    position: relative;
+    overflow: hidden;
+
+    margin-top: 38px;
+    padding: 38px;
+
+    background: linear-gradient(
+        115deg,
+        #20274b,
+        #392468
+    );
+
+    border: 1px solid rgba(169, 139, 255, 0.23);
+    border-radius: 19px;
+}
+
+.recommend-page .recommend-bottom::after {
+    content: "♫";
+
+    position: absolute;
+    top: 50%;
+    right: 38px;
+
+    transform: translateY(-50%);
+
+    color: rgba(255, 255, 255, 0.08);
+    font-size: 145px;
+
+    pointer-events: none;
+}
+
+.recommend-page .recommend-bottom-content {
+    position: relative;
+    z-index: 1;
+}
+
+.recommend-page .recommend-bottom h2 {
+    margin: 0 0 14px;
+
+    color: #ffffff;
+    font-size: 25px;
+}
+
+.recommend-page .recommend-bottom p {
+    margin: 0 0 22px;
+
+    color: #bfc4e0;
+    line-height: 1.8;
+}
+
+.recommend-page .recommend-bottom-button {
+    display: inline-block;
+
+    padding: 12px 23px;
+    border-radius: 9px;
+
+    text-decoration: none;
+    font-weight: 700;
+}
+
+/* =========================================
+   手机与平板适配
+   ========================================= */
+
+@media (max-width: 760px) {
+
+    body:not(:has(.music-home))
+    .recommend-page .song.recommend-song {
+        grid-template-columns: 46px minmax(0, 1fr);
+        gap: 15px;
+        padding: 20px;
+    }
+
+    .recommend-page .recommend-cover-wrap {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    .recommend-page .recommend-song-info {
+        grid-column: 1 / -1;
+    }
+
+    .recommend-page .recommend-bottom {
+        padding: 30px 24px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .recommend-page .recommend-rate-form {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .recommend-page .recommend-rate-form select,
+    .recommend-page .recommend-rate-form button {
+        width: 100%;
+    }
+
+    .recommend-page .recommend-bottom::after {
+        right: 0;
+        font-size: 90px;
+    }
+}
+
+/* 减少动画偏好 */
+@media (prefers-reduced-motion: reduce) {
+
+    .recommend-page .recommend-song,
+    .recommend-page .recommend-cover {
+        transition: none;
+    }
+
+    .recommend-page .recommend-song:hover {
+        transform: none;
+    }
+}
+
+/* =========================================
+   歌曲库页面：深色音乐平台主题
+   ========================================= */
+
+.library-page {
+    color: #eef0fa;
+    padding-bottom: 40px;
+}
+
+.library-page * {
+    box-sizing: border-box;
+}
+
+/* =========================================
+   1. 顶部渐变横幅
+   ========================================= */
+
+.library-page .library-hero {
+    position: relative;
+    overflow: hidden;
+
+    min-height: 225px;
+    padding: 42px;
+    margin-bottom: 42px;
+
+    border-radius: 20px;
+
+    background:
+        radial-gradient(
+            circle at 85% 40%,
+            rgba(165, 93, 255, 0.32),
+            transparent 46%
+        ),
+        linear-gradient(
+            115deg,
+            #162345,
+            #292153,
+            #45246d
+        );
+
+    border: 1px solid rgba(180, 148, 255, 0.25);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+.library-page .library-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 680px;
+}
+
+.library-page .library-subtitle {
+    display: block;
+    margin-bottom: 12px;
+
+    color: #bda8ff;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.library-page .library-hero h1 {
+    margin: 0 0 16px;
+
+    color: #ffffff;
+    font-size: clamp(28px, 4vw, 39px);
+    line-height: 1.3;
+}
+
+.library-page .library-hero p {
+    max-width: 540px;
+    margin: 0 0 21px;
+
+    color: #d4d1eb;
+    font-size: 14px;
+    line-height: 1.9;
+}
+
+.library-page .library-hero-badge {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 10px 16px;
+    border-radius: 25px;
+
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+
+    color: #eadfff;
+    font-size: 13px;
+}
+
+.library-page .library-hero-decoration {
+    position: absolute;
+    top: 50%;
+    right: 60px;
+
+    transform: translateY(-50%) rotate(-12deg);
+
+    color: rgba(206, 166, 255, 0.16);
+    font-size: 170px;
+    line-height: 1;
+
+    pointer-events: none;
+}
+
+/* =========================================
+   2. 页面板块标题
+   ========================================= */
+
+.library-page .library-section {
+    margin-bottom: 42px;
+}
+
+.library-page .library-section-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+
+    margin-bottom: 22px;
+}
+
+.library-page .library-section-heading h2 {
+    margin: 0;
+
+    color: #ffffff;
+    font-size: 26px;
+}
+
+.library-page .library-section-description {
+    margin: 10px 0 0;
+
+    color: #aeb6d0;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.library-page .library-song-count {
+    display: inline-block;
+
+    padding: 9px 15px;
+    border-radius: 22px;
+
+    background: rgba(139, 105, 255, 0.17);
+    border: 1px solid rgba(157, 130, 255, 0.25);
+
+    color: #d0beff;
+    font-size: 13px;
+}
+
+/* =========================================
+   3. 搜索和筛选区域
+   ========================================= */
+
+body:not(:has(.music-home))
+.library-page .library-search-box {
+    padding: 26px;
+    margin-bottom: 0;
+
+    background: linear-gradient(
+        135deg,
+        #222944,
+        #1b2139
+    );
+
+    border: 1px solid rgba(160, 140, 255, 0.21);
+    border-radius: 17px;
+}
+
+.library-page .library-search-form {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1fr)
+        190px
+        auto;
+
+    align-items: end;
+    gap: 17px;
+}
+
+.library-page .library-search-field,
+.library-page .library-genre-field {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
+}
+
+.library-page .library-search-field label,
+.library-page .library-genre-field label {
+    color: #d7d5ee;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+body:not(:has(.music-home))
+.library-page .library-search-field input,
+body:not(:has(.music-home))
+.library-page .library-genre-field select {
+    display: block;
+
+    width: 100%;
+    min-width: 0;
+    height: 44px;
+    margin: 0;
+    padding: 10px 13px;
+
+    background: #151c32;
+    color: #ffffff;
+
+    border: 1px solid #46466f;
+    border-radius: 9px;
+
+    font-size: 14px;
+}
+
+.library-page .library-search-field input:focus,
+.library-page .library-genre-field select:focus {
+    outline: 2px solid #9b84ff;
+    outline-offset: 2px;
+}
+
+.library-page .library-search-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 11px;
+}
+
+body:not(:has(.music-home))
+.library-page .library-search-actions button {
+    min-height: 44px;
+    padding: 11px 19px;
+
+    background: linear-gradient(
+        120deg,
+        #7758df,
+        #a16bf5
+    );
+
+    color: white;
+    border-radius: 9px;
+
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.library-page .library-clear-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 44px;
+    padding: 10px;
+
+    color: #cbbaff;
+    text-decoration: none;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.library-page .library-clear-button:hover {
+    color: #ffffff;
+}
+
+/* =========================================
+   4. 歌曲列表
+   ========================================= */
+
+.library-page .library-song-list {
+    display: flex;
+    flex-direction: column;
+    gap: 17px;
+}
+
+body:not(:has(.music-home))
+.library-page .song.library-song {
+    display: grid;
+
+    grid-template-columns:
+        44px
+        112px
+        minmax(0, 1fr)
+        180px;
+
+    align-items: start;
+    gap: 19px;
+
+    min-width: 0;
+    padding: 23px;
+    margin: 0;
+
+    background: linear-gradient(
+        125deg,
+        #222944,
+        #181e34
+    );
+
+    border: 1px solid rgba(155, 143, 235, 0.2);
+    border-radius: 17px;
+
+    box-shadow: 0 8px 27px rgba(0, 0, 0, 0.14);
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+body:not(:has(.music-home))
+.library-page .song.library-song:hover {
+    transform: translateY(-4px);
+
+    border-color: rgba(171, 140, 255, 0.55);
+
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.24);
+}
+
+/* =========================================
+   5. 歌曲编号和封面
+   ========================================= */
+
+.library-page .rank.library-rank {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 44px;
+    height: 44px;
+    line-height: 1;
+
+    background: linear-gradient(
+        135deg,
+        #7155db,
+        #9968ed
+    );
+
+    color: #ffffff;
+    border-radius: 11px;
+
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.library-page .library-cover-wrap {
+    width: 112px;
+    height: 112px;
+
+    overflow: hidden;
+    border-radius: 12px;
+
+    background: #343052;
+}
+
+.library-page .cover.library-cover {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    border: none;
+    object-fit: cover;
+
+    transition: transform 0.35s ease;
+}
+
+.library-page .library-song:hover
+.library-cover {
+    transform: scale(1.06);
+}
+
+.library-page .library-cover-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 100%;
+
+    color: #e0d0ff;
+    font-size: 44px;
+
+    background: linear-gradient(
+        135deg,
+        #5946a0,
+        #252b5c
+    );
+}
+
+/* =========================================
+   6. 歌曲名称、歌手、标签
+   ========================================= */
+
+.library-page .song-info.library-song-info {
+    width: 100%;
+    min-width: 0;
+}
+
+.library-page .library-song-heading {
+    margin-bottom: 9px;
+}
+
+.library-page .library-song-heading h3 {
+    margin: 0;
+
+    color: #ffffff;
+    font-size: 21px;
+
+    overflow-wrap: anywhere;
+}
+
+.library-page .library-artist {
+    margin: 0 0 15px;
+
+    color: #b4bdd8;
+    font-size: 14px;
+}
+
+.library-page .library-song-tags {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 9px;
+
+    margin-bottom: 19px;
+}
+
+.library-page .library-genre {
+    display: inline-block;
+
+    padding: 6px 11px;
+    border-radius: 7px;
+
+    background: rgba(145, 103, 255, 0.2);
+    color: #cbb7ff;
+
+    font-size: 12px;
+}
+
+.library-page .library-tags {
+    color: #aab3d0;
+    font-size: 12px;
+    overflow-wrap: anywhere;
+}
+
+/* 歌曲试听 */
+.library-page .library-audio {
+    width: 100%;
+    max-width: 340px;
+}
+
+.library-page .library-audio audio {
+    display: block;
+
+    width: 100%;
+    max-width: 100%;
+    height: 40px;
+
+    margin: 0;
+}
+
+.library-page .library-no-audio {
+    color: #a5aecb;
+    font-size: 13px;
+}
+
+/* =========================================
+   7. 歌曲评分区域
+   ========================================= */
+
+.library-page .rate-area.library-rate-area {
+    width: 100%;
+    min-width: 0;
+
+    padding: 16px;
+
+    background: rgba(139, 105, 255, 0.08);
+    border: 1px solid rgba(160, 139, 255, 0.18);
+    border-radius: 12px;
+}
+
+.library-page .library-rating-title {
+    margin-bottom: 15px;
+
+    color: #e0cfff;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.library-page .library-rating-form {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+}
+
+.library-page .library-rating-label {
+    color: #bec4dd;
+    font-size: 12px;
+}
+
+body:not(:has(.music-home))
+.library-page .library-rating-form select {
+    width: 100%;
+    min-width: 0;
+    min-height: 41px;
+    margin: 0;
+
+    padding: 9px 10px;
+
+    background: #151b31;
+    color: #ffffff;
+
+    border: 1px solid #4c4778;
+    border-radius: 8px;
+
+    font-size: 13px;
+}
+
+.library-page .library-rating-form select:focus {
+    outline: 2px solid #9c83ff;
+    outline-offset: 2px;
+}
+
+body:not(:has(.music-home))
+.library-page .library-rating-form button {
+    width: 100%;
+    min-height: 41px;
+
+    background: linear-gradient(
+        120deg,
+        #7758e0,
+        #9f69f1
+    );
+
+    color: white;
+    border-radius: 8px;
+
+    font-weight: 700;
+}
+
+/* 未登录时的评分提示 */
+.library-page .library-login-tip {
+    text-align: center;
+}
+
+.library-page .library-login-icon {
+    display: block;
+    margin-bottom: 10px;
+
+    color: #bb9fff;
+    font-size: 28px;
+}
+
+.library-page .library-login-tip p {
+    color: #bcc2dc;
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+.library-page .library-login-link {
+    color: #ccb9ff;
+    font-size: 12px;
+    text-decoration: none;
+}
+
+/* =========================================
+   8. 搜索无结果的提示
+   ========================================= */
+
+.library-page .library-empty-state {
+    padding: 48px 25px;
+
+    text-align: center;
+
+    background: linear-gradient(
+        135deg,
+        #222944,
+        #282044
+    );
+
+    border: 1px solid rgba(155, 140, 255, 0.2);
+    border-radius: 17px;
+}
+
+.library-page .library-empty-icon {
+    margin-bottom: 15px;
+
+    color: #bba3ff;
+    font-size: 65px;
+}
+
+.library-page .library-empty-state h3 {
+    color: #ffffff;
+    font-size: 22px;
+}
+
+.library-page .library-empty-state p {
+    margin-bottom: 22px;
+
+    color: #b4bdd6;
+    line-height: 1.8;
+}
+
+.library-page .library-reset-button {
+    display: inline-block;
+    padding: 12px 22px;
+}
+
+/* =========================================
+   9. 底部引导区域
+   ========================================= */
+
+.library-page .library-bottom {
+    position: relative;
+    overflow: hidden;
+
+    margin-top: 30px;
+    padding: 38px;
+
+    border-radius: 19px;
+
+    background: linear-gradient(
+        115deg,
+        #20274b,
+        #392468
+    );
+
+    border: 1px solid rgba(169, 139, 255, 0.23);
+}
+
+.library-page .library-bottom::after {
+    content: "♫";
+
+    position: absolute;
+    right: 38px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: rgba(255, 255, 255, 0.08);
+    font-size: 145px;
+
+    pointer-events: none;
+}
+
+.library-page .library-bottom-content {
+    position: relative;
+    z-index: 1;
+}
+
+.library-page .library-bottom h2 {
+    margin: 0 0 14px;
+
+    color: #ffffff;
+    font-size: 25px;
+}
+
+.library-page .library-bottom p {
+    margin: 0 0 23px;
+
+    color: #c0c5df;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.library-page .library-bottom-button {
+    display: inline-block;
+
+    padding: 12px 23px;
+    border-radius: 9px;
+
+    text-decoration: none;
+    font-weight: 700;
+}
+
+/* =========================================
+   10. 平板和手机适配
+   ========================================= */
+
+@media (max-width: 900px) {
+
+    .library-page .library-search-form {
+        grid-template-columns:
+            minmax(0, 1fr)
+            minmax(160px, 1fr);
+    }
+
+    .library-page .library-search-actions {
+        grid-column: 1 / -1;
+    }
+
+    body:not(:has(.music-home))
+    .library-page .song.library-song {
+        grid-template-columns:
+            44px
+            112px
+            minmax(0, 1fr);
+    }
+
+    .library-page .rate-area.library-rate-area {
+        grid-column: 2 / -1;
+    }
+
+    .library-page .library-rating-form {
+        flex-direction: row;
+        align-items: end;
+        flex-wrap: wrap;
+    }
+
+    .library-page .library-rating-form select,
+    .library-page .library-rating-form button {
+        flex: 1;
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .library-page .library-hero {
+        padding: 30px 24px;
+    }
+
+    .library-page .library-hero-decoration {
+        right: 8px;
+        font-size: 90px;
+    }
+
+    .library-page .library-search-form {
+        grid-template-columns: 1fr;
+    }
+
+    .library-page .library-search-actions {
+        grid-column: auto;
+    }
+
+    body:not(:has(.music-home))
+    .library-page .song.library-song {
+        grid-template-columns:
+            44px
+            minmax(0, 1fr);
+
+        gap: 15px;
+        padding: 18px;
+    }
+
+    .library-page .library-cover-wrap {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    .library-page .song-info.library-song-info,
+    .library-page .rate-area.library-rate-area {
+        grid-column: 1 / -1;
+    }
+
+    .library-page .library-rating-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .library-page .library-bottom {
+        padding: 30px 24px;
+    }
+
+    .library-page .library-bottom::after {
+        right: 0;
+        font-size: 90px;
+    }
+
+}
+
+/* 尊重减少动画的系统设置 */
+@media (prefers-reduced-motion: reduce) {
+
+    .library-page .library-song,
+    .library-page .library-cover {
+        transition: none;
+    }
+
+    .library-page .library-song:hover {
+        transform: none;
+    }
+
+}
+
+/* =========================================
+   兴趣推荐页面：深蓝紫色音乐平台风格
+   ========================================= */
+
+.interest-page {
+    color: #eef0fa;
+    padding-bottom: 40px;
+}
+
+.interest-page * {
+    box-sizing: border-box;
+}
+
+/* =========================================
+   1. 顶部欢迎横幅
+   ========================================= */
+
+.interest-page .interest-hero {
+    position: relative;
+    overflow: hidden;
+
+    min-height: 235px;
+    padding: 42px;
+    margin-bottom: 42px;
+
+    border-radius: 20px;
+
+    background:
+        radial-gradient(
+            circle at 85% 35%,
+            rgba(165, 95, 255, 0.35),
+            transparent 47%
+        ),
+        linear-gradient(
+            115deg,
+            #172344,
+            #2b2055,
+            #48246d
+        );
+
+    border: 1px solid rgba(181, 149, 255, 0.26);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+.interest-page .interest-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 680px;
+}
+
+.interest-page .interest-subtitle {
+    display: block;
+    margin-bottom: 12px;
+
+    color: #c0aaff;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.interest-page .interest-hero h1 {
+    margin: 0 0 18px;
+
+    color: #ffffff;
+    font-size: clamp(28px, 4vw, 39px);
+    line-height: 1.3;
+}
+
+.interest-page .interest-hero p {
+    max-width: 550px;
+    margin: 0 0 22px;
+
+    color: #d5d3ed;
+    font-size: 14px;
+    line-height: 1.9;
+}
+
+.interest-page .interest-hero-badge {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 10px 16px;
+    border-radius: 25px;
+
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+
+    color: #e7ddff;
+    font-size: 13px;
+}
+
+.interest-page .interest-hero-decoration {
+    position: absolute;
+
+    right: 55px;
+    top: 50%;
+
+    transform: translateY(-50%) rotate(-15deg);
+
+    color: rgba(205, 170, 255, 0.17);
+    font-size: 165px;
+    line-height: 1;
+
+    pointer-events: none;
+}
+
+/* =========================================
+   2. 页面板块标题
+   ========================================= */
+
+.interest-page .interest-section {
+    margin-bottom: 42px;
+}
+
+.interest-page .interest-section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 16px;
+
+    margin-bottom: 23px;
+}
+
+.interest-page .interest-section-heading h2 {
+    margin: 0;
+    color: #ffffff;
+    font-size: 26px;
+}
+
+.interest-page .interest-section-description {
+    margin: 10px 0 0;
+
+    color: #aeb6d0;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+/* =========================================
+   3. 音乐偏好选择卡片
+   ========================================= */
+
+body:not(:has(.music-home))
+.interest-page .interest-choice-panel {
+    margin-bottom: 18px;
+    padding: 28px;
+
+    background: linear-gradient(
+        135deg,
+        #222944,
+        #1b2139
+    );
+
+    border: 1px solid rgba(160, 140, 255, 0.23);
+    border-radius: 18px;
+
+    box-shadow: 0 9px 30px rgba(0, 0, 0, 0.15);
+}
+
+.interest-page .interest-choice-heading {
+    display: flex;
+    align-items: center;
+    gap: 17px;
+
+    margin-bottom: 25px;
+}
+
+.interest-page .interest-choice-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 53px;
+    height: 53px;
+    flex-shrink: 0;
+
+    border-radius: 14px;
+
+    background: rgba(140, 102, 255, 0.2);
+    color: #d2b8ff;
+
+    font-size: 27px;
+}
+
+.interest-page .interest-tag-icon {
+    background: rgba(255, 107, 174, 0.15);
+    color: #ffacd6;
+}
+
+.interest-page .interest-choice-heading h3 {
+    margin: 0 0 8px;
+
+    color: #ffffff;
+    font-size: 20px;
+}
+
+.interest-page .interest-choice-heading p {
+    margin: 0;
+
+    color: #aeb6d0;
+    font-size: 13px;
+}
+
+/* =========================================
+   4. 紫色音乐类型、标签胶囊
+   ========================================= */
+
+.interest-page .interest-options {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+
+    margin: 0;
+}
+
+/* 覆盖之前全站的 options label 样式 */
+body:not(:has(.music-home))
+.interest-page .interest-options label.interest-option {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+
+    margin: 0;
+    padding: 12px 17px;
+
+    border-radius: 30px;
+
+    background: #2b3050;
+    border: 1px solid rgba(162, 149, 231, 0.25);
+
+    color: #d5d8ee;
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+    user-select: none;
+
+    transition:
+        background 0.25s ease,
+        border-color 0.25s ease,
+        transform 0.25s ease;
+}
+
+.interest-page .interest-option:hover {
+    transform: translateY(-2px);
+    border-color: #a98cff;
+}
+
+/* 保留可见的复选框 */
+.interest-page .interest-option input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+
+    accent-color: #a78bfa;
+    cursor: pointer;
+}
+
+/* 被选中的类型或标签 */
+body:not(:has(.music-home))
+.interest-page .interest-options
+label.interest-option:has(input:checked) {
+    background: linear-gradient(
+        120deg,
+        #6647bb,
+        #7854cb
+    );
+
+    border-color: #b7a1ff;
+    color: #ffffff;
+
+    box-shadow: 0 4px 15px rgba(135, 98, 255, 0.2);
+}
+
+/* 键盘操作时的焦点 */
+.interest-page .interest-option:focus-within {
+    outline: 2px solid #c5b3ff;
+    outline-offset: 3px;
+}
+
+/* =========================================
+   5. 生成兴趣推荐按钮区域
+   ========================================= */
+
+.interest-page .interest-submit-area {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+
+    padding: 25px 28px;
+    margin-top: 20px;
+
+    border-radius: 17px;
+
+    background: linear-gradient(
+        120deg,
+        #242a4b,
+        #342456
+    );
+
+    border: 1px solid rgba(170, 140, 255, 0.25);
+}
+
+.interest-page .interest-submit-description {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.interest-page .interest-submit-symbol {
+    color: #c3a5ff;
+    font-size: 38px;
+}
+
+.interest-page .interest-submit-description strong {
+    display: block;
+    margin-bottom: 8px;
+
+    color: #ffffff;
+    font-size: 17px;
+}
+
+.interest-page .interest-submit-description p {
+    margin: 0;
+
+    color: #b6bbd5;
+    font-size: 13px;
+}
+
+/* 生成按钮 */
+body:not(:has(.music-home))
+.interest-page .interest-submit-button {
+    min-height: 47px;
+    padding: 13px 25px;
+
+    border-radius: 10px;
+    border: none;
+
+    background: linear-gradient(
+        120deg,
+        #7859e6,
+        #a46bf6
+    );
+
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 800;
+
+    cursor: pointer;
+    white-space: nowrap;
+
+    box-shadow: 0 7px 20px rgba(126, 91, 255, 0.22);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.interest-page .interest-submit-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 11px 25px rgba(126, 91, 255, 0.38);
+}
+
+/* =========================================
+   6. 兴趣推荐结果
+   ========================================= */
+
+.interest-page .interest-result-count {
+    display: inline-block;
+
+    padding: 9px 15px;
+    border-radius: 25px;
+
+    background: rgba(139, 105, 255, 0.17);
+    border: 1px solid rgba(160, 135, 255, 0.28);
+
+    color: #d1c0ff;
+    font-size: 13px;
+}
+
+.interest-page .interest-song-list {
+    display: flex;
+    flex-direction: column;
+    gap: 17px;
+}
+
+body:not(:has(.music-home))
+.interest-page .song.interest-song {
+    display: grid;
+    grid-template-columns: 46px 116px minmax(0, 1fr);
+    align-items: start;
+    gap: 22px;
+
+    margin: 0;
+    padding: 24px;
+    min-width: 0;
+
+    background: linear-gradient(
+        125deg,
+        #222944,
+        #181e34
+    );
+
+    border: 1px solid rgba(155, 143, 235, 0.2);
+    border-radius: 17px;
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease;
+}
+
+body:not(:has(.music-home))
+.interest-page .song.interest-song:hover {
+    transform: translateY(-4px);
+    border-color: rgba(172, 140, 255, 0.55);
+}
+
+/* 推荐序号 */
+.interest-page .rank.interest-rank {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 46px;
+    height: 46px;
+    line-height: 1;
+
+    border-radius: 11px;
+
+    background: linear-gradient(
+        135deg,
+        #7657dd,
+        #a16bf5
+    );
+
+    color: white;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+/* 歌曲封面 */
+.interest-page .interest-cover-wrap {
+    width: 116px;
+    height: 116px;
+    overflow: hidden;
+
+    border-radius: 12px;
+    background: #343052;
+}
+
+.interest-page .cover.interest-cover {
+    display: block;
+    width: 100%;
+    height: 100%;
+
+    border: none;
+    object-fit: cover;
+
+    transition: transform 0.3s ease;
+}
+
+.interest-page .interest-song:hover .interest-cover {
+    transform: scale(1.06);
+}
+
+.interest-page .interest-cover-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 100%;
+
+    background: linear-gradient(
+        135deg,
+        #5946a0,
+        #252b5c
+    );
+
+    color: #e0d0ff;
+    font-size: 45px;
+}
+
+/* 歌曲信息 */
+.interest-page .interest-song-info {
+    min-width: 0;
+}
+
+.interest-page .interest-song-heading {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+
+    margin-bottom: 9px;
+}
+
+.interest-page .interest-song-heading h3 {
+    margin: 0;
+
+    color: #ffffff;
+    font-size: 21px;
+    overflow-wrap: anywhere;
+}
+
+.interest-page .interest-match-badge {
+    padding: 5px 10px;
+    border-radius: 7px;
+
+    background: rgba(150, 110, 255, 0.2);
+    color: #cdb7ff;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.interest-page .interest-artist {
+    margin: 0 0 14px;
+
+    color: #b3bdd9;
+    font-size: 14px;
+}
+
+.interest-page .interest-song-tags {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    margin-bottom: 17px;
+}
+
+.interest-page .interest-genre {
+    padding: 6px 11px;
+    border-radius: 7px;
+
+    background: rgba(145, 103, 255, 0.18);
+    color: #c8b5ff;
+
+    font-size: 12px;
+}
+
+.interest-page .interest-tags {
+    color: #aab3d0;
+    font-size: 12px;
+}
+
+/* 兴趣匹配分 */
+.interest-page .interest-score-area {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+
+    margin-bottom: 18px;
+}
+
+.interest-page .interest-score-label {
+    color: #b9b4db;
+    font-size: 13px;
+}
+
+.interest-page .interest-score {
+    color: #ffca77;
+    font-size: 17px;
+    font-weight: 800;
+}
+
+/* 音乐播放器 */
+.interest-page .interest-audio {
+    width: 100%;
+    max-width: 360px;
+}
+
+.interest-page .interest-audio audio {
+    display: block;
+
+    width: 100%;
+    max-width: 100%;
+    height: 40px;
+
+    margin: 0;
+}
+
+/* =========================================
+   7. 无匹配结果
+   ========================================= */
+
+body:not(:has(.music-home))
+.interest-page .interest-empty-state {
+    padding: 45px 28px;
+    text-align: center;
+
+    background: linear-gradient(
+        135deg,
+        #222945,
+        #292049
+    );
+
+    border: 1px solid rgba(160, 140, 255, 0.22);
+    border-radius: 18px;
+}
+
+.interest-page .interest-empty-icon {
+    margin-bottom: 18px;
+
+    color: #b59cff;
+    font-size: 68px;
+}
+
+.interest-page .interest-empty-state h3 {
+    margin: 0 0 16px;
+    color: white;
+    font-size: 23px;
+}
+
+.interest-page .interest-empty-state p {
+    margin: 0 auto 14px;
+    max-width: 560px;
+
+    color: #b9c0d8;
+    line-height: 1.9;
+}
+
+.interest-page .interest-muted {
+    color: #aeb6d0 !important;
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+.interest-page .interest-library-button {
+    display: inline-block;
+    margin-top: 18px;
+
+    padding: 12px 23px;
+    border-radius: 9px;
+    text-decoration: none;
+}
+
+/* =========================================
+   8. 底部引导横幅
+   ========================================= */
+
+.interest-page .interest-bottom {
+    position: relative;
+    overflow: hidden;
+
+    margin-top: 38px;
+    padding: 38px;
+
+    border-radius: 19px;
+
+    background: linear-gradient(
+        115deg,
+        #20274b,
+        #392468
+    );
+
+    border: 1px solid rgba(169, 139, 255, 0.23);
+}
+
+.interest-page .interest-bottom::after {
+    content: "♫";
+
+    position: absolute;
+
+    right: 38px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: rgba(255, 255, 255, 0.08);
+    font-size: 145px;
+
+    pointer-events: none;
+}
+
+.interest-page .interest-bottom-content {
+    position: relative;
+    z-index: 1;
+}
+
+.interest-page .interest-bottom h2 {
+    margin: 0 0 14px;
+
+    color: white;
+    font-size: 25px;
+}
+
+.interest-page .interest-bottom p {
+    margin: 0 0 23px;
+
+    color: #c0c5df;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.interest-page .interest-bottom-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 17px;
+}
+
+.interest-page .interest-bottom-button {
+    display: inline-block;
+    padding: 12px 23px;
+
+    border-radius: 9px;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+body:not(:has(.music-home))
+.interest-page .interest-bottom-link {
+    color: #d4c5ff;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.interest-page .interest-bottom-link:hover {
+    text-decoration: underline;
+}
+
+/* =========================================
+   9. 手机与平板适配
+   ========================================= */
+
+@media (max-width: 760px) {
+
+    .interest-page .interest-hero {
+        padding: 32px 25px;
+    }
+
+    .interest-page .interest-hero-decoration {
+        right: 8px;
+        font-size: 95px;
+    }
+
+    .interest-page .interest-submit-area {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    body:not(:has(.music-home))
+    .interest-page .song.interest-song {
+        grid-template-columns: 46px minmax(0, 1fr);
+        gap: 15px;
+        padding: 20px;
+    }
+
+    .interest-page .interest-cover-wrap {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    .interest-page .interest-song-info {
+        grid-column: 1 / -1;
+    }
+
+    .interest-page .interest-bottom {
+        padding: 30px 24px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .interest-page .interest-choice-panel {
+        padding: 20px;
+    }
+
+    .interest-page .interest-options {
+        gap: 9px;
+    }
+
+    body:not(:has(.music-home))
+    .interest-page .interest-options label.interest-option {
+        padding: 10px 13px;
+    }
+
+    .interest-page .interest-submit-button {
+        width: 100%;
+    }
+
+    .interest-page .interest-bottom::after {
+        right: 0;
+        font-size: 90px;
+    }
+}
+
+/* 系统设置减少动画时 */
+@media (prefers-reduced-motion: reduce) {
+
+    .interest-page .interest-option,
+    .interest-page .interest-song,
+    .interest-page .interest-cover {
+        transition: none;
+    }
+
+    .interest-page .interest-song:hover,
+    .interest-page .interest-option:hover {
+        transform: none;
+    }
+}
+
+/* =========================================
+   数据统计页面：深色音乐数据看板
+   ========================================= */
+
+.statistics-page {
+    color: #eef0fa;
+    padding-bottom: 40px;
+}
+
+.statistics-page * {
+    box-sizing: border-box;
+}
+
+/* =========================================
+   1. 顶部数据分析横幅
+   ========================================= */
+
+.statistics-page .statistics-hero {
+    position: relative;
+    overflow: hidden;
+
+    min-height: 235px;
+    padding: 42px;
+    margin-bottom: 42px;
+
+    border-radius: 20px;
+
+    background:
+        radial-gradient(
+            circle at 85% 35%,
+            rgba(159, 94, 255, 0.35),
+            transparent 48%
+        ),
+        linear-gradient(
+            115deg,
+            #172344,
+            #292052,
+            #48246d
+        );
+
+    border: 1px solid rgba(181, 149, 255, 0.26);
+
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+.statistics-page .statistics-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 680px;
+}
+
+.statistics-page .statistics-subtitle {
+    display: block;
+    margin-bottom: 12px;
+
+    color: #c0aaff;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.statistics-page .statistics-hero h1 {
+    margin: 0 0 18px;
+
+    color: #ffffff;
+    font-size: clamp(28px, 4vw, 39px);
+    line-height: 1.3;
+}
+
+.statistics-page .statistics-hero p {
+    max-width: 550px;
+    margin: 0 0 22px;
+
+    color: #d5d3ed;
+    font-size: 14px;
+    line-height: 1.9;
+}
+
+.statistics-page .statistics-hero-badge {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 10px 16px;
+    border-radius: 25px;
+
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+
+    color: #eadfff;
+    font-size: 13px;
+}
+
+.statistics-page .statistics-hero-decoration {
+    position: absolute;
+    top: 50%;
+    right: 55px;
+
+    transform: translateY(-50%) rotate(-12deg);
+
+    color: rgba(210, 177, 255, 0.16);
+    font-size: 165px;
+    line-height: 1;
+
+    pointer-events: none;
+}
+
+/* =========================================
+   2. 页面板块标题
+   ========================================= */
+
+.statistics-page .statistics-section {
+    margin-bottom: 43px;
+}
+
+.statistics-page .statistics-section-heading {
+    margin-bottom: 23px;
+}
+
+.statistics-page .statistics-section-heading h2 {
+    margin: 0 0 10px;
+
+    color: #ffffff;
+    font-size: 26px;
+}
+
+.statistics-page .statistics-section-heading p {
+    margin: 0;
+
+    color: #aeb6d0;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+/* =========================================
+   3. 四项核心数据统计卡片
+   ========================================= */
+
+.statistics-page .statistics-overview-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 17px;
+}
+
+.statistics-page .statistics-overview-card {
+    min-width: 0;
+    padding: 25px;
+
+    background: linear-gradient(
+        145deg,
+        #242b48,
+        #1a2038
+    );
+
+    border: 1px solid rgba(160, 145, 255, 0.2);
+    border-radius: 17px;
+
+    box-shadow: 0 8px 27px rgba(0, 0, 0, 0.15);
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.statistics-page .statistics-overview-card:hover {
+    transform: translateY(-5px);
+
+    border-color: rgba(175, 145, 255, 0.55);
+
+    box-shadow: 0 15px 34px rgba(0, 0, 0, 0.25);
+}
+
+/* 数据图标 */
+
+.statistics-page .statistics-card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 52px;
+    height: 52px;
+
+    margin-bottom: 22px;
+
+    border-radius: 14px;
+    font-size: 27px;
+}
+
+.statistics-page .stats-icon-purple {
+    background: rgba(150, 100, 255, 0.2);
+    color: #d0b5ff;
+}
+
+.statistics-page .stats-icon-blue {
+    background: rgba(79, 144, 255, 0.18);
+    color: #8cbbff;
+}
+
+.statistics-page .stats-icon-pink {
+    background: rgba(255, 104, 173, 0.17);
+    color: #ffabcd;
+}
+
+.statistics-page .stats-icon-cyan {
+    background: rgba(75, 214, 219, 0.16);
+    color: #85e5e7;
+}
+
+/* 核心统计数值 */
+
+.statistics-page .statistics-card-number {
+    margin-bottom: 10px;
+
+    color: #ffffff;
+    font-size: clamp(25px, 3vw, 33px);
+    font-weight: 800;
+
+    overflow-wrap: anywhere;
+}
+
+.statistics-page .statistics-card-label {
+    margin-bottom: 12px;
+
+    color: #d6d8ed;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.statistics-page .statistics-card-description {
+    color: #959dbd;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.3px;
+}
+
+/* =========================================
+   4. 用户评分分析卡片
+   ========================================= */
+
+.statistics-page .statistics-rating-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.statistics-page .statistics-rating-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    min-width: 0;
+    padding: 28px;
+
+    background: linear-gradient(
+        135deg,
+        #242b48,
+        #1c223d
+    );
+
+    border: 1px solid rgba(160, 145, 255, 0.2);
+    border-radius: 17px;
+}
+
+.statistics-page .statistics-rating-symbol {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 46px;
+    height: 46px;
+
+    margin-bottom: 20px;
+
+    border-radius: 12px;
+
+    background: rgba(255, 192, 102, 0.14);
+
+    color: #ffca77;
+    font-size: 25px;
+    font-weight: 800;
+}
+
+.statistics-page .statistics-rating-title {
+    margin-bottom: 12px;
+
+    color: #c5c9e2;
+    font-size: 14px;
+}
+
+.statistics-page .statistics-rating-value {
+    margin-bottom: 12px;
+
+    color: #ffca77;
+    font-size: 35px;
+    font-weight: 800;
+
+    overflow-wrap: anywhere;
+}
+
+.statistics-page .statistics-rating-description {
+    color: #969fc0;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+}
+
+/* =========================================
+   5. 评分矩阵分析区域
+   ========================================= */
+
+.statistics-page .statistics-matrix-panel {
+    padding: 30px;
+
+    background: linear-gradient(
+        135deg,
+        #222944,
+        #1a2039
+    );
+
+    border: 1px solid rgba(155, 140, 255, 0.23);
+    border-radius: 18px;
+
+    box-shadow: 0 9px 30px rgba(0, 0, 0, 0.15);
+}
+
+.statistics-page .statistics-matrix-heading {
+    display: flex;
+    align-items: center;
+    gap: 17px;
+
+    margin-bottom: 27px;
+}
+
+.statistics-page .statistics-matrix-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 55px;
+    height: 55px;
+    flex-shrink: 0;
+
+    border-radius: 14px;
+
+    background: rgba(145, 105, 255, 0.2);
+    color: #c7adff;
+    font-size: 30px;
+}
+
+.statistics-page .statistics-matrix-heading h3 {
+    margin: 0 0 8px;
+
+    color: #ffffff;
+    font-size: 21px;
+}
+
+.statistics-page .statistics-matrix-heading p {
+    margin: 0;
+
+    color: #aeb6d0;
+    font-size: 13px;
+}
+
+.statistics-page .statistics-matrix-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 15px;
+
+    margin-bottom: 25px;
+}
+
+.statistics-page .statistics-matrix-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 13px;
+
+    min-width: 0;
+    padding: 23px 15px;
+
+    background: rgba(133, 108, 244, 0.09);
+
+    border: 1px solid rgba(166, 142, 255, 0.18);
+    border-radius: 13px;
+
+    text-align: center;
+}
+
+.statistics-page .statistics-matrix-item span {
+    color: #b9bddb;
+    font-size: 13px;
+}
+
+.statistics-page .statistics-matrix-item strong {
+    color: #d2bcff;
+    font-size: 29px;
+    font-weight: 800;
+
+    overflow-wrap: anywhere;
+}
+
+/* 评分矩阵说明 */
+
+.statistics-page .statistics-matrix-note {
+    padding: 20px 23px;
+
+    background: rgba(12, 18, 36, 0.4);
+
+    border-left: 3px solid #9875ef;
+    border-radius: 9px;
+}
+
+.statistics-page .statistics-matrix-note strong {
+    display: block;
+    margin-bottom: 9px;
+
+    color: #dfd1ff;
+    font-size: 14px;
+}
+
+.statistics-page .statistics-matrix-note p {
+    margin: 0;
+
+    color: #b4bdd7;
+    font-size: 13px;
+    line-height: 1.9;
+}
+
+/* =========================================
+   6. 完整统计明细表格
+   ========================================= */
+
+.statistics-page .statistics-table-wrap {
+    overflow-x: auto;
+
+    background: #1b223d;
+
+    border: 1px solid rgba(155, 140, 255, 0.22);
+    border-radius: 17px;
+}
+
+/* 覆盖之前的全站通用表格样式 */
+
+body:not(:has(.music-home))
+.statistics-page table.statistics-detail-table {
+    width: 100%;
+    margin: 0;
+
+    border-collapse: collapse;
+    background: transparent;
+
+    color: #e9ecf7;
+}
+
+body:not(:has(.music-home))
+.statistics-page .statistics-detail-table th {
+    padding: 19px 24px;
+
+    background: #302d55;
+    border: none;
+
+    color: #e6dcff;
+    font-size: 14px;
+    text-align: left;
+}
+
+body:not(:has(.music-home))
+.statistics-page .statistics-detail-table td {
+    padding: 17px 24px;
+
+    background: transparent;
+    border: none;
+    border-top: 1px solid rgba(156, 147, 218, 0.14);
+
+    color: #d4d9ee;
+    font-size: 14px;
+    text-align: left;
+}
+
+.statistics-page .statistics-detail-table th:last-child,
+.statistics-page .statistics-detail-table td:last-child {
+    text-align: right !important;
+}
+
+.statistics-page .statistics-detail-table td:last-child {
+    color: #cdb7ff !important;
+    font-weight: 700;
+}
+
+.statistics-page .statistics-detail-table tbody tr:hover {
+    background: rgba(142, 111, 255, 0.09);
+}
+
+/* =========================================
+   7. 页面底部引导区域
+   ========================================= */
+
+.statistics-page .statistics-bottom {
+    position: relative;
+    overflow: hidden;
+
+    padding: 38px;
+    margin-top: 35px;
+
+    border-radius: 19px;
+
+    background: linear-gradient(
+        115deg,
+        #20274b,
+        #392468
+    );
+
+    border: 1px solid rgba(169, 139, 255, 0.23);
+}
+
+.statistics-page .statistics-bottom::after {
+    content: "♫";
+
+    position: absolute;
+    top: 50%;
+    right: 38px;
+
+    transform: translateY(-50%);
+
+    color: rgba(255, 255, 255, 0.08);
+    font-size: 145px;
+
+    pointer-events: none;
+}
+
+.statistics-page .statistics-bottom-content {
+    position: relative;
+    z-index: 1;
+}
+
+.statistics-page .statistics-bottom h2 {
+    margin: 0 0 14px;
+
+    color: #ffffff;
+    font-size: 25px;
+}
+
+.statistics-page .statistics-bottom p {
+    margin: 0 0 23px;
+
+    color: #c0c5df;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.statistics-page .statistics-bottom-button {
+    display: inline-block;
+
+    padding: 12px 23px;
+    border-radius: 9px;
+
+    text-decoration: none;
+    font-weight: 700;
+}
+
+/* =========================================
+   8. 平板和手机适配
+   ========================================= */
+
+@media (max-width: 900px) {
+
+    .statistics-page .statistics-overview-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+@media (max-width: 650px) {
+
+    .statistics-page .statistics-hero {
+        padding: 30px 24px;
+    }
+
+    .statistics-page .statistics-hero-decoration {
+        right: 8px;
+        font-size: 90px;
+    }
+
+    .statistics-page .statistics-rating-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .statistics-page .statistics-matrix-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .statistics-page .statistics-matrix-panel {
+        padding: 22px;
+    }
+
+    .statistics-page .statistics-bottom {
+        padding: 30px 24px;
+    }
+
+    .statistics-page .statistics-bottom::after {
+        right: 0;
+        font-size: 90px;
+    }
+
+}
+
+@media (max-width: 400px) {
+
+    .statistics-page .statistics-overview-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .statistics-page .statistics-section-heading h2 {
+        font-size: 23px;
+    }
+
+    body:not(:has(.music-home))
+    .statistics-page .statistics-detail-table th,
+    body:not(:has(.music-home))
+    .statistics-page .statistics-detail-table td {
+        padding: 14px 12px;
+    }
+
+}
+
+/* 减少动画偏好 */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .statistics-page .statistics-overview-card {
+        transition: none;
+    }
+
+    .statistics-page .statistics-overview-card:hover {
+        transform: none;
+    }
+
+}
+
+/* =========================================
+   个人中心：深蓝紫色音乐平台风格
+   ========================================= */
+
+.profile-page {
+    color: #eef0fa;
+    padding-bottom: 40px;
+}
+
+.profile-page * {
+    box-sizing: border-box;
+}
+
+/* =========================================
+   1. 个人资料顶部横幅
+   ========================================= */
+
+.profile-page .profile-hero {
+    position: relative;
+    overflow: hidden;
+
+    min-height: 290px;
+    padding: 42px;
+    margin-bottom: 42px;
+
+    border-radius: 20px;
+
+    background:
+        radial-gradient(
+            circle at 85% 35%,
+            rgba(159, 94, 255, 0.35),
+            transparent 48%
+        ),
+        linear-gradient(
+            115deg,
+            #172344,
+            #292052,
+            #48246d
+        );
+
+    border: 1px solid rgba(181, 149, 255, 0.26);
+
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+.profile-page .profile-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 730px;
+}
+
+.profile-page .profile-subtitle {
+    display: block;
+    margin-bottom: 15px;
+
+    color: #c0aaff;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+/* 头像和用户名 */
+
+.profile-page .profile-hero-user {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+
+    margin: 24px 0;
+}
+
+.profile-page .profile-avatar.profile-hero-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100px;
+    height: 100px;
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: linear-gradient(
+        135deg,
+        #7858e8,
+        #b06df6
+    );
+
+    border: 4px solid rgba(255, 255, 255, 0.22);
+
+    color: #ffffff;
+    font-size: 42px;
+    font-weight: 800;
+
+    box-shadow: 0 8px 30px rgba(120, 88, 232, 0.38);
+}
+
+.profile-page .profile-hero-info {
+    min-width: 0;
+}
+
+.profile-page .profile-welcome-label {
+    display: block;
+    margin-bottom: 9px;
+
+    color: #d0c6ef;
+    font-size: 13px;
+}
+
+.profile-page .profile-hero-info h1 {
+    margin: 0 0 13px;
+
+    color: #ffffff;
+    font-size: clamp(30px, 4vw, 42px);
+
+    overflow-wrap: anywhere;
+}
+
+.profile-page .profile-user-badge {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 8px 15px;
+
+    border-radius: 25px;
+
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.17);
+
+    color: #e4dcff;
+    font-size: 13px;
+}
+
+.profile-page .profile-hero-description {
+    max-width: 600px;
+    margin: 22px 0 0;
+
+    color: #d2d2e9;
+    font-size: 14px;
+    line-height: 1.9;
+}
+
+.profile-page .profile-hero-decoration {
+    position: absolute;
+    top: 50%;
+    right: 55px;
+
+    transform: translateY(-50%) rotate(-13deg);
+
+    color: rgba(208, 176, 255, 0.15);
+    font-size: 175px;
+    line-height: 1;
+
+    pointer-events: none;
+}
+
+/* =========================================
+   2. 页面板块标题
+   ========================================= */
+
+.profile-page .profile-section {
+    margin-bottom: 43px;
+}
+
+.profile-page .profile-section-heading {
+    margin-bottom: 23px;
+}
+
+.profile-page .profile-section-heading h2 {
+    margin: 0 0 10px;
+
+    color: #ffffff;
+    font-size: 26px;
+}
+
+.profile-page .profile-section-heading p {
+    margin: 0;
+
+    color: #aeb6d0;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+/* =========================================
+   3. 我的音乐数据
+   ========================================= */
+
+.profile-page .profile-stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+
+    margin: 0;
+}
+
+body:not(:has(.music-home))
+.profile-page .profile-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    min-width: 0;
+    margin: 0;
+    padding: 27px;
+
+    text-align: left;
+
+    background: linear-gradient(
+        135deg,
+        #242b48,
+        #1b213a
+    );
+
+    border: 1px solid rgba(160, 145, 255, 0.2);
+    border-radius: 17px;
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease;
+}
+
+.profile-page .profile-stat:hover {
+    transform: translateY(-4px);
+    border-color: rgba(175, 145, 255, 0.5);
+}
+
+.profile-page .profile-stat-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 52px;
+    height: 52px;
+    margin-bottom: 20px;
+
+    border-radius: 14px;
+
+    background: rgba(150, 100, 255, 0.2);
+    color: #d1b5ff;
+
+    font-size: 27px;
+}
+
+.profile-page .profile-id-stat .profile-stat-icon {
+    background: rgba(79, 144, 255, 0.17);
+    color: #94bdff;
+}
+
+.profile-page .profile-stat-number {
+    margin-bottom: 9px;
+
+    color: #ffffff;
+    font-size: 34px;
+    font-weight: 800;
+}
+
+.profile-page .profile-stat-label {
+    margin-bottom: 10px;
+
+    color: #d8dcf0;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.profile-page .profile-stat-description {
+    color: #939dbf;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+}
+
+/* =========================================
+   4. 我的音乐功能入口
+   ========================================= */
+
+.profile-page .profile-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+/* 每个功能入口 */
+
+body:not(:has(.music-home))
+.main .profile-page a.profile-action-card {
+    display: flex;
+    align-items: center;
+    gap: 17px;
+
+    min-width: 0;
+    min-height: 130px;
+    padding: 24px;
+
+    border-radius: 17px;
+
+    background: linear-gradient(
+        135deg,
+        #242b48,
+        #1b2139
+    );
+
+    border: 1px solid rgba(160, 145, 255, 0.2);
+
+    color: #eef0fa;
+    text-decoration: none;
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+body:not(:has(.music-home))
+.main .profile-page a.profile-action-card:hover {
+    transform: translateY(-5px);
+
+    border-color: rgba(175, 145, 255, 0.58);
+
+    box-shadow: 0 15px 34px rgba(0, 0, 0, 0.24);
+}
+
+/* 功能图标 */
+
+.profile-page .profile-action-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 55px;
+    height: 55px;
+    flex-shrink: 0;
+
+    border-radius: 14px;
+
+    font-size: 26px;
+}
+
+.profile-page .profile-icon-purple {
+    background: rgba(150, 100, 255, 0.2);
+    color: #d1b5ff;
+}
+
+.profile-page .profile-icon-pink {
+    background: rgba(255, 104, 173, 0.17);
+    color: #ffabcd;
+}
+
+.profile-page .profile-icon-blue {
+    background: rgba(79, 144, 255, 0.18);
+    color: #94bdff;
+}
+
+.profile-page .profile-icon-cyan {
+    background: rgba(75, 214, 219, 0.16);
+    color: #85e5e7;
+}
+
+.profile-page .profile-icon-orange {
+    background: rgba(255, 183, 94, 0.15);
+    color: #ffc77e;
+}
+
+/* 功能文字 */
+
+.profile-page .profile-action-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.profile-page .profile-action-content h3 {
+    margin: 0 0 10px;
+
+    color: #ffffff;
+    font-size: 18px;
+}
+
+.profile-page .profile-action-content p {
+    margin: 0;
+
+    color: #b2bad5;
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+.profile-page .profile-action-arrow {
+    flex-shrink: 0;
+
+    color: #bfaaff;
+    font-size: 25px;
+
+    transition: transform 0.25s ease;
+}
+
+.profile-page .profile-action-card:hover
+.profile-action-arrow {
+    transform: translateX(5px);
+}
+
+/* =========================================
+   5. 账户安全区域
+   ========================================= */
+
+.profile-page .profile-account-panel,
+.profile-page .profile-logout-panel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 22px;
+
+    padding: 27px;
+    margin-bottom: 17px;
+
+    border-radius: 17px;
+
+    background: linear-gradient(
+        135deg,
+        #242b48,
+        #1b2139
+    );
+
+    border: 1px solid rgba(160, 145, 255, 0.2);
+}
+
+.profile-page .profile-account-info {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    min-width: 0;
+}
+
+.profile-page .profile-account-panel h3,
+.profile-page .profile-logout-panel h3 {
+    margin: 0 0 10px;
+
+    color: #ffffff;
+    font-size: 18px;
+}
+
+.profile-page .profile-account-panel p,
+.profile-page .profile-logout-panel p {
+    margin: 0;
+
+    color: #adb6d1;
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+/* 修改密码按钮 */
+
+body:not(:has(.music-home))
+.main .profile-page a.profile-account-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 43px;
+    padding: 11px 20px;
+
+    border-radius: 9px;
+
+    background: rgba(140, 105, 255, 0.18);
+    border: 1px solid rgba(165, 135, 255, 0.3);
+
+    color: #dfd2ff;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+body:not(:has(.music-home))
+.main .profile-page a.profile-account-button:hover {
+    background: #7659d9;
+    color: #ffffff;
+}
+
+/* 退出登录区域 */
+
+.profile-page .profile-logout-panel {
+    background: rgba(127, 48, 69, 0.12);
+    border-color: rgba(232, 110, 132, 0.24);
+}
+
+body:not(:has(.music-home))
+.main .profile-page a.profile-logout-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 43px;
+    padding: 11px 20px;
+
+    border-radius: 9px;
+
+    background: #c94c64;
+    color: #ffffff;
+
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+body:not(:has(.music-home))
+.main .profile-page a.profile-logout-button:hover {
+    background: #df6076;
+    color: #ffffff;
+}
+
+/* =========================================
+   6. 页面底部音乐横幅
+   ========================================= */
+
+.profile-page .profile-bottom {
+    position: relative;
+    overflow: hidden;
+
+    margin-top: 38px;
+    padding: 38px;
+
+    border-radius: 19px;
+
+    background: linear-gradient(
+        115deg,
+        #20274b,
+        #392468
+    );
+
+    border: 1px solid rgba(169, 139, 255, 0.23);
+}
+
+.profile-page .profile-bottom::after {
+    content: "♫";
+
+    position: absolute;
+    top: 50%;
+    right: 38px;
+
+    transform: translateY(-50%);
+
+    color: rgba(255, 255, 255, 0.08);
+    font-size: 145px;
+
+    pointer-events: none;
+}
+
+.profile-page .profile-bottom-content {
+    position: relative;
+    z-index: 1;
+}
+
+.profile-page .profile-bottom h2 {
+    margin: 0 0 14px;
+
+    color: #ffffff;
+    font-size: 25px;
+}
+
+.profile-page .profile-bottom p {
+    margin: 0 0 23px;
+
+    color: #c0c5df;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.profile-page .profile-bottom-button {
+    display: inline-block;
+    padding: 12px 23px;
+
+    border-radius: 9px;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+/* 键盘导航高亮 */
+
+.profile-page a:focus-visible {
+    outline: 2px solid #c9b7ff;
+    outline-offset: 4px;
+}
+
+/* =========================================
+   7. 平板和手机适配
+   ========================================= */
+
+@media (max-width: 800px) {
+
+    .profile-page .profile-actions {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-page .profile-hero {
+        padding: 34px 28px;
+    }
+
+    .profile-page .profile-hero-decoration {
+        right: 15px;
+        font-size: 110px;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .profile-page .profile-hero-user {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .profile-page .profile-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-page .profile-account-panel,
+    .profile-page .profile-logout-panel {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 22px;
+    }
+
+    .profile-page .profile-bottom {
+        padding: 30px 24px;
+    }
+
+    .profile-page .profile-bottom::after {
+        right: 0;
+        font-size: 90px;
+    }
+}
+
+/* 减少动画偏好 */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .profile-page .profile-stat,
+    .profile-page .profile-action-card,
+    .profile-page .profile-action-arrow {
+        transition: none;
+    }
+
+    .profile-page .profile-stat:hover,
+    .profile-page .profile-action-card:hover {
+        transform: none;
+    }
+}
+
+/* =========================================
+   我的评分页面：深色音乐平台风格
+   ========================================= */
+
+.my-ratings-page {
+    color: #eef0fa;
+    padding-bottom: 40px;
+}
+
+.my-ratings-page * {
+    box-sizing: border-box;
+}
+
+/* =========================================
+   1. 顶部欢迎横幅
+   ========================================= */
+
+.my-ratings-page .my-ratings-hero {
+    position: relative;
+    overflow: hidden;
+
+    min-height: 235px;
+    padding: 42px;
+    margin-bottom: 42px;
+
+    border-radius: 20px;
+
+    background:
+        radial-gradient(
+            circle at 85% 35%,
+            rgba(165, 95, 255, 0.35),
+            transparent 47%
+        ),
+        linear-gradient(
+            115deg,
+            #172344,
+            #292052,
+            #48246d
+        );
+
+    border: 1px solid rgba(181, 149, 255, 0.26);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+.my-ratings-page .my-ratings-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 680px;
+}
+
+.my-ratings-page .my-ratings-subtitle {
+    display: block;
+    margin-bottom: 12px;
+
+    color: #c0aaff;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.my-ratings-page .my-ratings-hero h1 {
+    margin: 0 0 18px;
+
+    color: #ffffff;
+    font-size: clamp(28px, 4vw, 39px);
+    line-height: 1.3;
+}
+
+.my-ratings-page .my-ratings-hero p {
+    max-width: 550px;
+    margin: 0 0 22px;
+
+    color: #d5d3ed;
+    font-size: 14px;
+    line-height: 1.9;
+}
+
+.my-ratings-page .my-ratings-hero-badge {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 10px 16px;
+    border-radius: 25px;
+
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+
+    color: #eadfff;
+    font-size: 13px;
+}
+
+.my-ratings-page .my-ratings-hero-decoration {
+    position: absolute;
+
+    right: 55px;
+    top: 50%;
+
+    transform: translateY(-50%) rotate(-12deg);
+
+    color: rgba(216, 178, 255, 0.16);
+    font-size: 165px;
+    line-height: 1;
+
+    pointer-events: none;
+}
+
+/* =========================================
+   2. 页面板块标题
+   ========================================= */
+
+.my-ratings-page .my-ratings-section {
+    margin-bottom: 42px;
+}
+
+.my-ratings-page .my-ratings-section-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+
+    margin-bottom: 23px;
+}
+
+.my-ratings-page .my-ratings-section-heading h2 {
+    margin: 0 0 10px;
+
+    color: #ffffff;
+    font-size: 26px;
+}
+
+.my-ratings-page .my-ratings-section-heading p {
+    margin: 0;
+
+    color: #aeb6d0;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.my-ratings-page .my-ratings-count {
+    display: inline-block;
+
+    padding: 9px 15px;
+    border-radius: 25px;
+
+    background: rgba(139, 105, 255, 0.17);
+    border: 1px solid rgba(160, 135, 255, 0.28);
+
+    color: #d1c0ff;
+    font-size: 13px;
+}
+
+/* =========================================
+   3. 已评分歌曲列表
+   ========================================= */
+
+.my-ratings-page .my-ratings-list {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* 单首歌曲卡片 */
+
+body:not(:has(.music-home))
+.my-ratings-page .song.my-rating-song {
+    display: grid;
+
+    grid-template-columns:
+        46px
+        116px
+        minmax(0, 1fr)
+        220px;
+
+    align-items: start;
+    gap: 22px;
+
+    min-width: 0;
+    margin: 0;
+    padding: 24px;
+
+    border-radius: 17px;
+
+    background: linear-gradient(
+        125deg,
+        #222944,
+        #181e34
+    );
+
+    border: 1px solid rgba(155, 143, 235, 0.22);
+
+    box-shadow: 0 8px 27px rgba(0, 0, 0, 0.14);
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+body:not(:has(.music-home))
+.my-ratings-page .song.my-rating-song:hover {
+    transform: translateY(-4px);
+
+    border-color: rgba(171, 140, 255, 0.55);
+
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.24);
+}
+
+/* =========================================
+   4. 歌曲编号和封面
+   ========================================= */
+
+.my-ratings-page .rank.my-rating-rank {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 46px;
+    height: 46px;
+    line-height: 1;
+
+    border-radius: 11px;
+
+    background: linear-gradient(
+        135deg,
+        #7657dd,
+        #a16bf5
+    );
+
+    color: #ffffff;
+    font-size: 19px;
+    font-weight: 800;
+}
+
+.my-ratings-page .my-rating-cover-wrap {
+    width: 116px;
+    height: 116px;
+
+    overflow: hidden;
+    border-radius: 12px;
+
+    background: #343052;
+}
+
+.my-ratings-page .cover.my-rating-cover {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+    margin: 0;
+
+    border: none;
+    object-fit: cover;
+
+    transition: transform 0.35s ease;
+}
+
+.my-ratings-page .my-rating-song:hover
+.my-rating-cover {
+    transform: scale(1.06);
+}
+
+.my-ratings-page .my-rating-cover-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 100%;
+
+    background: linear-gradient(
+        135deg,
+        #5946a0,
+        #252b5c
+    );
+
+    color: #e0d0ff;
+    font-size: 45px;
+}
+
+/* =========================================
+   5. 歌曲信息
+   ========================================= */
+
+.my-ratings-page .song-info.my-rating-song-info {
+    width: 100%;
+    min-width: 0;
+}
+
+.my-ratings-page .my-rating-song-heading {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+
+    margin-bottom: 9px;
+}
+
+.my-ratings-page .my-rating-song-heading h3 {
+    margin: 0;
+
+    color: #ffffff;
+    font-size: 21px;
+    overflow-wrap: anywhere;
+}
+
+.my-ratings-page .my-rating-saved-badge {
+    padding: 5px 10px;
+
+    border-radius: 7px;
+
+    background: rgba(150, 110, 255, 0.2);
+    color: #cdb7ff;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.my-ratings-page .my-rating-artist {
+    margin: 0 0 14px;
+
+    color: #b3bdd9;
+    font-size: 14px;
+}
+
+/* 音乐类型和标签 */
+
+.my-ratings-page .my-rating-song-tags {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    margin-bottom: 17px;
+}
+
+.my-ratings-page .my-rating-genre {
+    padding: 6px 11px;
+
+    border-radius: 7px;
+
+    background: rgba(145, 103, 255, 0.18);
+    color: #c8b5ff;
+
+    font-size: 12px;
+}
+
+.my-ratings-page .my-rating-tags {
+    color: #aab3d0;
+    font-size: 12px;
+    overflow-wrap: anywhere;
+}
+
+/* =========================================
+   6. 当前评分显示
+   ========================================= */
+
+.my-ratings-page .my-rating-current {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+
+    margin-bottom: 19px;
+}
+
+.my-ratings-page .my-rating-current-label {
+    color: #b9b4db;
+    font-size: 13px;
+}
+
+.my-ratings-page .my-rating-current-score {
+    color: #ffca77;
+    font-size: 19px;
+    font-weight: 800;
+}
+
+/* =========================================
+   7. 在线试听播放器
+   ========================================= */
+
+.my-ratings-page .my-rating-audio {
+    width: 100%;
+    max-width: 350px;
+}
+
+.my-ratings-page .my-rating-audio audio {
+    display: block;
+
+    width: 100%;
+    max-width: 100%;
+    height: 40px;
+
+    margin: 0;
+}
+
+.my-ratings-page .my-rating-muted {
+    color: #aeb6d0;
+    font-size: 13px;
+}
+
+/* =========================================
+   8. 评分管理区域
+   ========================================= */
+
+body:not(:has(.music-home))
+.my-ratings-page .rate-area.my-rating-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+
+    padding: 18px;
+    margin: 0;
+
+    background: rgba(139, 105, 255, 0.09);
+    border: 1px solid rgba(160, 139, 255, 0.21);
+    border-radius: 13px;
+}
+
+.my-ratings-page .my-rating-actions-title {
+    color: #dfcfff;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+/* 修改评分表单 */
+
+.my-ratings-page .my-rating-edit-form {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 11px;
+
+    width: 100%;
+    margin: 0;
+}
+
+.my-ratings-page .my-rating-edit-form label {
+    color: #bec4dd;
+    font-size: 12px;
+}
+
+body:not(:has(.music-home))
+.my-ratings-page .my-rating-edit-form select {
+    width: 100%;
+    min-width: 0;
+    min-height: 43px;
+
+    margin: 0;
+    padding: 10px;
+
+    background: #151b31;
+    color: #ffffff;
+
+    border: 1px solid #4c4778;
+    border-radius: 8px;
+
+    font-size: 13px;
+}
+
+.my-ratings-page .my-rating-edit-form select:focus {
+    outline: 2px solid #ab91ff;
+    outline-offset: 2px;
+}
+
+/* 保存修改：紫色按钮 */
+
+body:not(:has(.music-home))
+.main .my-ratings-page
+button.my-rating-save-button {
+    width: 100%;
+    min-height: 43px;
+    margin: 0;
+    padding: 11px;
+
+    background: linear-gradient(
+        120deg,
+        #7758e0,
+        #a16bf5
+    );
+
+    border: none;
+    border-radius: 9px;
+
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+/* 删除评分表单 */
+
+.my-ratings-page .my-rating-delete-form {
+    width: 100%;
+    margin: 0;
+
+    padding-top: 14px;
+
+    border-top: 1px solid rgba(160, 139, 255, 0.2);
+}
+
+/* 删除评分：红色按钮 */
+
+body:not(:has(.music-home))
+.main .my-ratings-page
+button.my-rating-delete-button {
+    width: 100%;
+    min-height: 43px;
+    margin: 0;
+    padding: 11px;
+
+    background: rgba(214, 76, 100, 0.15);
+
+    border: 1px solid rgba(231, 109, 129, 0.4);
+    border-radius: 9px;
+
+    color: #ff9baa;
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+body:not(:has(.music-home))
+.main .my-ratings-page
+button.my-rating-delete-button:hover {
+    background: #c94c64;
+    color: #ffffff;
+    opacity: 1;
+}
+
+/* 评分操作键盘焦点 */
+
+.my-ratings-page button:focus-visible,
+.my-ratings-page a:focus-visible {
+    outline: 2px solid #c9b7ff;
+    outline-offset: 3px;
+}
+
+/* =========================================
+   9. 没有评分记录的状态
+   ========================================= */
+
+body:not(:has(.music-home))
+.my-ratings-page .my-ratings-empty {
+    padding: 50px 28px;
+
+    text-align: center;
+
+    background: linear-gradient(
+        135deg,
+        #222945,
+        #292049
+    );
+
+    border: 1px solid rgba(160, 140, 255, 0.22);
+    border-radius: 18px;
+}
+
+.my-ratings-page .my-ratings-empty-icon {
+    margin-bottom: 18px;
+
+    color: #b59cff;
+    font-size: 70px;
+}
+
+.my-ratings-page .my-ratings-empty h3 {
+    margin: 0 0 16px;
+
+    color: #ffffff;
+    font-size: 23px;
+}
+
+.my-ratings-page .my-ratings-empty p {
+    margin: 0 auto 20px;
+    max-width: 550px;
+
+    color: #b9c0d8;
+    line-height: 1.9;
+}
+
+.my-ratings-page .my-ratings-empty-button {
+    display: inline-block;
+    padding: 12px 24px;
+
+    border-radius: 9px;
+    text-decoration: none;
+}
+
+/* =========================================
+   10. 页面底部引导
+   ========================================= */
+
+.my-ratings-page .my-ratings-bottom {
+    position: relative;
+    overflow: hidden;
+
+    margin-top: 38px;
+    padding: 38px;
+
+    border-radius: 19px;
+
+    background: linear-gradient(
+        115deg,
+        #20274b,
+        #392468
+    );
+
+    border: 1px solid rgba(169, 139, 255, 0.23);
+}
+
+.my-ratings-page .my-ratings-bottom::after {
+    content: "♫";
+
+    position: absolute;
+
+    right: 38px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: rgba(255, 255, 255, 0.08);
+    font-size: 145px;
+
+    pointer-events: none;
+}
+
+.my-ratings-page .my-ratings-bottom-content {
+    position: relative;
+    z-index: 1;
+}
+
+.my-ratings-page .my-ratings-bottom h2 {
+    margin: 0 0 14px;
+
+    color: #ffffff;
+    font-size: 25px;
+}
+
+.my-ratings-page .my-ratings-bottom p {
+    margin: 0 0 23px;
+
+    color: #c0c5df;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.my-ratings-page .my-ratings-bottom-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 18px;
+}
+
+.my-ratings-page .my-ratings-bottom-button {
+    display: inline-block;
+
+    padding: 12px 23px;
+    border-radius: 9px;
+
+    text-decoration: none;
+    font-weight: 700;
+}
+
+body:not(:has(.music-home))
+.main .my-ratings-page
+a.my-ratings-recommend-link {
+    color: #d6c7ff;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.my-ratings-page .my-ratings-recommend-link:hover {
+    text-decoration: underline;
+}
+
+/* =========================================
+   11. 平板和手机适配
+   ========================================= */
+
+@media (max-width: 950px) {
+
+    body:not(:has(.music-home))
+    .my-ratings-page .song.my-rating-song {
+        grid-template-columns:
+            46px
+            116px
+            minmax(0, 1fr);
+    }
+
+    .my-ratings-page .rate-area.my-rating-actions {
+        grid-column: 2 / -1;
+    }
+
+    .my-ratings-page .my-rating-edit-form {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-items: end;
+    }
+
+    .my-ratings-page .my-rating-edit-form label {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .my-ratings-page .my-ratings-hero {
+        padding: 30px 24px;
+    }
+
+    .my-ratings-page .my-ratings-hero-decoration {
+        right: 8px;
+        font-size: 90px;
+    }
+
+    body:not(:has(.music-home))
+    .my-ratings-page .song.my-rating-song {
+        grid-template-columns: 46px minmax(0, 1fr);
+        gap: 15px;
+        padding: 18px;
+    }
+
+    .my-ratings-page .my-rating-cover-wrap {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    .my-ratings-page .song-info.my-rating-song-info,
+    .my-ratings-page .rate-area.my-rating-actions {
+        grid-column: 1 / -1;
+    }
+
+    .my-ratings-page .my-rating-edit-form {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .my-ratings-page .my-ratings-bottom {
+        padding: 30px 24px;
+    }
+
+    .my-ratings-page .my-ratings-bottom::after {
+        right: 0;
+        font-size: 90px;
+    }
+}
+
+/* 减少动画偏好 */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .my-ratings-page .my-rating-song,
+    .my-ratings-page .my-rating-cover {
+        transition: none;
+    }
+
+    .my-ratings-page .my-rating-song:hover {
+        transform: none;
+    }
+}
+
+/* =========================================
+   系统说明页面：深蓝紫色音乐平台风格
+   ========================================= */
+
+.about-page {
+    color: #eef0fa;
+    padding-bottom: 40px;
+}
+
+.about-page * {
+    box-sizing: border-box;
+}
+
+/* =========================================
+   1. 顶部介绍横幅
+   ========================================= */
+
+.about-page .about-hero {
+    position: relative;
+    overflow: hidden;
+
+    min-height: 240px;
+    padding: 42px;
+    margin-bottom: 43px;
+
+    border-radius: 20px;
+
+    background:
+        radial-gradient(
+            circle at 85% 35%,
+            rgba(165, 95, 255, 0.35),
+            transparent 47%
+        ),
+        linear-gradient(
+            115deg,
+            #172344,
+            #292052,
+            #48246d
+        );
+
+    border: 1px solid rgba(181, 149, 255, 0.26);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+.about-page .about-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 700px;
+}
+
+.about-page .about-subtitle {
+    display: block;
+    margin-bottom: 12px;
+
+    color: #c0aaff;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.about-page .about-hero h1 {
+    margin: 0 0 18px;
+
+    color: #ffffff;
+    font-size: clamp(28px, 4vw, 39px);
+    line-height: 1.3;
+}
+
+.about-page .about-hero p {
+    max-width: 560px;
+    margin: 0 0 22px;
+
+    color: #d5d3ed;
+    font-size: 14px;
+    line-height: 1.9;
+}
+
+.about-page .about-hero-badge {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 10px 16px;
+
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 25px;
+
+    color: #eadfff;
+    font-size: 13px;
+}
+
+.about-page .about-hero-decoration {
+    position: absolute;
+
+    top: 50%;
+    right: 55px;
+
+    transform: translateY(-50%) rotate(-12deg);
+
+    color: rgba(210, 176, 255, 0.16);
+    font-size: 165px;
+    line-height: 1;
+
+    pointer-events: none;
+}
+
+/* =========================================
+   2. 页面分区和标题
+   ========================================= */
+
+.about-page .about-section {
+    margin-bottom: 45px;
+}
+
+.about-page .about-section-heading {
+    margin-bottom: 24px;
+}
+
+.about-page .about-section-heading h2 {
+    margin: 0 0 11px;
+
+    color: #ffffff;
+    font-size: 26px;
+}
+
+.about-page .about-section-heading p {
+    margin: 0;
+
+    color: #aeb6d0;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+/* =========================================
+   3. 系统核心功能卡片
+   ========================================= */
+
+.about-page .about-feature-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+body:not(:has(.music-home))
+.main .about-page a.about-feature-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    min-height: 235px;
+    min-width: 0;
+    padding: 27px;
+
+    background: linear-gradient(
+        135deg,
+        #242b48,
+        #1b2139
+    );
+
+    border: 1px solid rgba(160, 145, 255, 0.2);
+    border-radius: 17px;
+
+    color: #eef0fa;
+    text-decoration: none;
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+body:not(:has(.music-home))
+.main .about-page a.about-feature-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(175, 145, 255, 0.55);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+}
+
+.about-page .about-feature-icon,
+.about-page .about-strategy-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 52px;
+    height: 52px;
+    flex-shrink: 0;
+
+    margin-bottom: 20px;
+
+    border-radius: 14px;
+    font-size: 26px;
+}
+
+.about-page .about-icon-purple {
+    background: rgba(150, 100, 255, 0.2);
+    color: #d1b5ff;
+}
+
+.about-page .about-icon-blue {
+    background: rgba(79, 144, 255, 0.18);
+    color: #94bdff;
+}
+
+.about-page .about-icon-pink {
+    background: rgba(255, 104, 173, 0.17);
+    color: #ffabcd;
+}
+
+.about-page .about-icon-orange {
+    background: rgba(255, 183, 94, 0.15);
+    color: #ffc77e;
+}
+
+.about-page .about-feature-card h3 {
+    margin: 0 0 12px;
+    color: #ffffff;
+    font-size: 19px;
+}
+
+.about-page .about-feature-card p {
+    margin: 0 0 19px;
+
+    color: #b3bdd9;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.about-page .about-feature-card > span {
+    margin-top: auto;
+
+    color: #cbb8ff;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+/* =========================================
+   4. 协同过滤算法介绍卡片
+   ========================================= */
+
+.about-page .about-technical-card,
+.about-page .about-formula-card {
+    padding: 30px;
+
+    background: linear-gradient(
+        135deg,
+        #222944,
+        #1a2039
+    );
+
+    border: 1px solid rgba(160, 145, 255, 0.22);
+    border-radius: 18px;
+
+    box-shadow: 0 9px 30px rgba(0, 0, 0, 0.15);
+}
+
+.about-page .about-technical-heading,
+.about-page .about-formula-heading {
+    display: flex;
+    align-items: center;
+    gap: 17px;
+
+    margin-bottom: 24px;
+}
+
+.about-page .about-technical-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 55px;
+    height: 55px;
+    flex-shrink: 0;
+
+    background: rgba(145, 105, 255, 0.2);
+    border-radius: 14px;
+
+    color: #d0b5ff;
+    font-size: 28px;
+}
+
+.about-page .about-technical-heading h3,
+.about-page .about-formula-heading h3 {
+    margin: 0 0 8px;
+
+    color: #ffffff;
+    font-size: 21px;
+}
+
+.about-page .about-technical-heading p,
+.about-page .about-formula-heading p {
+    margin: 0;
+
+    color: #aeb6d0;
+    font-size: 13px;
+}
+
+.about-page .about-technical-description,
+.about-page .about-formula-card > p {
+    margin: 0 0 26px;
+
+    color: #c0c7df;
+    font-size: 14px;
+    line-height: 1.95;
+}
+
+/* =========================================
+   5. 推荐算法四步流程
+   ========================================= */
+
+.about-page .about-process {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 15px;
+}
+
+.about-page .about-process-step {
+    position: relative;
+
+    min-width: 0;
+    padding: 22px 18px;
+
+    background: rgba(136, 107, 244, 0.09);
+    border: 1px solid rgba(166, 142, 255, 0.2);
+    border-radius: 13px;
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease;
+}
+
+.about-page .about-process-step:hover {
+    transform: translateY(-3px);
+    border-color: rgba(175, 145, 255, 0.5);
+}
+
+.about-page .about-process-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 40px;
+    height: 40px;
+
+    margin-bottom: 19px;
+
+    background: linear-gradient(
+        135deg,
+        #7758e0,
+        #a16bf5
+    );
+
+    border-radius: 10px;
+
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.about-page .about-process-step strong {
+    display: block;
+    margin-bottom: 11px;
+
+    color: #ffffff;
+    font-size: 14px;
+}
+
+.about-page .about-process-step p {
+    margin: 0;
+
+    color: #aeb7d3;
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+/* =========================================
+   6. 推荐评分公式展示
+   ========================================= */
+
+.about-page .about-formula-box {
+    padding: 26px;
+
+    background: rgba(13, 19, 39, 0.55);
+
+    border: 1px solid rgba(166, 142, 255, 0.24);
+    border-left: 4px solid #9875ef;
+    border-radius: 12px;
+}
+
+.about-page .about-formula-label {
+    display: block;
+    margin-bottom: 20px;
+
+    color: #bda9ff;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.about-page .about-formula-text {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+
+    color: #f0edff;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.9;
+}
+
+.about-page .about-formula-text > span {
+    overflow-wrap: anywhere;
+}
+
+.about-page .about-formula-equal,
+.about-page .about-formula-plus {
+    color: #c2a6ff;
+    font-size: 23px;
+    font-weight: 800;
+}
+
+/* =========================================
+   7. 冷启动和热门推荐策略
+   ========================================= */
+
+.about-page .about-strategy-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.about-page .about-strategy-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    min-width: 0;
+    padding: 28px;
+
+    background: linear-gradient(
+        135deg,
+        #242b48,
+        #1b2139
+    );
+
+    border: 1px solid rgba(160, 145, 255, 0.22);
+    border-radius: 17px;
+}
+
+.about-page .about-strategy-card h3 {
+    margin: 0 0 14px;
+
+    color: #ffffff;
+    font-size: 20px;
+}
+
+.about-page .about-strategy-card p {
+    margin: 0 0 20px;
+
+    color: #b5bed8;
+    font-size: 14px;
+    line-height: 1.9;
+}
+
+.about-page .about-strategy-note,
+.about-page .about-formula-small {
+    width: 100%;
+    padding: 14px 16px;
+    margin-bottom: 24px;
+
+    background: rgba(143, 109, 255, 0.11);
+    border: 1px solid rgba(167, 139, 255, 0.18);
+    border-radius: 9px;
+
+    color: #d2c1ff;
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+body:not(:has(.music-home))
+.main .about-page .about-strategy-card a {
+    margin-top: auto;
+
+    color: #cbb8ff;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.about-page .about-strategy-card a:hover {
+    text-decoration: underline;
+}
+
+/* =========================================
+   8. 音乐在线试听说明
+   ========================================= */
+
+.about-page .about-playback-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+
+    padding: 30px;
+
+    background: linear-gradient(
+        135deg,
+        #242b48,
+        #1b2139
+    );
+
+    border: 1px solid rgba(160, 145, 255, 0.22);
+    border-radius: 18px;
+}
+
+.about-page .about-playback-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 70px;
+    height: 70px;
+    flex-shrink: 0;
+
+    background: rgba(79, 144, 255, 0.19);
+    border-radius: 18px;
+
+    color: #9dbfff;
+    font-size: 32px;
+}
+
+.about-page .about-playback-content {
+    min-width: 0;
+}
+
+.about-page .about-playback-content h3 {
+    margin: 0 0 14px;
+
+    color: #ffffff;
+    font-size: 21px;
+}
+
+.about-page .about-playback-content p {
+    margin: 0 0 16px;
+
+    color: #b9c2dc;
+    font-size: 14px;
+    line-height: 1.9;
+
+    overflow-wrap: anywhere;
+}
+
+body:not(:has(.music-home))
+.main .about-page .about-playback-content a {
+    display: inline-block;
+    margin-top: 8px;
+
+    color: #cbb8ff;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.about-page .about-playback-content a:hover {
+    text-decoration: underline;
+}
+
+/* =========================================
+   9. 页面底部音乐横幅
+   ========================================= */
+
+.about-page .about-bottom {
+    position: relative;
+    overflow: hidden;
+
+    padding: 38px;
+    margin-top: 35px;
+
+    background: linear-gradient(
+        115deg,
+        #20274b,
+        #392468
+    );
+
+    border: 1px solid rgba(169, 139, 255, 0.23);
+    border-radius: 19px;
+}
+
+.about-page .about-bottom::after {
+    content: "♫";
+
+    position: absolute;
+    top: 50%;
+    right: 38px;
+
+    transform: translateY(-50%);
+
+    color: rgba(255, 255, 255, 0.08);
+    font-size: 145px;
+
+    pointer-events: none;
+}
+
+.about-page .about-bottom-content {
+    position: relative;
+    z-index: 1;
+}
+
+.about-page .about-bottom h2 {
+    margin: 0 0 14px;
+
+    color: #ffffff;
+    font-size: 25px;
+}
+
+.about-page .about-bottom p {
+    margin: 0 0 23px;
+
+    color: #c0c5df;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.about-page .about-bottom-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 18px;
+}
+
+.about-page .about-bottom-button {
+    display: inline-block;
+
+    padding: 12px 23px;
+    border-radius: 9px;
+
+    text-decoration: none;
+    font-weight: 700;
+}
+
+body:not(:has(.music-home))
+.main .about-page a.about-bottom-link {
+    color: #d6c7ff;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.about-page .about-bottom-link:hover {
+    text-decoration: underline;
+}
+
+/* =========================================
+   10. 平板与手机适配
+   ========================================= */
+
+@media (max-width: 900px) {
+
+    .about-page .about-process {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+@media (max-width: 650px) {
+
+    .about-page .about-hero {
+        padding: 30px 24px;
+    }
+
+    .about-page .about-hero-decoration {
+        right: 8px;
+        font-size: 90px;
+    }
+
+    .about-page .about-feature-grid,
+    .about-page .about-strategy-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .about-page .about-technical-card,
+    .about-page .about-formula-card {
+        padding: 22px;
+    }
+
+    .about-page .about-playback-card {
+        flex-direction: column;
+        padding: 24px;
+    }
+
+    .about-page .about-bottom {
+        padding: 30px 24px;
+    }
+
+    .about-page .about-bottom::after {
+        right: 0;
+        font-size: 90px;
+    }
+
+}
+
+@media (max-width: 450px) {
+
+    .about-page .about-process {
+        grid-template-columns: 1fr;
+    }
+
+    .about-page .about-formula-box {
+        padding: 18px;
+    }
+
+    .about-page .about-formula-text {
+        gap: 8px;
+        font-size: 14px;
+    }
+
+    .about-page .about-section-heading h2 {
+        font-size: 23px;
+    }
+
+}
+
+/* 减少动画偏好 */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .about-page .about-feature-card,
+    .about-page .about-process-step {
+        transition: none;
+    }
+
+    .about-page .about-feature-card:hover,
+    .about-page .about-process-step:hover {
+        transform: none;
+    }
+
+}
+
+/* =========================================
+   用户登录页面：深蓝紫色音乐平台风格
+   ========================================= */
+
+.login-page {
+    color: #eef0fa;
+    padding: 25px 0 45px;
+}
+
+.login-page * {
+    box-sizing: border-box;
+}
+
+/* =========================================
+   1. 页面顶部标题
+   ========================================= */
+
+.login-page .login-page-heading {
+    margin-bottom: 34px;
+    text-align: center;
+}
+
+.login-page .login-subtitle {
+    display: block;
+    margin-bottom: 12px;
+
+    color: #c0aaff;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.login-page .login-page-heading h1 {
+    margin: 0 0 13px;
+
+    color: #ffffff;
+    font-size: clamp(29px, 4vw, 39px);
+}
+
+.login-page .login-page-heading p {
+    margin: 0;
+
+    color: #aeb8d4;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+/* =========================================
+   2. 登录页面双栏布局
+   ========================================= */
+
+.login-page .login-layout {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1.1fr)
+        minmax(0, 0.9fr);
+
+    align-items: stretch;
+    gap: 20px;
+
+    max-width: 1080px;
+    margin: 0 auto;
+}
+
+/* =========================================
+   3. 左侧音乐介绍区域
+   ========================================= */
+
+.login-page .login-intro {
+    position: relative;
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+
+    min-height: 540px;
+    padding: 45px;
+
+    border-radius: 20px;
+
+    background:
+        radial-gradient(
+            circle at 85% 25%,
+            rgba(184, 118, 255, 0.36),
+            transparent 48%
+        ),
+        linear-gradient(
+            135deg,
+            #192548,
+            #302459,
+            #512677
+        );
+
+    border: 1px solid rgba(183, 151, 255, 0.28);
+
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.22);
+}
+
+.login-page .login-intro-content {
+    position: relative;
+    z-index: 2;
+    max-width: 480px;
+}
+
+/* 音乐图标 */
+
+.login-page .login-intro-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 75px;
+    height: 75px;
+
+    margin-bottom: 30px;
+
+    border-radius: 19px;
+
+    background: linear-gradient(
+        135deg,
+        #7958e8,
+        #a66bf5
+    );
+
+    color: #ffffff;
+    font-size: 41px;
+
+    box-shadow: 0 12px 35px rgba(126, 88, 232, 0.35);
+}
+
+.login-page .login-intro-label {
+    display: block;
+    margin-bottom: 16px;
+
+    color: #c6b6ff;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.login-page .login-intro h2 {
+    margin: 0 0 20px;
+
+    color: #ffffff;
+    font-size: clamp(27px, 3vw, 36px);
+    line-height: 1.5;
+}
+
+.login-page .login-intro h2 span {
+    display: block;
+
+    color: #d0adff;
+}
+
+.login-page .login-intro-content > p {
+    margin: 0 0 30px;
+
+    color: #d0d3ed;
+    font-size: 14px;
+    line-height: 2;
+}
+
+/* 左侧功能介绍 */
+
+.login-page .login-intro-features {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.login-page .login-intro-features > div {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+
+    color: #eee8ff;
+    font-size: 14px;
+}
+
+.login-page .login-intro-features span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 34px;
+    height: 34px;
+
+    border-radius: 9px;
+
+    background: rgba(255, 255, 255, 0.11);
+
+    color: #ddc8ff;
+    font-size: 18px;
+}
+
+/* 右下角装饰音符 */
+
+.login-page .login-intro-decoration {
+    position: absolute;
+
+    right: 24px;
+    bottom: 8px;
+
+    color: rgba(229, 192, 255, 0.13);
+    font-size: 190px;
+    line-height: 1;
+
+    transform: rotate(-15deg);
+    pointer-events: none;
+}
+
+/* =========================================
+   4. 右侧登录卡片
+   ========================================= */
+
+body:not(:has(.music-home))
+.login-page .box.login-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    min-width: 0;
+    margin: 0;
+    padding: 42px;
+
+    background: linear-gradient(
+        145deg,
+        #252c49,
+        #1a2038
+    );
+
+    border: 1px solid rgba(160, 145, 255, 0.23);
+    border-radius: 20px;
+
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.17);
+}
+
+/* 登录卡片顶部 */
+
+.login-page .login-card-heading {
+    margin-bottom: 30px;
+}
+
+.login-page .login-card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 58px;
+    height: 58px;
+
+    margin-bottom: 22px;
+
+    border-radius: 15px;
+
+    background: rgba(150, 105, 255, 0.2);
+
+    color: #cdb2ff;
+    font-size: 32px;
+}
+
+.login-page .login-card-heading h2 {
+    margin: 0 0 11px;
+
+    color: #ffffff;
+    font-size: 29px;
+}
+
+.login-page .login-card-heading p {
+    margin: 0;
+
+    color: #aeb8d3;
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+/* =========================================
+   5. 用户名和密码输入框
+   ========================================= */
+
+.login-page .login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+
+    width: 100%;
+}
+
+.login-page .login-form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+
+    width: 100%;
+}
+
+.login-page .login-form-field label {
+    color: #e4e2f5;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+/* 覆盖原来的通用输入框样式 */
+
+body:not(:has(.music-home))
+.main .login-page .login-form-field input {
+    display: block;
+
+    width: 100%;
+    min-width: 0;
+    height: 49px;
+
+    margin: 0;
+    padding: 12px 15px;
+
+    background: #141b31;
+    color: #ffffff;
+
+    border: 1px solid #464770;
+    border-radius: 10px;
+
+    font-size: 14px;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.login-page .login-form-field input::placeholder {
+    color: #8792b2;
+}
+
+body:not(:has(.music-home))
+.main .login-page .login-form-field input:focus {
+    outline: none;
+
+    border-color: #a38bff;
+
+    box-shadow: 0 0 0 3px rgba(151, 119, 255, 0.17);
+}
+
+/* =========================================
+   6. 紫色渐变登录按钮
+   ========================================= */
+
+body:not(:has(.music-home))
+.main .login-page button.login-submit-button {
+    display: block;
+
+    width: 100%;
+    min-height: 49px;
+
+    margin: 5px 0 0;
+    padding: 13px 18px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: linear-gradient(
+        120deg,
+        #7455e1,
+        #a36af4
+    );
+
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    box-shadow: 0 8px 24px rgba(124, 89, 233, 0.23);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+body:not(:has(.music-home))
+.main .login-page button.login-submit-button:hover {
+    opacity: 1;
+    transform: translateY(-2px);
+
+    box-shadow: 0 12px 30px rgba(124, 89, 233, 0.35);
+}
+
+/* =========================================
+   7. 注册入口
+   ========================================= */
+
+.login-page .login-register-area {
+    margin-top: 26px;
+    padding-top: 23px;
+
+    border-top: 1px solid rgba(163, 148, 228, 0.17);
+
+    text-align: center;
+}
+
+.login-page .login-register-area p {
+    margin: 0;
+
+    color: #aeb7d2;
+    font-size: 13px;
+}
+
+body:not(:has(.music-home))
+.main .login-page .login-register-area a {
+    color: #cdb8ff;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.login-page .login-register-area a:hover {
+    text-decoration: underline;
+}
+
+/* 登录卡片说明 */
+
+.login-page .login-card-footer {
+    margin-top: 27px;
+    padding: 16px;
+
+    background: rgba(135, 105, 255, 0.08);
+
+    border: 1px solid rgba(160, 135, 255, 0.16);
+    border-radius: 10px;
+
+    color: #aeb7d4;
+    font-size: 12px;
+    line-height: 1.9;
+}
+
+.login-page .login-card-footer span {
+    margin-right: 6px;
+    color: #c9b1ff;
+}
+
+/* =========================================
+   8. 页面底部
+   ========================================= */
+
+.login-page .login-page-bottom {
+    margin-top: 32px;
+
+    color: #8996ba;
+    font-size: 13px;
+
+    text-align: center;
+}
+
+.login-page .login-page-bottom span {
+    margin-right: 8px;
+    color: #bba3ff;
+}
+
+/* =========================================
+   9. 平板和手机适配
+   ========================================= */
+
+@media (max-width: 850px) {
+
+    .login-page .login-layout {
+        grid-template-columns: 1fr;
+        max-width: 600px;
+    }
+
+    .login-page .login-intro {
+        min-height: 320px;
+        padding: 35px;
+    }
+
+    .login-page .login-intro-decoration {
+        font-size: 125px;
+    }
+
+    body:not(:has(.music-home))
+    .login-page .box.login-card {
+        padding: 35px;
+    }
+}
+
+@media (max-width: 500px) {
+
+    .login-page {
+        padding-top: 15px;
+    }
+
+    .login-page .login-page-heading h1 {
+        font-size: 28px;
+    }
+
+    .login-page .login-intro {
+        min-height: 0;
+        padding: 27px 23px;
+    }
+
+    .login-page .login-intro h2 {
+        font-size: 27px;
+    }
+
+    body:not(:has(.music-home))
+    .login-page .box.login-card {
+        padding: 28px 23px;
+    }
+
+    .login-page .login-card-heading h2 {
+        font-size: 25px;
+    }
+}
+
+/* 减少动画偏好 */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .login-page .login-form-field input,
+    .login-page .login-submit-button {
+        transition: none;
+    }
+
+    .login-page .login-submit-button:hover {
+        transform: none;
+    }
+}
+
+/* =========================================
+   个性化背景设置页面
+   深蓝紫色音乐平台风格
+   ========================================= */
+
+.background-page {
+    color: #eef0fa;
+    padding-bottom: 40px;
+}
+
+.background-page * {
+    box-sizing: border-box;
+}
+
+/* =========================================
+   1. 顶部欢迎横幅
+   ========================================= */
+
+.background-page .background-hero {
+    position: relative;
+    overflow: hidden;
+
+    min-height: 235px;
+    padding: 42px;
+    margin-bottom: 42px;
+
+    border-radius: 20px;
+
+    background:
+        radial-gradient(
+            circle at 85% 35%,
+            rgba(165, 95, 255, 0.35),
+            transparent 47%
+        ),
+        linear-gradient(
+            115deg,
+            #172344,
+            #292052,
+            #48246d
+        );
+
+    border: 1px solid rgba(181, 149, 255, 0.26);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+.background-page .background-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 690px;
+}
+
+.background-page .background-subtitle {
+    display: block;
+    margin-bottom: 12px;
+
+    color: #c0aaff;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.background-page .background-hero h1 {
+    margin: 0 0 18px;
+
+    color: #ffffff;
+    font-size: clamp(28px, 4vw, 39px);
+    line-height: 1.3;
+}
+
+.background-page .background-hero p {
+    max-width: 560px;
+    margin: 0 0 22px;
+
+    color: #d5d3ed;
+    font-size: 14px;
+    line-height: 1.9;
+}
+
+.background-page .background-hero-badge {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 10px 16px;
+
+    border-radius: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+
+    background: rgba(255, 255, 255, 0.1);
+
+    color: #eadfff;
+    font-size: 13px;
+}
+
+.background-page .background-hero-decoration {
+    position: absolute;
+    top: 50%;
+    right: 55px;
+
+    transform: translateY(-50%) rotate(-12deg);
+
+    color: rgba(210, 176, 255, 0.16);
+    font-size: 165px;
+    line-height: 1;
+
+    pointer-events: none;
+}
+
+/* =========================================
+   2. 各个板块的标题
+   ========================================= */
+
+.background-page .background-section {
+    margin-bottom: 43px;
+}
+
+.background-page .background-section-heading {
+    margin-bottom: 23px;
+}
+
+.background-page .background-section-heading h2 {
+    margin: 0 0 11px;
+
+    color: #ffffff;
+    font-size: 26px;
+}
+
+.background-page .background-section-heading p {
+    margin: 0;
+
+    color: #aeb6d0;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+/* =========================================
+   3. 上传背景主面板
+   ========================================= */
+
+.background-page .background-upload-panel {
+    padding: 30px;
+
+    border-radius: 18px;
+    border: 1px solid rgba(160, 145, 255, 0.23);
+
+    background: linear-gradient(
+        135deg,
+        #242b48,
+        #1a2039
+    );
+
+    box-shadow: 0 9px 30px rgba(0, 0, 0, 0.15);
+}
+
+.background-page .background-panel-heading {
+    display: flex;
+    align-items: center;
+    gap: 17px;
+
+    margin-bottom: 28px;
+}
+
+.background-page .background-panel-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 55px;
+    height: 55px;
+    flex-shrink: 0;
+
+    border-radius: 14px;
+
+    background: rgba(145, 105, 255, 0.2);
+
+    color: #d0b5ff;
+    font-size: 30px;
+}
+
+.background-page .background-panel-heading h3 {
+    margin: 0 0 9px;
+
+    color: #ffffff;
+    font-size: 20px;
+}
+
+.background-page .background-panel-heading p {
+    margin: 0;
+
+    color: #aeb6d0;
+    font-size: 13px;
+}
+
+/* =========================================
+   4. 文件选择区域
+   ========================================= */
+
+.background-page .background-upload-form {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.background-page .background-file-area {
+    padding: 36px 25px;
+
+    border: 2px dashed rgba(167, 139, 255, 0.48);
+    border-radius: 16px;
+
+    background: rgba(139, 105, 255, 0.07);
+
+    text-align: center;
+
+    transition:
+        background 0.25s ease,
+        border-color 0.25s ease;
+}
+
+.background-page .background-file-area:hover {
+    background: rgba(139, 105, 255, 0.12);
+    border-color: #b49bff;
+}
+
+.background-page .background-upload-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 68px;
+    height: 68px;
+
+    margin: 0 auto 21px;
+
+    border-radius: 17px;
+
+    background: linear-gradient(
+        135deg,
+        #7657dd,
+        #a16bf5
+    );
+
+    color: #ffffff;
+    font-size: 38px;
+    font-weight: 800;
+}
+
+.background-page .background-file-area h3 {
+    margin: 0 0 13px;
+
+    color: #ffffff;
+    font-size: 21px;
+}
+
+.background-page .background-file-area p {
+    max-width: 460px;
+    margin: 0 auto 24px;
+
+    color: #b5bdd7;
+    font-size: 13px;
+    line-height: 1.9;
+}
+
+/* 文件选择控件 */
+
+.background-page .background-file-input-wrap {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 13px;
+
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+.background-page .background-file-input-wrap label {
+    color: #d8ccff;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+body .background-page input[type="file"] {
+    display: block;
+
+    width: 100%;
+    max-width: 480px;
+    min-width: 0;
+
+    padding: 12px;
+
+    border: 1px solid rgba(164, 140, 255, 0.33);
+    border-radius: 10px;
+
+    background: #151b31;
+
+    color: #cbd1e8;
+    font-size: 13px;
+
+    cursor: pointer;
+}
+
+/* 浏览器原生“选择文件”按钮 */
+
+.background-page input[type="file"]::file-selector-button {
+    margin-right: 14px;
+    padding: 10px 16px;
+
+    border: 0;
+    border-radius: 8px;
+
+    background: #6954c2;
+
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.background-page input[type="file"]::file-selector-button:hover {
+    background: #8668e5;
+}
+
+/* =========================================
+   5. 上传并应用背景按钮
+   ========================================= */
+
+body .background-page button.background-upload-button {
+    align-self: center;
+
+    width: 100%;
+    max-width: 360px;
+    min-height: 49px;
+
+    margin: 0;
+    padding: 13px 23px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: linear-gradient(
+        120deg,
+        #7657dd,
+        #a46bf5
+    );
+
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    box-shadow: 0 8px 24px rgba(124, 89, 233, 0.23);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+body .background-page button.background-upload-button:hover {
+    opacity: 1;
+    transform: translateY(-2px);
+
+    box-shadow: 0 12px 30px rgba(124, 89, 233, 0.38);
+}
+
+/* =========================================
+   6. 三种背景格式介绍
+   ========================================= */
+
+.background-page .background-format-grid {
+    display: grid;
+
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    gap: 18px;
+}
+
+.background-page .background-format-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    min-width: 0;
+    padding: 27px;
+
+    border-radius: 17px;
+    border: 1px solid rgba(160, 145, 255, 0.21);
+
+    background: linear-gradient(
+        135deg,
+        #242b48,
+        #1b2139
+    );
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease;
+}
+
+.background-page .background-format-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(177, 146, 255, 0.55);
+}
+
+.background-page .background-format-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 54px;
+    height: 54px;
+
+    margin-bottom: 22px;
+
+    border-radius: 14px;
+    font-size: 26px;
+}
+
+.background-page .background-icon-purple {
+    background: rgba(150, 100, 255, 0.2);
+    color: #d1b5ff;
+}
+
+.background-page .background-icon-pink {
+    background: rgba(255, 104, 173, 0.17);
+    color: #ffabcd;
+}
+
+.background-page .background-icon-blue {
+    background: rgba(79, 144, 255, 0.18);
+    color: #94bdff;
+}
+
+.background-page .background-format-card h3 {
+    margin: 0 0 13px;
+
+    color: #ffffff;
+    font-size: 19px;
+}
+
+.background-page .background-format-card p {
+    margin: 0 0 22px;
+
+    color: #b5bdd7;
+    font-size: 13px;
+    line-height: 1.9;
+}
+
+.background-page .background-format-type {
+    display: inline-block;
+
+    margin-top: auto;
+    padding: 9px 12px;
+
+    border-radius: 8px;
+
+    background: rgba(143, 109, 255, 0.13);
+
+    color: #d1bdff;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+/* =========================================
+   7. 文件上传提示
+   ========================================= */
+
+.background-page .background-file-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+
+    margin-top: 20px;
+    padding: 19px 22px;
+
+    border-radius: 12px;
+    border: 1px solid rgba(245, 188, 101, 0.2);
+
+    background: rgba(245, 188, 101, 0.06);
+}
+
+.background-page .background-notice-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: rgba(255, 195, 110, 0.18);
+
+    color: #ffca77;
+    font-weight: 800;
+}
+
+.background-page .background-file-notice strong {
+    display: block;
+    margin-bottom: 8px;
+
+    color: #ffdc9b;
+    font-size: 14px;
+}
+
+.background-page .background-file-notice p {
+    margin: 0;
+
+    color: #bfc5dc;
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+/* =========================================
+   8. 当前背景设置面板
+   ========================================= */
+
+.background-page .background-current-panel {
+    padding: 30px;
+
+    border-radius: 18px;
+    border: 1px solid rgba(160, 145, 255, 0.23);
+
+    background: linear-gradient(
+        135deg,
+        #222944,
+        #1a2039
+    );
+}
+
+.background-page .background-current-heading {
+    display: flex;
+    align-items: center;
+    gap: 17px;
+
+    margin-bottom: 26px;
+}
+
+.background-page .background-current-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 53px;
+    height: 53px;
+    flex-shrink: 0;
+
+    border-radius: 14px;
+
+    background: rgba(91, 214, 179, 0.14);
+
+    color: #81e3c4;
+    font-size: 27px;
+    font-weight: 800;
+}
+
+.background-page .background-current-heading h3 {
+    margin: 0 0 8px;
+
+    color: #ffffff;
+    font-size: 19px;
+}
+
+.background-page .background-current-heading p {
+    margin: 0;
+
+    color: #aeb6d0;
+    font-size: 13px;
+}
+
+/* 当前背景的具体信息 */
+
+.background-page .background-current-details {
+    display: grid;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 16px;
+    margin-bottom: 25px;
+}
+
+.background-page .background-detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+
+    min-width: 0;
+    padding: 20px;
+
+    border-radius: 12px;
+    border: 1px solid rgba(166, 142, 255, 0.19);
+
+    background: rgba(133, 108, 244, 0.08);
+}
+
+.background-page .background-detail-item span {
+    color: #aeb6d0;
+    font-size: 12px;
+}
+
+.background-page .background-detail-item strong {
+    color: #e7ddff;
+    font-size: 14px;
+
+    overflow-wrap: anywhere;
+}
+
+/* =========================================
+   9. 恢复默认背景区域
+   ========================================= */
+
+.background-page .background-reset-area {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+
+    padding: 22px;
+
+    border-radius: 13px;
+    border: 1px solid rgba(255, 177, 116, 0.18);
+
+    background: rgba(255, 174, 103, 0.05);
+}
+
+.background-page .background-reset-area h3 {
+    margin: 0 0 9px;
+
+    color: #ffffff;
+    font-size: 17px;
+}
+
+.background-page .background-reset-area p {
+    margin: 0;
+
+    color: #b3bdd8;
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+.background-page .background-reset-form {
+    flex-shrink: 0;
+    margin: 0;
+}
+
+body .background-page button.background-reset-button {
+    min-height: 44px;
+    margin: 0;
+    padding: 11px 21px;
+
+    border-radius: 9px;
+    border: 1px solid rgba(255, 179, 117, 0.36);
+
+    background: rgba(255, 181, 109, 0.12);
+
+    color: #ffd2a4;
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+body .background-page button.background-reset-button:hover {
+    background: rgba(255, 181, 109, 0.23);
+    color: #ffffff;
+    opacity: 1;
+}
+
+/* =========================================
+   10. 默认背景状态
+   ========================================= */
+
+.background-page .background-default-state {
+    padding: 38px 20px;
+
+    text-align: center;
+}
+
+.background-page .background-default-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 72px;
+    height: 72px;
+
+    margin: 0 auto 23px;
+
+    border-radius: 19px;
+
+    background: rgba(145, 105, 255, 0.2);
+
+    color: #cbb1ff;
+    font-size: 39px;
+}
+
+.background-page .background-default-state h3 {
+    margin: 0 0 16px;
+
+    color: #ffffff;
+    font-size: 22px;
+}
+
+.background-page .background-default-state p {
+    max-width: 550px;
+    margin: 0 auto 13px;
+
+    color: #b7bfd9;
+    font-size: 14px;
+    line-height: 1.9;
+}
+
+.background-page .background-muted {
+    color: #929fbe !important;
+    font-size: 13px !important;
+}
+
+/* =========================================
+   11. 页面底部引导横幅
+   ========================================= */
+
+.background-page .background-bottom {
+    position: relative;
+    overflow: hidden;
+
+    margin-top: 35px;
+    padding: 38px;
+
+    border-radius: 19px;
+    border: 1px solid rgba(169, 139, 255, 0.23);
+
+    background: linear-gradient(
+        115deg,
+        #20274b,
+        #392468
+    );
+}
+
+.background-page .background-bottom::after {
+    content: "♫";
+
+    position: absolute;
+    top: 50%;
+    right: 38px;
+
+    transform: translateY(-50%);
+
+    color: rgba(255, 255, 255, 0.08);
+    font-size: 145px;
+
+    pointer-events: none;
+}
+
+.background-page .background-bottom-content {
+    position: relative;
+    z-index: 1;
+}
+
+.background-page .background-bottom h2 {
+    margin: 0 0 14px;
+
+    color: #ffffff;
+    font-size: 25px;
+}
+
+.background-page .background-bottom p {
+    margin: 0 0 23px;
+
+    color: #c0c5df;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.background-page .background-back-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 12px 23px;
+
+    border-radius: 9px;
+    border: 1px solid rgba(190, 166, 255, 0.34);
+
+    background: rgba(140, 105, 255, 0.22);
+
+    color: #e4d9ff;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.background-page .background-back-button:hover {
+    background: #7455d4;
+    color: #ffffff;
+}
+
+/* =========================================
+   12. 键盘操作高亮
+   ========================================= */
+
+.background-page button:focus-visible,
+.background-page input:focus-visible,
+.background-page a:focus-visible {
+    outline: 2px solid #c9b7ff;
+    outline-offset: 4px;
+}
+
+/* =========================================
+   13. 平板与手机适配
+   ========================================= */
+
+@media (max-width: 900px) {
+
+    .background-page .background-format-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+@media (max-width: 650px) {
+
+    .background-page .background-hero {
+        padding: 30px 24px;
+    }
+
+    .background-page .background-hero-decoration {
+        right: 8px;
+        font-size: 90px;
+    }
+
+    .background-page .background-upload-panel,
+    .background-page .background-current-panel {
+        padding: 22px;
+    }
+
+    .background-page .background-format-grid,
+    .background-page .background-current-details {
+        grid-template-columns: 1fr;
+    }
+
+    .background-page .background-reset-area {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .background-page .background-reset-form,
+    .background-page .background-reset-button {
+        width: 100%;
+    }
+
+    .background-page .background-bottom {
+        padding: 30px 24px;
+    }
+
+    .background-page .background-bottom::after {
+        right: 0;
+        font-size: 90px;
+    }
+
+}
+
+@media (max-width: 450px) {
+
+    .background-page .background-file-area {
+        padding: 26px 15px;
+    }
+
+    .background-page .background-section-heading h2 {
+        font-size: 23px;
+    }
+
+    .background-page .background-panel-heading {
+        align-items: flex-start;
+    }
+
+}
+
+/* 减少动画偏好 */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .background-page .background-file-area,
+    .background-page .background-format-card,
+    .background-page .background-upload-button {
+        transition: none;
+    }
+
+    .background-page .background-format-card:hover,
+    .background-page .background-upload-button:hover {
+        transform: none;
+    }
+
+}
