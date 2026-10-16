@@ -1,64 +1,463 @@
+
 {% extends "base.html" %}
 
-{% block title %}数据统计{% endblock %}
+{% block title %}数据统计 - 音乐推荐系统{% endblock %}
 
 {% block content %}
 
-<h1>数据统计</h1>
+<div class="statistics-page">
 
-<table>
+    <!-- ========================= -->
+    <!-- 顶部数据分析横幅 -->
+    <!-- ========================= -->
+    <section class="statistics-hero">
 
-    <tr>
-        <th>统计项目</th>
-        <th>数值</th>
-    </tr>
+        <div class="statistics-hero-content">
 
-    <tr>
-        <td>用户数量</td>
-        <td>{{ stats.user_count }}</td>
-    </tr>
+            <span class="statistics-subtitle">
+                MUSIC DATA ANALYTICS
+            </span>
 
-    <tr>
-        <td>音乐数量</td>
-        <td>{{ stats.music_count }}</td>
-    </tr>
+            <h1>
+                ♫ 音乐数据分析中心
+            </h1>
 
-    <tr>
-        <td>评分数量</td>
-        <td>{{ stats.rating_count }}</td>
-    </tr>
+            <p>
+                用数据记录每一次音乐发现。
+                从用户数量、歌曲规模到评分矩阵，
+                直观了解音乐推荐系统的数据情况。
+            </p>
 
-    <tr>
-        <td>平均评分</td>
-        <td>{{ stats.average_rating }}</td>
-    </tr>
+            <div class="statistics-hero-badge">
+                ◈ 系统数据统计概览
+            </div>
 
-    <tr>
-        <td>最高评分</td>
-        <td>{{ stats.max_rating }}</td>
-    </tr>
+        </div>
 
-    <tr>
-        <td>最低评分</td>
-        <td>{{ stats.min_rating }}</td>
-    </tr>
+        <div class="statistics-hero-decoration"
+             aria-hidden="true">
+            ◉
+        </div>
 
-    <tr>
-        <td>评分矩阵大小</td>
-        <td>
-            {{ stats.matrix_rows }}
-            ×
-            {{ stats.matrix_cols }}
-        </td>
-    </tr>
+    </section>
 
-    <tr>
-        <td>评分矩阵密度</td>
-        <td>
-            {{ stats.matrix_density }}%
-        </td>
-    </tr>
 
-</table>
+    <!-- ========================= -->
+    <!-- 核心数据概览 -->
+    <!-- ========================= -->
+    <section class="statistics-section">
+
+        <div class="statistics-section-heading">
+
+            <span class="statistics-subtitle">
+                SYSTEM OVERVIEW
+            </span>
+
+            <h2>核心数据概览</h2>
+
+            <p>
+                系统当前的用户、音乐及评分数据。
+            </p>
+
+        </div>
+
+
+        <div class="statistics-overview-grid">
+
+            <!-- 用户数量 -->
+            <div class="statistics-overview-card">
+
+                <div class="statistics-card-icon stats-icon-purple">
+                    ♙
+                </div>
+
+                <div class="statistics-card-number">
+                    {{ stats.user_count }}
+                </div>
+
+                <div class="statistics-card-label">
+                    系统用户
+                </div>
+
+                <div class="statistics-card-description">
+                    USER COUNT
+                </div>
+
+            </div>
+
+
+            <!-- 歌曲数量 -->
+            <div class="statistics-overview-card">
+
+                <div class="statistics-card-icon stats-icon-blue">
+                    ♫
+                </div>
+
+                <div class="statistics-card-number">
+                    {{ stats.music_count }}
+                </div>
+
+                <div class="statistics-card-label">
+                    收录歌曲
+                </div>
+
+                <div class="statistics-card-description">
+                    MUSIC LIBRARY
+                </div>
+
+            </div>
+
+
+            <!-- 评分数量 -->
+            <div class="statistics-overview-card">
+
+                <div class="statistics-card-icon stats-icon-pink">
+                    ★
+                </div>
+
+                <div class="statistics-card-number">
+                    {{ stats.rating_count }}
+                </div>
+
+                <div class="statistics-card-label">
+                    用户评分
+                </div>
+
+                <div class="statistics-card-description">
+                    TOTAL RATINGS
+                </div>
+
+            </div>
+
+
+            <!-- 评分矩阵密度 -->
+            <div class="statistics-overview-card">
+
+                <div class="statistics-card-icon stats-icon-cyan">
+                    ◈
+                </div>
+
+                <div class="statistics-card-number">
+                    {{ stats.matrix_density }}%
+                </div>
+
+                <div class="statistics-card-label">
+                    评分矩阵密度
+                </div>
+
+                <div class="statistics-card-description">
+                    MATRIX DENSITY
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ========================= -->
+    <!-- 评分数据分析 -->
+    <!-- ========================= -->
+    <section class="statistics-section">
+
+        <div class="statistics-section-heading">
+
+            <span class="statistics-subtitle">
+                RATING ANALYSIS
+            </span>
+
+            <h2>用户评分分析</h2>
+
+            <p>
+                查看用户评分的平均值、最高值和最低值。
+            </p>
+
+        </div>
+
+
+        <div class="statistics-rating-grid">
+
+            <div class="statistics-rating-card">
+
+                <span class="statistics-rating-symbol">
+                    ★
+                </span>
+
+                <span class="statistics-rating-title">
+                    平均评分
+                </span>
+
+                <strong class="statistics-rating-value">
+                    {{ stats.average_rating }}
+                </strong>
+
+                <span class="statistics-rating-description">
+                    AVERAGE RATING
+                </span>
+
+            </div>
+
+
+            <div class="statistics-rating-card">
+
+                <span class="statistics-rating-symbol">
+                    ↑
+                </span>
+
+                <span class="statistics-rating-title">
+                    最高评分
+                </span>
+
+                <strong class="statistics-rating-value">
+                    {{ stats.max_rating }}
+                </strong>
+
+                <span class="statistics-rating-description">
+                    MAXIMUM RATING
+                </span>
+
+            </div>
+
+
+            <div class="statistics-rating-card">
+
+                <span class="statistics-rating-symbol">
+                    ↓
+                </span>
+
+                <span class="statistics-rating-title">
+                    最低评分
+                </span>
+
+                <strong class="statistics-rating-value">
+                    {{ stats.min_rating }}
+                </strong>
+
+                <span class="statistics-rating-description">
+                    MINIMUM RATING
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ========================= -->
+    <!-- 评分矩阵分析 -->
+    <!-- ========================= -->
+    <section class="statistics-section">
+
+        <div class="statistics-section-heading">
+
+            <span class="statistics-subtitle">
+                COLLABORATIVE FILTERING DATA
+            </span>
+
+            <h2>评分矩阵分析</h2>
+
+            <p>
+                用户协同过滤算法使用评分矩阵，
+                根据用户之间的评分情况计算相似度。
+            </p>
+
+        </div>
+
+
+        <div class="statistics-matrix-panel">
+
+            <div class="statistics-matrix-heading">
+
+                <div class="statistics-matrix-icon">
+                    ▦
+                </div>
+
+                <div>
+
+                    <h3>用户－歌曲评分矩阵</h3>
+
+                    <p>
+                        展示评分矩阵的规模与数据密度
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="statistics-matrix-grid">
+
+                <div class="statistics-matrix-item">
+
+                    <span>矩阵行数</span>
+
+                    <strong>
+                        {{ stats.matrix_rows }}
+                    </strong>
+
+                </div>
+
+
+                <div class="statistics-matrix-item">
+
+                    <span>矩阵列数</span>
+
+                    <strong>
+                        {{ stats.matrix_cols }}
+                    </strong>
+
+                </div>
+
+
+                <div class="statistics-matrix-item">
+
+                    <span>矩阵密度</span>
+
+                    <strong>
+                        {{ stats.matrix_density }}%
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="statistics-matrix-note">
+
+                <strong>数据说明</strong>
+
+                <p>
+                    评分矩阵用于表示用户与歌曲之间的评分关系。
+                    矩阵密度反映已有评分在矩阵中的占比，
+                    是观察推荐系统数据稀疏程度的指标之一。
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ========================= -->
+    <!-- 完整统计数据明细 -->
+    <!-- ========================= -->
+    <section class="statistics-section">
+
+        <div class="statistics-section-heading">
+
+            <span class="statistics-subtitle">
+                DETAILED STATISTICS
+            </span>
+
+            <h2>完整数据明细</h2>
+
+            <p>
+                查看系统各项统计指标的具体数值。
+            </p>
+
+        </div>
+
+
+        <div class="statistics-table-wrap">
+
+            <table class="statistics-detail-table">
+
+                <thead>
+                    <tr>
+                        <th>统计项目</th>
+                        <th>当前数值</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>用户数量</td>
+                        <td>{{ stats.user_count }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>音乐数量</td>
+                        <td>{{ stats.music_count }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>评分数量</td>
+                        <td>{{ stats.rating_count }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>平均评分</td>
+                        <td>{{ stats.average_rating }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>最高评分</td>
+                        <td>{{ stats.max_rating }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>最低评分</td>
+                        <td>{{ stats.min_rating }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>评分矩阵大小</td>
+                        <td>
+                            {{ stats.matrix_rows }}
+                            ×
+                            {{ stats.matrix_cols }}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>评分矩阵密度</td>
+                        <td>
+                            {{ stats.matrix_density }}%
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- ========================= -->
+    <!-- 页面底部 -->
+    <!-- ========================= -->
+    <section class="statistics-bottom">
+
+        <div class="statistics-bottom-content">
+
+            <span class="statistics-subtitle">
+                DISCOVER MORE
+            </span>
+
+            <h2>
+                让数据帮助你发现音乐
+            </h2>
+
+            <p>
+                通过用户评分与协同过滤算法，
+                探索更多符合个人喜好的歌曲。
+            </p>
+
+            <a class="button statistics-bottom-button"
+               href="{{ url_for('recommend') }}">
+                ♫ 探索个性化推荐 →
+            </a>
+
+        </div>
+
+    </section>
+
+</div>
 
 {% endblock %}

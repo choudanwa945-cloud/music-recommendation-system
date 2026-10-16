@@ -1,106 +1,474 @@
+
 {% extends "base.html" %}
 
-{% block title %}兴趣推荐{% endblock %}
+{% block title %}兴趣音乐推荐{% endblock %}
 
 {% block content %}
 
-<h1>新用户兴趣推荐</h1>
+<div class="interest-page">
 
-<p class="help">
-    如果新用户还没有评分记录，可以先选择喜欢的音乐类型和标签。
-</p>
+    <!-- ========================= -->
+    <!-- 顶部介绍横幅 -->
+    <!-- ========================= -->
+    <section class="interest-hero">
 
-<div class="box">
+        <div class="interest-hero-content">
 
-    <form method="post">
+            <span class="interest-subtitle">
+                DISCOVER YOUR TASTE
+            </span>
 
-        <h3>音乐类型</h3>
-
-        <div class="options">
-            {% for item in genres %}
-            <label>
-                <input type="checkbox"
-                       name="genres"
-                       value="{{ item }}"
-                       {% if item in selected_genres %}checked{% endif %}>
-                {{ item }}
-            </label>
-            {% endfor %}
-        </div>
-
-        <h3>音乐标签</h3>
-
-        <div class="options">
-            {% for item in tags %}
-            <label>
-                <input type="checkbox"
-                       name="tags"
-                       value="{{ item }}"
-                       {% if item in selected_tags %}checked{% endif %}>
-                {{ item }}
-            </label>
-            {% endfor %}
-        </div>
-
-        <button type="submit">
-            生成兴趣推荐
-        </button>
-
-    </form>
-
-</div>
-
-{% if songs is not none %}
-
-<h2>推荐结果</h2>
-
-{% if songs %}
-
-    {% for song in songs %}
-
-    <div class="song">
-
-        <div class="rank">
-            {{ loop.index }}
-        </div>
-
-        <div class="song-info">
-
-            <h3>{{ song.title }}</h3>
+            <h1>
+                ♫ 发现你的音乐偏好
+            </h1>
 
             <p>
-                {{ song.artist }}
-                -
-                {{ song.genre }}
+                每个人都有独特的音乐品味。
+                选择你喜欢的音乐类型与标签，
+                让系统帮你发现符合兴趣的歌曲。
             </p>
 
-            <p>
-                标签：{{ song.tags }}
-            </p>
+            <div class="interest-hero-badge">
+                ♪ 无需历史评分，也能发现喜欢的音乐
+            </div>
 
-            <p>
-                兴趣匹配分：
-                {{ song.recommend_score }}
-            </p>
+        </div>
 
-            {% if song.audio_file %}
-            <audio controls preload="none">
-                <source src="{{ url_for('static', filename=song.audio_file) }}">
-            </audio>
+        <div class="interest-hero-decoration"
+             aria-hidden="true">
+            ♫
+        </div>
+
+    </section>
+
+
+    <!-- ========================= -->
+    <!-- 兴趣偏好选择 -->
+    <!-- ========================= -->
+    <section class="interest-section">
+
+        <div class="interest-section-heading">
+
+            <div>
+
+                <span class="interest-subtitle">
+                    CHOOSE YOUR STYLE
+                </span>
+
+                <h2>定制你的音乐兴趣</h2>
+
+                <p class="interest-section-description">
+                    可以同时选择多个音乐类型和标签，
+                    系统会根据所选偏好匹配歌曲。
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <form
+            class="interest-form"
+            action="{{ url_for('interest') }}"
+            method="post"
+        >
+
+            <!-- ========================= -->
+            <!-- 音乐类型 -->
+            <!-- ========================= -->
+            <div class="box interest-choice-panel">
+
+                <div class="interest-choice-heading">
+
+                    <div class="interest-choice-icon">
+                        ♫
+                    </div>
+
+                    <div>
+
+                        <h3>喜欢的音乐类型</h3>
+
+                        <p>
+                            选择你经常聆听的音乐风格
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="options interest-options">
+
+                    {% for item in genres %}
+
+                    <label class="interest-option">
+
+                        <input
+                            type="checkbox"
+                            name="genres"
+                            value="{{ item }}"
+                            {% if item in selected_genres %}
+                            checked
+                            {% endif %}
+                        >
+
+                        <span class="interest-option-text">
+                            {{ item }}
+                        </span>
+
+                    </label>
+
+                    {% else %}
+
+                    <p class="interest-muted">
+                        暂无可选择的音乐类型。
+                    </p>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+
+            <!-- ========================= -->
+            <!-- 音乐标签 -->
+            <!-- ========================= -->
+            <div class="box interest-choice-panel">
+
+                <div class="interest-choice-heading">
+
+                    <div class="interest-choice-icon interest-tag-icon">
+                        ♥
+                    </div>
+
+                    <div>
+
+                        <h3>喜欢的音乐标签</h3>
+
+                        <p>
+                            选择符合你音乐心情和喜好的标签
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="options interest-options">
+
+                    {% for item in tags %}
+
+                    <label class="interest-option">
+
+                        <input
+                            type="checkbox"
+                            name="tags"
+                            value="{{ item }}"
+                            {% if item in selected_tags %}
+                            checked
+                            {% endif %}
+                        >
+
+                        <span class="interest-option-text">
+                            {{ item }}
+                        </span>
+
+                    </label>
+
+                    {% else %}
+
+                    <p class="interest-muted">
+                        暂无可选择的音乐标签。
+                    </p>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+
+            <!-- ========================= -->
+            <!-- 生成推荐 -->
+            <!-- ========================= -->
+            <div class="interest-submit-area">
+
+                <div class="interest-submit-description">
+
+                    <span class="interest-submit-symbol">
+                        ✦
+                    </span>
+
+                    <div>
+
+                        <strong>准备好探索了吗？</strong>
+
+                        <p>
+                            选择偏好后，生成你的兴趣推荐歌单。
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="interest-submit-button"
+                >
+                    ♫ 生成兴趣推荐 →
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+
+    <!-- ========================= -->
+    <!-- 兴趣推荐结果 -->
+    <!-- ========================= -->
+    {% if songs is not none %}
+
+    <section class="interest-section interest-results-section">
+
+        <div class="interest-section-heading">
+
+            <div>
+
+                <span class="interest-subtitle">
+                    MATCHED FOR YOU
+                </span>
+
+                <h2>为你发现的音乐</h2>
+
+                <p class="interest-section-description">
+                    根据你选择的类型和标签，
+                    找到与你兴趣相匹配的歌曲。
+                </p>
+
+            </div>
+
+
+            {% if songs %}
+
+            <span class="interest-result-count">
+                ♫ 共匹配 {{ songs | length }} 首歌曲
+            </span>
+
             {% endif %}
 
         </div>
 
-    </div>
 
-    {% endfor %}
+        {% if songs %}
 
-{% else %}
+        <div class="interest-song-list">
 
-<p>没有匹配到歌曲，请重新选择。</p>
+            {% for song in songs %}
 
-{% endif %}
+            <div class="song interest-song">
 
-{% endif %}
+                <!-- 推荐排名 -->
+                <div class="rank interest-rank">
+                    {{ loop.index }}
+                </div>
+
+
+                <!-- 歌曲封面 -->
+                <div class="interest-cover-wrap">
+
+                    {% if song.cover_file %}
+
+                    <img
+                        class="cover interest-cover"
+                        src="{{ url_for('static', filename=song.cover_file) }}"
+                        alt="{{ song.title }}"
+                        loading="lazy"
+                    >
+
+                    {% else %}
+
+                    <div class="interest-cover-placeholder">
+                        ♫
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- 歌曲信息 -->
+                <div class="song-info interest-song-info">
+
+                    <div class="interest-song-heading">
+
+                        <h3>
+                            {{ song.title }}
+                        </h3>
+
+                        <span class="interest-match-badge">
+                            兴趣匹配
+                        </span>
+
+                    </div>
+
+
+                    <p class="interest-artist">
+                        {{ song.artist }}
+                    </p>
+
+
+                    <!-- 歌曲类型和标签 -->
+                    <div class="interest-song-tags">
+
+                        <span class="interest-genre">
+                            {{ song.genre }}
+                        </span>
+
+                        {% if song.tags %}
+
+                        <span class="interest-tags">
+                            {{ song.tags }}
+                        </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- 匹配评分 -->
+                    <div class="interest-score-area">
+
+                        <span class="interest-score-label">
+                            兴趣匹配分
+                        </span>
+
+                        <strong class="interest-score">
+                            ★ {{ song.recommend_score }}
+                        </strong>
+
+                    </div>
+
+
+                    <!-- 在线试听 -->
+                    {% if song.audio_file %}
+
+                    <div class="interest-audio">
+
+                        <audio controls preload="none">
+
+                            <source
+                                src="{{ url_for('static', filename=song.audio_file) }}"
+                            >
+
+                            你的浏览器不支持音频播放。
+
+                        </audio>
+
+                    </div>
+
+                    {% else %}
+
+                    <p class="interest-muted">
+                        暂无试听文件
+                    </p>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        {% else %}
+
+        <!-- ========================= -->
+        <!-- 无匹配结果 -->
+        <!-- ========================= -->
+        <div class="box interest-empty-state">
+
+            <div class="interest-empty-icon">
+                ♫
+            </div>
+
+            <h3>
+                暂时没有找到匹配的音乐
+            </h3>
+
+            <p>
+                当前所选的音乐类型和标签，
+                暂时没有匹配到歌曲。
+            </p>
+
+            <p class="interest-muted">
+                可以调整上方选择，
+                尝试其他音乐风格或标签。
+            </p>
+
+            <a
+                class="button interest-library-button"
+                href="{{ url_for('library') }}"
+            >
+                浏览完整歌曲库 →
+            </a>
+
+        </div>
+
+        {% endif %}
+
+    </section>
+
+    {% endif %}
+
+
+    <!-- ========================= -->
+    <!-- 页面底部引导 -->
+    <!-- ========================= -->
+    <section class="interest-bottom">
+
+        <div class="interest-bottom-content">
+
+            <span class="interest-subtitle">
+                MORE MUSIC TO DISCOVER
+            </span>
+
+            <h2>
+                音乐的世界不止一种可能
+            </h2>
+
+            <p>
+                除了按照兴趣探索，你还可以浏览热门歌曲，
+                或通过评分获得个性化音乐推荐。
+            </p>
+
+            <div class="interest-bottom-actions">
+
+                <a
+                    class="button interest-bottom-button"
+                    href="{{ url_for('popular') }}"
+                >
+                    ♫ 发现热门音乐
+                </a>
+
+                <a
+                    class="interest-bottom-link"
+                    href="{{ url_for('library') }}"
+                >
+                    探索歌曲库 →
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
 
 {% endblock %}

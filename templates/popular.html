@@ -1,58 +1,229 @@
+
 {% extends "base.html" %}
 
-{% block title %}热门音乐{% endblock %}
+{% block title %}热门音乐排行榜{% endblock %}
 
 {% block content %}
 
-<h1>热门音乐推荐</h1>
+<div class="popular-page">
 
-<p class="help">
-    热门得分 = 平均评分 × log(评分人数 + 1)
-</p>
+    <!-- ========================= -->
+    <!-- 榜单顶部介绍 -->
+    <!-- ========================= -->
+    <section class="popular-hero">
 
-{% for song in songs %}
+        <div class="popular-hero-content">
 
-<div class="song">
+            <span class="popular-subtitle">
+                MUSIC TOP CHART
+            </span>
 
-    <div class="rank">
-        {{ loop.index }}
+            <h1>
+                ♫ 热门音乐排行榜
+            </h1>
+
+            <p>
+                发现大家都在喜欢的音乐。
+                根据用户评分与评分人数，
+                为你呈现当前最受欢迎的歌曲。
+            </p>
+
+            <div class="popular-formula">
+                热门得分 = 平均评分 × log(评分人数 + 1)
+            </div>
+
+        </div>
+
+        <div class="popular-hero-decoration"
+             aria-hidden="true">
+            ★
+        </div>
+
+    </section>
+
+
+    <!-- ========================= -->
+    <!-- 榜单标题 -->
+    <!-- ========================= -->
+    <div class="popular-section-heading">
+
+        <div>
+            <span class="popular-subtitle">
+                TRENDING TRACKS
+            </span>
+
+            <h2>热门歌曲 TOP 10</h2>
+        </div>
+
+        <span class="popular-list-tip">
+            按综合热门得分排序
+        </span>
+
     </div>
 
-    {% if song.cover_file %}
-    <img class="cover"
-         src="{{ url_for('static', filename=song.cover_file) }}"
-         alt="{{ song.title }}">
-    {% endif %}
 
-    <div class="song-info">
-        <h3>{{ song.title }}</h3>
+    <!-- ========================= -->
+    <!-- 音乐排行榜 -->
+    <!-- ========================= -->
+    <div class="popular-list">
+
+        {% for song in songs %}
+
+        <div class="song popular-song
+                    {% if loop.index == 1 %}popular-top-one{% endif %}
+                    {% if loop.index == 2 %}popular-top-two{% endif %}
+                    {% if loop.index == 3 %}popular-top-three{% endif %}">
+
+            <!-- 排名 -->
+            <div class="rank popular-rank">
+
+                {% if loop.index == 1 %}
+                    ♛
+                {% elif loop.index == 2 %}
+                    2
+                {% elif loop.index == 3 %}
+                    3
+                {% else %}
+                    {{ loop.index }}
+                {% endif %}
+
+            </div>
+
+
+            <!-- 歌曲封面 -->
+            <div class="popular-cover-wrap">
+
+                {% if song.cover_file %}
+
+                    <img
+                        class="cover popular-cover"
+                        src="{{ url_for('static', filename=song.cover_file) }}"
+                        alt="{{ song.title }}"
+                        loading="lazy"
+                    >
+
+                {% else %}
+
+                    <div class="popular-cover-placeholder">
+                        ♫
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- 歌曲信息 -->
+            <div class="song-info popular-song-info">
+
+                <div class="popular-song-heading">
+
+                    <h3>
+                        {{ song.title }}
+                    </h3>
+
+                    {% if loop.index <= 3 %}
+
+                    <span class="popular-top-badge">
+                        TOP {{ loop.index }}
+                    </span>
+
+                    {% endif %}
+
+                </div>
+
+
+                <p class="popular-artist">
+                    {{ song.artist }}
+                </p>
+
+
+                <div class="popular-song-tags">
+
+                    <span class="popular-genre">
+                        {{ song.genre }}
+                    </span>
+
+                    {% if song.tags %}
+
+                    <span class="popular-tags">
+                        {{ song.tags }}
+                    </span>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- 热门数据 -->
+                <div class="popular-song-stats">
+
+                    <span class="popular-score">
+                        ★ {{ "%.2f"|format(song.average_rating) }}
+                    </span>
+
+                    <span class="popular-rating-count">
+                        {{ song.rating_count }} 人评分
+                    </span>
+
+                </div>
+
+
+                <!-- 在线试听 -->
+                {% if song.audio_file %}
+
+                <div class="popular-audio">
+
+                    <audio controls preload="none">
+
+                        <source
+                            src="{{ url_for('static', filename=song.audio_file) }}"
+                        >
+
+                        你的浏览器不支持音频播放。
+
+                    </audio>
+
+                </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+        {% else %}
+
+        <div class="box popular-empty">
+            暂时没有热门音乐数据。
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- 底部引导 -->
+    <!-- ========================= -->
+    <div class="popular-bottom">
+
+        <h3>
+            还想发现更多音乐？
+        </h3>
 
         <p>
-            歌手：{{ song.artist }}
-            &nbsp;&nbsp;
-            类型：{{ song.genre }}
+            浏览完整歌曲库，
+            聆听音乐并记录自己的喜好。
         </p>
 
-        <p>
-            标签：{{ song.tags }}
-        </p>
+        <a class="button popular-explore-button"
+           href="{{ url_for('library') }}">
+            ♫ 探索歌曲库 →
+        </a>
 
-        <p>
-            平均评分：
-            {{ "%.2f"|format(song.average_rating) }}
-            ，评分人数：
-            {{ song.rating_count }}
-        </p>
-
-        {% if song.audio_file %}
-        <audio controls preload="none">
-            <source src="{{ url_for('static', filename=song.audio_file) }}">
-        </audio>
-        {% endif %}
     </div>
 
 </div>
-
-{% endfor %}
 
 {% endblock %}

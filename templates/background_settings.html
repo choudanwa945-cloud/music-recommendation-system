@@ -1,112 +1,462 @@
+
 {% extends "base.html" %}
 
-{% block title %}
-背景设置
-{% endblock %}
+{% block title %}个性化背景设置{% endblock %}
 
 {% block content %}
 
-<div class="background-settings-card">
+<div class="background-page">
 
-    <h2>个性化背景设置</h2>
+    <!-- ========================= -->
+    <!-- 顶部欢迎横幅 -->
+    <!-- ========================= -->
 
-    <p>
-        你可以从自己的电脑中选择图片、GIF 动图或视频作为网站背景。
-    </p>
+    <section class="background-hero">
 
-    <form
-        method="POST"
-        enctype="multipart/form-data"
-    >
+        <div class="background-hero-content">
 
-        <input
-            type="hidden"
-            name="action"
-            value="upload"
-        >
+            <span class="background-subtitle">
+                PERSONALIZE YOUR SPACE
+            </span>
 
-        <div class="form-group">
+            <h1>
+                ♫ 打造专属音乐空间
+            </h1>
 
-            <label for="background_file">
-                选择背景文件
-            </label>
+            <p>
+                音乐有自己的风格，
+                你的音乐空间也可以与众不同。
 
-            <input
-                type="file"
-                id="background_file"
-                name="background_file"
-                accept=".jpg,.jpeg,.png,.webp,.gif,.mp4,.webm"
-                required
+                上传喜欢的图片、GIF 动图或视频，
+                为网站设置属于自己的个性化背景。
+            </p>
+
+            <div class="background-hero-badge">
+                ♪ 让每一次聆听都有独特的氛围
+            </div>
+
+        </div>
+
+        <div class="background-hero-decoration"
+             aria-hidden="true">
+            ✦
+        </div>
+
+    </section>
+
+
+    <!-- ========================= -->
+    <!-- 背景上传设置 -->
+    <!-- ========================= -->
+
+    <section class="background-section">
+
+        <div class="background-section-heading">
+
+            <span class="background-subtitle">
+                CUSTOMIZE BACKGROUND
+            </span>
+
+            <h2>上传个性化背景</h2>
+
+            <p>
+                从你的电脑中选择喜欢的背景文件，
+                上传后即可应用到音乐推荐系统。
+            </p>
+
+        </div>
+
+
+        <div class="background-upload-panel">
+
+            <div class="background-panel-heading">
+
+                <div class="background-panel-icon">
+                    ♫
+                </div>
+
+                <div>
+
+                    <h3>选择你的背景文件</h3>
+
+                    <p>
+                        支持静态图片、动态图片和视频背景。
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- 背景文件上传表单 -->
+
+            <form
+                class="background-upload-form"
+                method="POST"
+                enctype="multipart/form-data"
             >
 
+                <input
+                    type="hidden"
+                    name="action"
+                    value="upload"
+                >
+
+
+                <div class="background-file-area">
+
+                    <div class="background-upload-icon">
+                        ↑
+                    </div>
+
+                    <h3>
+                        上传你的专属背景
+                    </h3>
+
+                    <p>
+                        点击下面的“选择文件”，
+                        从电脑中选择一张图片、
+                        GIF 动图或视频。
+                    </p>
+
+
+                    <div class="background-file-input-wrap">
+
+                        <label for="background_file">
+                            选择背景文件
+                        </label>
+
+                        <input
+                            type="file"
+                            id="background_file"
+                            name="background_file"
+                            accept=".jpg,.jpeg,.png,.webp,.gif,.mp4,.webm"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- 上传按钮 -->
+
+                <button
+                    type="submit"
+                    class="background-upload-button"
+                >
+                    ♫ 上传并应用背景 →
+                </button>
+
+            </form>
+
         </div>
 
-        <div class="background-help">
+    </section>
+
+
+    <!-- ========================= -->
+    <!-- 支持的背景类型 -->
+    <!-- ========================= -->
+
+    <section class="background-section">
+
+        <div class="background-section-heading">
+
+            <span class="background-subtitle">
+                SUPPORTED FORMATS
+            </span>
+
+            <h2>支持的背景格式</h2>
 
             <p>
-                支持格式：
-            </p>
-
-            <p>
-                JPG、JPEG、PNG、WEBP
-            </p>
-
-            <p>
-                GIF 动态图片
-            </p>
-
-            <p>
-                MP4、WEBM 视频
-            </p>
-
-            <p>
-                单个文件最大 50MB
+                根据个人喜好，
+                选择不同类型的背景文件。
             </p>
 
         </div>
 
-        <button
-            type="submit"
-            class="btn"
-        >
-            上传并设置为背景
-        </button>
 
-    </form>
+        <div class="background-format-grid">
+
+            <!-- 静态图片 -->
+
+            <div class="background-format-card">
+
+                <div class="background-format-icon background-icon-purple">
+                    ◈
+                </div>
+
+                <h3>静态图片</h3>
+
+                <p>
+                    使用喜欢的照片、
+                    插画或风景图片作为背景。
+                </p>
+
+                <span class="background-format-type">
+                    JPG · JPEG · PNG · WEBP
+                </span>
+
+            </div>
 
 
-    {% if background_type != "default" and background_file %}
+            <!-- GIF 动图 -->
 
-    <hr>
+            <div class="background-format-card">
 
-    <p>
-        当前背景类型：
-        {{ background_type }}
-    </p>
+                <div class="background-format-icon background-icon-pink">
+                    ✦
+                </div>
 
-    <p>
-        当前背景文件：
-        {{ background_file }}
-    </p>
+                <h3>GIF 动态背景</h3>
 
-    <form method="POST">
+                <p>
+                    使用动态图片，
+                    让你的音乐空间更加生动。
+                </p>
 
-        <input
-            type="hidden"
-            name="action"
-            value="reset"
-        >
+                <span class="background-format-type">
+                    GIF
+                </span>
 
-        <button
-            type="submit"
-            class="btn"
-        >
-            恢复默认背景
-        </button>
+            </div>
 
-    </form>
 
-    {% endif %}
+            <!-- 视频背景 -->
+
+            <div class="background-format-card">
+
+                <div class="background-format-icon background-icon-blue">
+                    ▶
+                </div>
+
+                <h3>视频背景</h3>
+
+                <p>
+                    使用喜欢的视频，
+                    营造更丰富的视觉氛围。
+                </p>
+
+                <span class="background-format-type">
+                    MP4 · WEBM
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="background-file-notice">
+
+            <span class="background-notice-icon">
+                !
+            </span>
+
+            <div>
+
+                <strong>上传文件提示</strong>
+
+                <p>
+                    单个文件最大 50MB。
+                    建议优先使用大小适中的图片或视频，
+                    以减少加载等待时间。
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ========================= -->
+    <!-- 当前背景状态 -->
+    <!-- ========================= -->
+
+    <section class="background-section">
+
+        <div class="background-section-heading">
+
+            <span class="background-subtitle">
+                CURRENT APPEARANCE
+            </span>
+
+            <h2>当前背景设置</h2>
+
+            <p>
+                查看正在使用的背景，
+                或恢复系统默认外观。
+            </p>
+
+        </div>
+
+
+        <div class="background-current-panel">
+
+            {% if background_type != "default" and background_file %}
+
+            <!-- 已设置个性化背景 -->
+
+            <div class="background-current-heading">
+
+                <div class="background-current-icon">
+                    ✓
+                </div>
+
+                <div>
+
+                    <h3>
+                        正在使用个性化背景
+                    </h3>
+
+                    <p>
+                        你的自定义背景已经保存。
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="background-current-details">
+
+                <div class="background-detail-item">
+
+                    <span>背景类型</span>
+
+                    <strong>
+                        {% if background_type == "image" %}
+                            静态图片
+                        {% elif background_type == "gif" %}
+                            GIF 动态图片
+                        {% elif background_type == "video" %}
+                            视频背景
+                        {% else %}
+                            {{ background_type }}
+                        {% endif %}
+                    </strong>
+
+                </div>
+
+
+                <div class="background-detail-item">
+
+                    <span>当前背景文件</span>
+
+                    <strong class="background-file-name">
+                        {{ background_file }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- 恢复默认背景 -->
+
+            <div class="background-reset-area">
+
+                <div>
+
+                    <h3>想要恢复默认外观？</h3>
+
+                    <p>
+                        可以随时恢复系统原来的背景，
+                        以后也可以重新上传。
+                    </p>
+
+                </div>
+
+
+                <form
+                    method="POST"
+                    class="background-reset-form"
+                >
+
+                    <input
+                        type="hidden"
+                        name="action"
+                        value="reset"
+                    >
+
+                    <button
+                        type="submit"
+                        class="background-reset-button"
+                    >
+                        恢复默认背景
+                    </button>
+
+                </form>
+
+            </div>
+
+
+            {% else %}
+
+            <!-- 当前使用默认背景 -->
+
+            <div class="background-default-state">
+
+                <div class="background-default-icon">
+                    ♫
+                </div>
+
+                <h3>
+                    当前使用系统默认背景
+                </h3>
+
+                <p>
+                    你还没有启用自定义背景，
+                    或者已经恢复了系统默认外观。
+                </p>
+
+                <p class="background-muted">
+                    可以使用上方的文件上传功能，
+                    随时切换成喜欢的背景。
+                </p>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </section>
+
+
+    <!-- ========================= -->
+    <!-- 页面底部引导 -->
+    <!-- ========================= -->
+
+    <section class="background-bottom">
+
+        <div class="background-bottom-content">
+
+            <span class="background-subtitle">
+                MAKE IT YOURS
+            </span>
+
+            <h2>
+                让音乐空间更有个性
+            </h2>
+
+            <p>
+                一张图片、一段动画或一段视频，
+                都可以成为属于你的音乐氛围。
+            </p>
+
+
+            <a
+                class="background-back-button"
+                href="{{ url_for('profile') }}"
+            >
+                ← 返回个人中心
+            </a>
+
+        </div>
+
+    </section>
 
 </div>
 

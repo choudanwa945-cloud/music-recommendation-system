@@ -1,130 +1,387 @@
+
 {% extends "base.html" %}
 
-{% block title %}我的评分{% endblock %}
+{% block title %}我的评分 - 音乐推荐系统{% endblock %}
 
 {% block content %}
 
-<h1>我的评分</h1>
+<div class="my-ratings-page">
 
-{% if ratings %}
+    <!-- ========================= -->
+    <!-- 顶部欢迎横幅 -->
+    <!-- ========================= -->
+    <section class="my-ratings-hero">
 
-    {% for item in ratings %}
+        <div class="my-ratings-hero-content">
 
-    <div class="song">
+            <span class="my-ratings-subtitle">
+                MY MUSIC COLLECTION
+            </span>
 
-        <div class="rank">
-            {{ item.music_id }}
+            <h1>
+                ★ 我的音乐评分
+            </h1>
+
+            <p>
+                每一次评分，都是一次音乐偏好的记录。
+                在这里回顾你喜欢的歌曲，
+                管理评分，让推荐系统更加了解你。
+            </p>
+
+            <div class="my-ratings-hero-badge">
+                ♫ 我的专属音乐记录
+            </div>
+
         </div>
 
-        {% if item.cover_file %}
-        <img class="cover"
-             src="{{ url_for('static', filename=item.cover_file) }}"
-             alt="{{ item.title }}">
+        <div class="my-ratings-hero-decoration"
+             aria-hidden="true">
+            ★
+        </div>
+
+    </section>
+
+
+    <!-- ========================= -->
+    <!-- 个人评分统计 -->
+    <!-- ========================= -->
+    <section class="my-ratings-section">
+
+        <div class="my-ratings-section-heading">
+
+            <div>
+
+                <span class="my-ratings-subtitle">
+                    YOUR RATING HISTORY
+                </span>
+
+                <h2>我的评分记录</h2>
+
+                <p>
+                    查看、修改或删除已经提交的歌曲评分。
+                </p>
+
+            </div>
+
+            <span class="my-ratings-count">
+                ★ 已评分 {{ ratings | length }} 首歌曲
+            </span>
+
+        </div>
+
+
+        {% if ratings %}
+
+        <!-- ========================= -->
+        <!-- 已评分歌曲列表 -->
+        <!-- ========================= -->
+        <div class="my-ratings-list">
+
+            {% for item in ratings %}
+
+            <div class="song my-rating-song">
+
+                <!-- 歌曲编号 -->
+                <div class="rank my-rating-rank">
+                    {{ item.music_id }}
+                </div>
+
+
+                <!-- 歌曲封面 -->
+                <div class="my-rating-cover-wrap">
+
+                    {% if item.cover_file %}
+
+                    <img
+                        class="cover my-rating-cover"
+                        src="{{ url_for('static', filename=item.cover_file) }}"
+                        alt="{{ item.title }}"
+                        loading="lazy"
+                    >
+
+                    {% else %}
+
+                    <div class="my-rating-cover-placeholder">
+                        ♫
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- 歌曲信息 -->
+                <div class="song-info my-rating-song-info">
+
+                    <div class="my-rating-song-heading">
+
+                        <h3>
+                            {{ item.title }}
+                        </h3>
+
+                        <span class="my-rating-saved-badge">
+                            已评分
+                        </span>
+
+                    </div>
+
+
+                    <p class="my-rating-artist">
+                        {{ item.artist }}
+                    </p>
+
+
+                    <!-- 音乐类型和标签 -->
+                    <div class="my-rating-song-tags">
+
+                        <span class="my-rating-genre">
+                            {{ item.genre }}
+                        </span>
+
+                        {% if item.tags %}
+
+                        <span class="my-rating-tags">
+                            {{ item.tags }}
+                        </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- 当前评分 -->
+                    <div class="my-rating-current">
+
+                        <span class="my-rating-current-label">
+                            我的评分
+                        </span>
+
+                        <strong class="my-rating-current-score">
+                            ★ {{ item.rating }} 分
+                        </strong>
+
+                    </div>
+
+
+                    <!-- 在线试听 -->
+                    {% if item.audio_file %}
+
+                    <div class="my-rating-audio">
+
+                        <audio controls preload="none">
+
+                            <source
+                                src="{{ url_for('static', filename=item.audio_file) }}"
+                            >
+
+                            你的浏览器不支持音频播放。
+
+                        </audio>
+
+                    </div>
+
+                    {% else %}
+
+                    <p class="my-rating-muted">
+                        暂无试听文件
+                    </p>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- ========================= -->
+                <!-- 评分管理区域 -->
+                <!-- ========================= -->
+                <div class="rate-area my-rating-actions">
+
+                    <div class="my-rating-actions-title">
+                        ★ 评分管理
+                    </div>
+
+
+                    <!-- 修改评分 -->
+                    <form
+                        class="my-rating-edit-form"
+                        action="{{ url_for('rate') }}"
+                        method="post"
+                    >
+
+                        <input
+                            type="hidden"
+                            name="music_id"
+                            value="{{ item.music_id }}"
+                        >
+
+                        <input
+                            type="hidden"
+                            name="next"
+                            value="{{ url_for('my_ratings') }}"
+                        >
+
+                        <label
+                            for="my-rating-select-{{ loop.index }}"
+                        >
+                            修改当前评分
+                        </label>
+
+                        <select
+                            id="my-rating-select-{{ loop.index }}"
+                            name="rating"
+                            required
+                        >
+
+                            <option value="">
+                                请选择评分
+                            </option>
+
+                            <option value="5"
+                                {% if item.rating|int == 5 %}selected{% endif %}>
+                                ★★★★★ 5 分
+                            </option>
+
+                            <option value="4"
+                                {% if item.rating|int == 4 %}selected{% endif %}>
+                                ★★★★ 4 分
+                            </option>
+
+                            <option value="3"
+                                {% if item.rating|int == 3 %}selected{% endif %}>
+                                ★★★ 3 分
+                            </option>
+
+                            <option value="2"
+                                {% if item.rating|int == 2 %}selected{% endif %}>
+                                ★★ 2 分
+                            </option>
+
+                            <option value="1"
+                                {% if item.rating|int == 1 %}selected{% endif %}>
+                                ★ 1 分
+                            </option>
+
+                        </select>
+
+                        <button
+                            class="my-rating-save-button"
+                            type="submit"
+                        >
+                            保存修改
+                        </button>
+
+                    </form>
+
+
+                    <!-- 删除评分 -->
+                    <form
+                        class="my-rating-delete-form"
+                        action="{{ url_for('delete_rating') }}"
+                        method="post"
+                    >
+
+                        <input
+                            type="hidden"
+                            name="music_id"
+                            value="{{ item.music_id }}"
+                        >
+
+                        <button
+                            class="my-rating-delete-button"
+                            type="submit"
+                            onclick="return confirm('确定要删除这条评分吗？');"
+                        >
+                            删除评分
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        {% else %}
+
+        <!-- ========================= -->
+        <!-- 暂无评分记录 -->
+        <!-- ========================= -->
+        <div class="box my-ratings-empty">
+
+            <div class="my-ratings-empty-icon">
+                ♫
+            </div>
+
+            <h3>
+                你的音乐评分记录还是空的
+            </h3>
+
+            <p>
+                前往歌曲库试听喜欢的音乐，
+                给歌曲留下你的第一条评分。
+            </p>
+
+            <a
+                class="button my-ratings-empty-button"
+                href="{{ url_for('library') }}"
+            >
+                ♫ 前往歌曲库评分 →
+            </a>
+
+        </div>
+
         {% endif %}
 
-        <div class="song-info">
+    </section>
 
-            <h3>{{ item.title }}</h3>
+
+    <!-- ========================= -->
+    <!-- 页面底部引导 -->
+    <!-- ========================= -->
+    <section class="my-ratings-bottom">
+
+        <div class="my-ratings-bottom-content">
+
+            <span class="my-ratings-subtitle">
+                KEEP DISCOVERING
+            </span>
+
+            <h2>
+                让每一次评分都有意义
+            </h2>
 
             <p>
-                歌手：{{ item.artist }}
-                &nbsp;&nbsp;
-                类型：{{ item.genre }}
+                持续探索不同的音乐，
+                通过真实评分记录你的偏好，
+                发现更多适合自己的歌曲。
             </p>
 
-            <p>
-                标签：{{ item.tags }}
-            </p>
+            <div class="my-ratings-bottom-actions">
 
-            <p>
-                我的评分：
-                <strong>{{ item.rating }} 分</strong>
-            </p>
+                <a
+                    class="button my-ratings-bottom-button"
+                    href="{{ url_for('library') }}"
+                >
+                    ♫ 继续探索音乐 →
+                </a>
 
-            {% if item.audio_file %}
+                <a
+                    class="my-ratings-recommend-link"
+                    href="{{ url_for('recommend') }}"
+                >
+                    查看个性化推荐 →
+                </a>
 
-            <audio controls preload="none">
-                <source src="{{ url_for('static', filename=item.audio_file) }}">
-            </audio>
-
-            {% endif %}
+            </div>
 
         </div>
 
-
-        <div class="rate-area">
-
-            <!-- 修改评分 -->
-            <form action="{{ url_for('rate') }}"
-                  method="post">
-
-                <input type="hidden"
-                       name="music_id"
-                       value="{{ item.music_id }}">
-
-                <input type="hidden"
-                       name="next"
-                       value="{{ url_for('my_ratings') }}">
-
-                <select name="rating" required>
-
-                    <option value="">
-                        修改评分
-                    </option>
-
-                    <option value="5">5 分</option>
-                    <option value="4">4 分</option>
-                    <option value="3">3 分</option>
-                    <option value="2">2 分</option>
-                    <option value="1">1 分</option>
-
-                </select>
-
-                <button type="submit">
-                    保存修改
-                </button>
-
-            </form>
-
-
-            <!-- 删除评分 -->
-            <form action="{{ url_for('delete_rating') }}"
-                  method="post"
-                  style="margin-top: 10px;">
-
-                <input type="hidden"
-                       name="music_id"
-                       value="{{ item.music_id }}">
-
-                <button type="submit"
-                        onclick="return confirm('确定要删除这条评分吗？');">
-                    删除评分
-                </button>
-
-            </form>
-
-        </div>
-
-    </div>
-
-    {% endfor %}
-
-{% else %}
-
-<div class="box">
-
-    <p>
-        你还没有给任何歌曲评分。
-    </p>
-
-    <p>
-        <a href="{{ url_for('library') }}">
-            去歌曲库评分
-        </a>
-    </p>
+    </section>
 
 </div>
-
-{% endif %}
 
 {% endblock %}

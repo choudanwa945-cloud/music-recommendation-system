@@ -1,50 +1,223 @@
+
 {% extends "base.html" %}
 
-{% block title %}用户注册{% endblock %}
+{% block title %}用户注册 - 个性化音乐推荐系统{% endblock %}
 
 {% block content %}
 
-<div class="box" style="max-width: 420px; margin: 50px auto;">
+<div class="login-page register-page">
 
-    <h2 style="text-align: center;">
-        用户注册
-    </h2>
-    <form method="post">
-        <p>
-            用户名
-        </p>
+    <!-- ========================= -->
+    <!-- 页面顶部标题 -->
+    <!-- ========================= -->
 
-        <input type="text"
-               name="username"
-               placeholder="请输入用户名"
-               required
-               style="width: 100%; box-sizing: border-box; padding: 10px;">
+    <div class="login-page-heading">
+
+        <span class="login-subtitle">
+            JOIN OUR MUSIC WORLD
+        </span>
+
+        <h1>开启属于你的音乐世界</h1>
 
         <p>
-            密码
+            创建音乐账号，记录喜欢的旋律，
+            开始你的个性化音乐探索之旅。
         </p>
 
-        <input type="password"
-               name="password"
-               placeholder="请输入密码"
-               required
-               style="width: 100%; box-sizing: border-box; padding: 10px;">
+    </div>
 
-        <br><br>
 
-        <button type="submit"
-                style="width: 100%; padding: 10px;">
-            注册
-        </button>
+    <!-- ========================= -->
+    <!-- 注册主体：左右双栏 -->
+    <!-- ========================= -->
 
-    </form>
+    <div class="login-layout">
 
-    <p style="text-align: center; margin-top: 20px;">
-        已经有账号？
-        <a href="{{ url_for('login') }}">
-            去登录
-        </a>
-    </p>
+        <!-- ========================= -->
+        <!-- 左侧音乐介绍 -->
+        <!-- ========================= -->
+
+        <section class="login-intro register-intro">
+
+            <div class="login-intro-content">
+
+                <div class="login-intro-icon">
+                    ♫
+                </div>
+
+                <span class="login-intro-label">
+                    CREATE YOUR MUSIC STORY
+                </span>
+
+                <h2>
+                    从这里开始
+                    <span>发现你的音乐宇宙</span>
+                </h2>
+
+                <p>
+                    每个人都有独特的音乐品味。
+                    注册账号后，你可以记录自己的评分，
+                    探索不同风格的歌曲，
+                    获得更符合个人喜好的音乐推荐。
+                </p>
+
+
+                <div class="login-intro-features">
+
+                    <div>
+                        <span>★</span>
+                        保存个人音乐评分
+                    </div>
+
+                    <div>
+                        <span>♫</span>
+                        发现个性化推荐歌单
+                    </div>
+
+                    <div>
+                        <span>♥</span>
+                        根据音乐兴趣探索歌曲
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="login-intro-decoration"
+                 aria-hidden="true">
+                ♪
+            </div>
+
+        </section>
+
+
+        <!-- ========================= -->
+        <!-- 右侧注册表单 -->
+        <!-- ========================= -->
+
+        <section class="box login-card register-card">
+
+            <div class="login-card-heading">
+
+                <div class="login-card-icon">
+                    ★
+                </div>
+
+                <span class="login-subtitle">
+                    CREATE ACCOUNT
+                </span>
+
+                <h2>创建音乐账号</h2>
+
+                <p>
+                    设置用户名和登录密码，
+                    开始记录你的音乐喜好。
+                </p>
+
+            </div>
+
+
+            <form
+                class="login-form register-form"
+                action="{{ url_for('register') }}"
+                method="post"
+            >
+
+                <!-- 用户名 -->
+
+                <div class="login-form-field">
+
+                    <label for="register-username">
+                        用户名
+                    </label>
+
+                    <input
+                        type="text"
+                        id="register-username"
+                        name="username"
+                        placeholder="请设置用户名"
+                        autocomplete="username"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- 密码 -->
+
+                <div class="login-form-field">
+
+                    <label for="register-password">
+                        登录密码
+                    </label>
+
+                    <input
+                        type="password"
+                        id="register-password"
+                        name="password"
+                        placeholder="请设置登录密码"
+                        autocomplete="new-password"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- 注册按钮 -->
+
+                <button
+                    type="submit"
+                    class="login-submit-button register-submit-button"
+                >
+                    ♫ 创建账号 →
+                </button>
+
+            </form>
+
+
+            <!-- 已有账号 -->
+
+            <div class="login-register-area">
+
+                <p>
+                    已经有账号？
+                    <a href="{{ url_for('login') }}">
+                        立即登录 →
+                    </a>
+                </p>
+
+            </div>
+
+
+            <!-- 底部提示 -->
+
+            <div class="login-card-footer">
+
+                <span>♪</span>
+
+                注册成功后，可以登录系统，
+                试听歌曲、保存评分记录，
+                获取属于自己的个性化音乐推荐。
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- 页面底部 -->
+    <!-- ========================= -->
+
+    <div class="login-page-bottom">
+
+        <span>♫</span>
+
+        从第一首喜欢的歌开始，记录你的音乐故事。
+
+    </div>
 
 </div>
 

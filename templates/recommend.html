@@ -1,151 +1,421 @@
+
 {% extends "base.html" %}
 
-{% block title %}个性化推荐{% endblock %}
+{% block title %}个性化音乐推荐{% endblock %}
 
 {% block content %}
 
-<h1>个性化音乐推荐</h1>
+<div class="recommend-page">
 
-<div class="box">
+    <!-- ========================= -->
+    <!-- 顶部欢迎横幅 -->
+    <!-- ========================= -->
+    <section class="recommend-hero box">
 
-    <form action="{{ url_for('recommend') }}" method="get">
+        <div class="recommend-hero-content">
 
-        <label>选择用户：</label>
-
-        <select name="user_id" required>
-
-            {% for uid in users %}
-            <option value="{{ uid }}"
-                {% if uid == user_id %}selected{% endif %}>
-                用户 {{ uid }}
-            </option>
-            {% endfor %}
-
-        </select>
-
-        <button type="submit">
-            开始推荐
-        </button>
-
-    </form>
-
-</div>
-
-{% if user_id is not none %}
-
-<div class="box">
-
-    <h3>相似用户</h3>
-
-    {% if similar_users %}
-
-        {% for item in similar_users %}
-            <span class="tag">
-                用户 {{ item.user_id }}
-                （{{ item.score }}）
+            <span class="recommend-subtitle">
+                MADE JUST FOR YOU
             </span>
-        {% endfor %}
 
-    {% else %}
+            <h1>
+                ♫ 发现你的专属音乐
+            </h1>
 
-        <p>没有找到有效相似用户。</p>
+            <p>
+                基于用户协同过滤算法，
+                分析你的历史评分和相似用户的音乐偏好，
+                为你推荐可能喜欢的歌曲。
+            </p>
 
-    {% endif %}
+            <div class="recommend-user-badge">
+                <span>♪</span>
+                当前用户：
+                {{ session.get('username') }}
+            </div>
 
-</div>
-
-<h2>推荐结果</h2>
-
-{% if songs %}
-
-    {% for song in songs %}
-
-    <div class="song">
-
-        <div class="rank">
-            {{ loop.index }}
         </div>
 
-        {% if song.cover_file %}
-        <img class="cover"
-             src="{{ url_for('static', filename=song.cover_file) }}"
-             alt="{{ song.title }}">
-        {% endif %}
+        <div class="recommend-hero-decoration"
+             aria-hidden="true">
+            ♫
+        </div>
 
-        <div class="song-info">
+    </section>
 
-            <h3>{{ song.title }}</h3>
 
-            <p>
-                歌手：{{ song.artist }}
-                &nbsp;&nbsp;
-                类型：{{ song.genre }}
-            </p>
+    <!-- ========================= -->
+    <!-- 相似用户分析 -->
+    <!-- ========================= -->
+    <section class="recommend-section">
 
-            <p>
-                标签：{{ song.tags }}
-            </p>
+        <div class="recommend-section-heading">
 
-            <p>
-                推荐方式：{{ song.recommend_type }}
-            </p>
+            <div>
 
-            <p>
-                推荐评分：
-                <strong>
-                    {{ "%.2f"|format(song.recommend_score) }}
-                </strong>
-            </p>
+                <span class="recommend-subtitle">
+                    LISTENERS LIKE YOU
+                </span>
 
-            {% if song.audio_file %}
-            <audio controls preload="none">
-                <source src="{{ url_for('static', filename=song.audio_file) }}">
-            </audio>
+                <h2>与你兴趣相近的用户</h2>
+
+                <p class="recommend-section-description">
+                    系统根据历史评分计算用户之间的相似度。
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="recommend-similar-box box">
+
+            {% if similar_users %}
+
+            <div class="recommend-similar-grid">
+
+                {% for item in similar_users %}
+
+                <div class="recommend-similar-card">
+
+                    <div class="recommend-similar-avatar">
+                        ♫
+                    </div>
+
+                    <div class="recommend-similar-info">
+
+                        <strong>
+                            用户 {{ item.user_id }}
+                        </strong>
+
+                        <span>
+                            相似度：
+                            {{ item.score }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+            {% else %}
+
+            <div class="recommend-similar-empty">
+
+                <span class="recommend-empty-icon">
+                    ♬
+                </span>
+
+                <p>
+                    暂时没有找到有效的相似用户。
+                </p>
+
+                <p class="recommend-muted">
+                    可以尝试为更多歌曲评分，
+                    丰富自己的音乐偏好数据。
+                </p>
+
+            </div>
+
             {% endif %}
 
-            <form class="rate-form"
-                  action="{{ url_for('rate') }}"
-                  method="post">
+        </div>
 
-                <input type="hidden"
-                       name="user_id"
-                       value="{{ user_id }}">
+    </section>
 
-                <input type="hidden"
-                       name="music_id"
-                       value="{{ song.music_id }}">
 
-                <input type="hidden"
-                       name="next"
-                       value="{{ url_for('recommend', user_id=user_id) }}">
+    <!-- ========================= -->
+    <!-- 个性化推荐结果 -->
+    <!-- ========================= -->
+    <section class="recommend-section">
 
-                <select name="rating" required>
-                    <option value="">评分</option>
-                    <option value="5">5 分</option>
-                    <option value="4">4 分</option>
-                    <option value="3">3 分</option>
-                    <option value="2">2 分</option>
-                    <option value="1">1 分</option>
-                </select>
+        <div class="recommend-section-heading">
 
-                <button type="submit">
-                    保存评分
-                </button>
+            <div>
 
-            </form>
+                <span class="recommend-subtitle">
+                    RECOMMENDED FOR YOU
+                </span>
+
+                <h2>你的专属推荐歌单</h2>
+
+                <p class="recommend-section-description">
+                    每一首推荐，都来自对你音乐喜好的分析。
+                </p>
+
+            </div>
+
+            {% if songs %}
+
+            <span class="recommend-result-count">
+                共 {{ songs | length }} 首推荐歌曲
+            </span>
+
+            {% endif %}
 
         </div>
 
-    </div>
 
-    {% endfor %}
+        {% if songs %}
 
-{% else %}
+        <div class="recommend-song-list">
 
-<p>暂时没有推荐结果。</p>
+            {% for song in songs %}
 
-{% endif %}
+            <div class="song recommend-song">
 
-{% endif %}
+                <!-- 推荐排名 -->
+                <div class="rank recommend-rank">
+                    {{ loop.index }}
+                </div>
+
+
+                <!-- 歌曲封面 -->
+                <div class="recommend-cover-wrap">
+
+                    {% if song.cover_file %}
+
+                    <img
+                        class="cover recommend-cover"
+                        src="{{ url_for('static', filename=song.cover_file) }}"
+                        alt="{{ song.title }}"
+                        loading="lazy"
+                    >
+
+                    {% else %}
+
+                    <div class="recommend-cover-placeholder">
+                        ♫
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- 歌曲详细信息 -->
+                <div class="song-info recommend-song-info">
+
+                    <div class="recommend-song-heading">
+
+                        <h3>
+                            {{ song.title }}
+                        </h3>
+
+                        <span class="recommend-song-badge">
+                            为你推荐
+                        </span>
+
+                    </div>
+
+
+                    <p class="recommend-artist">
+                        {{ song.artist }}
+                    </p>
+
+
+                    <!-- 类型和标签 -->
+                    <div class="recommend-song-tags">
+
+                        <span class="recommend-genre">
+                            {{ song.genre }}
+                        </span>
+
+                        {% if song.tags %}
+
+                        <span class="recommend-tags">
+                            {{ song.tags }}
+                        </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- 推荐信息 -->
+                    <div class="recommend-score-area">
+
+                        {% if song.recommend_type %}
+
+                        <span class="recommend-method">
+                            推荐方式：
+                            {{ song.recommend_type }}
+                        </span>
+
+                        {% endif %}
+
+                        <span class="recommend-score">
+                            ★ 推荐评分：
+                            {{ "%.2f"|format(song.recommend_score) }}
+                        </span>
+
+                    </div>
+
+
+                    <!-- 在线试听 -->
+                    {% if song.audio_file %}
+
+                    <div class="recommend-audio">
+
+                        <audio controls preload="none">
+
+                            <source
+                                src="{{ url_for('static', filename=song.audio_file) }}"
+                            >
+
+                            你的浏览器不支持音频播放。
+
+                        </audio>
+
+                    </div>
+
+                    {% endif %}
+
+
+                    <!-- 当前用户评分 -->
+                    <form
+                        class="rate-form recommend-rate-form"
+                        action="{{ url_for('rate') }}"
+                        method="post"
+                    >
+
+                        <input
+                            type="hidden"
+                            name="music_id"
+                            value="{{ song.music_id }}"
+                        >
+
+                        <input
+                            type="hidden"
+                            name="next"
+                            value="{{ url_for('recommend') }}"
+                        >
+
+                        <label for="recommend-rating-{{ loop.index }}">
+                            给这首歌评分
+                        </label>
+
+                        <select
+                            id="recommend-rating-{{ loop.index }}"
+                            name="rating"
+                            required
+                        >
+
+                            <option value="">
+                                请选择评分
+                            </option>
+
+                            <option value="5">
+                                ★★★★★ 5 分
+                            </option>
+
+                            <option value="4">
+                                ★★★★ 4 分
+                            </option>
+
+                            <option value="3">
+                                ★★★ 3 分
+                            </option>
+
+                            <option value="2">
+                                ★★ 2 分
+                            </option>
+
+                            <option value="1">
+                                ★ 1 分
+                            </option>
+
+                        </select>
+
+                        <button type="submit">
+                            保存评分
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        {% else %}
+
+        <!-- ========================= -->
+        <!-- 暂无推荐结果 -->
+        <!-- ========================= -->
+        <div class="recommend-empty-state box">
+
+            <div class="recommend-empty-symbol">
+                ♫
+            </div>
+
+            <h3>
+                你的专属歌单正在等待生成
+            </h3>
+
+            <p>
+                当前暂时没有可展示的个性化推荐结果。
+                可以先前往歌曲库试听音乐，
+                给喜欢的歌曲评分。
+            </p>
+
+            <p class="recommend-muted">
+                当系统积累足够的评分数据后，
+                就能更好地分析你的音乐偏好。
+            </p>
+
+            <a
+                class="button recommend-explore-button"
+                href="{{ url_for('library') }}"
+            >
+                ♫ 前往歌曲库评分 →
+            </a>
+
+        </div>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- ========================= -->
+    <!-- 底部提示 -->
+    <!-- ========================= -->
+    <section class="recommend-bottom box">
+
+        <div class="recommend-bottom-content">
+
+            <span class="recommend-subtitle">
+                KEEP EXPLORING
+            </span>
+
+            <h2>
+                让音乐更懂你
+            </h2>
+
+            <p>
+                持续探索和评分喜欢的歌曲，
+                帮助系统不断更新你的音乐偏好。
+            </p>
+
+            <a
+                class="button recommend-bottom-button"
+                href="{{ url_for('library') }}"
+            >
+                继续探索音乐 →
+            </a>
+
+        </div>
+
+    </section>
+
+</div>
 
 {% endblock %}

@@ -1,145 +1,471 @@
+
 {% extends "base.html" %}
 
-{% block title %}歌曲库{% endblock %}
+{% block title %}歌曲库 - 探索音乐{% endblock %}
 
 {% block content %}
 
-<h1>歌曲库</h1>
+<div class="library-page">
 
-<div class="box">
+    <!-- ========================= -->
+    <!-- 顶部音乐横幅 -->
+    <!-- ========================= -->
+    <section class="library-hero">
 
-    <form method="get">
+        <div class="library-hero-content">
 
-        <input type="text"
-               name="q"
-               value="{{ keyword }}"
-               placeholder="输入歌曲名、歌手或标签">
+            <span class="library-subtitle">
+                EXPLORE YOUR MUSIC
+            </span>
 
-        <select name="genre">
+            <h1>
+                ♫ 探索音乐世界
+            </h1>
 
-            <option value="">
-                全部类型
-            </option>
+            <p>
+                发现喜欢的旋律，探索不同风格的音乐。
+                在这里搜索歌曲、在线试听，
+                并记录属于你的音乐偏好。
+            </p>
 
-            {% for item in genres %}
+            <div class="library-hero-badge">
+                ♪ 发现下一首喜欢的歌
+            </div>
 
-            <option value="{{ item }}"
-                {% if item == genre %}selected{% endif %}>
-                {{ item }}
-            </option>
+        </div>
+
+        <div class="library-hero-decoration"
+             aria-hidden="true">
+            ♫
+        </div>
+
+    </section>
+
+
+    <!-- ========================= -->
+    <!-- 歌曲搜索和类型筛选 -->
+    <!-- ========================= -->
+    <section class="library-section">
+
+        <div class="library-section-heading">
+
+            <div>
+
+                <span class="library-subtitle">
+                    FIND YOUR SOUND
+                </span>
+
+                <h2>搜索与筛选</h2>
+
+                <p class="library-section-description">
+                    通过歌曲名称、歌手、标签或音乐类型，
+                    找到你想听的歌曲。
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="box library-search-box">
+
+            <form
+                class="library-search-form"
+                action="{{ url_for('library') }}"
+                method="get"
+            >
+
+                <div class="library-search-field">
+
+                    <label for="library-keyword">
+                        搜索音乐
+                    </label>
+
+                    <input
+                        type="text"
+                        id="library-keyword"
+                        name="q"
+                        value="{{ keyword }}"
+                        placeholder="输入歌曲名、歌手或标签"
+                    >
+
+                </div>
+
+
+                <div class="library-genre-field">
+
+                    <label for="library-genre">
+                        音乐类型
+                    </label>
+
+                    <select
+                        id="library-genre"
+                        name="genre"
+                    >
+
+                        <option value="">
+                            全部类型
+                        </option>
+
+                        {% for item in genres %}
+
+                        <option
+                            value="{{ item }}"
+                            {% if item == genre %}
+                            selected
+                            {% endif %}
+                        >
+                            {{ item }}
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <div class="library-search-actions">
+
+                    <button type="submit">
+                        搜索歌曲
+                    </button>
+
+                    <a
+                        class="library-clear-button"
+                        href="{{ url_for('library') }}"
+                    >
+                        清空筛选
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </section>
+
+
+    <!-- ========================= -->
+    <!-- 歌曲库展示区域 -->
+    <!-- ========================= -->
+    <section class="library-section">
+
+        <div class="library-section-heading">
+
+            <div>
+
+                <span class="library-subtitle">
+                    MUSIC COLLECTION
+                </span>
+
+                <h2>全部音乐</h2>
+
+                <p class="library-section-description">
+                    聆听不同风格的歌曲，
+                    让每一次发现都成为新的音乐体验。
+                </p>
+
+            </div>
+
+
+            <span class="library-song-count">
+                ♫ 共找到 {{ songs | length }} 首歌曲
+            </span>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- 歌曲列表 -->
+        <!-- ========================= -->
+
+        <div class="library-song-list">
+
+            {% for song in songs %}
+
+            <div class="song library-song">
+
+                <!-- 歌曲编号 -->
+                <div class="rank library-rank">
+                    {{ song.music_id }}
+                </div>
+
+
+                <!-- 歌曲封面 -->
+                <div class="library-cover-wrap">
+
+                    {% if song.cover_file %}
+
+                    <img
+                        class="cover library-cover"
+                        src="{{ url_for('static', filename=song.cover_file) }}"
+                        alt="{{ song.title }}"
+                        loading="lazy"
+                    >
+
+                    {% else %}
+
+                    <div class="library-cover-placeholder">
+                        ♫
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- 歌曲基本信息 -->
+                <div class="song-info library-song-info">
+
+                    <div class="library-song-heading">
+
+                        <h3>
+                            {{ song.title }}
+                        </h3>
+
+                    </div>
+
+
+                    <p class="library-artist">
+                        {{ song.artist }}
+                    </p>
+
+
+                    <!-- 音乐类型与标签 -->
+                    <div class="library-song-tags">
+
+                        <span class="library-genre">
+                            {{ song.genre }}
+                        </span>
+
+                        {% if song.tags %}
+
+                        <span class="library-tags">
+                            {{ song.tags }}
+                        </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- 音频试听 -->
+                    {% if song.audio_file %}
+
+                    <div class="library-audio">
+
+                        <audio controls preload="none">
+
+                            <source
+                                src="{{ url_for('static', filename=song.audio_file) }}"
+                            >
+
+                            你的浏览器不支持音频播放。
+
+                        </audio>
+
+                    </div>
+
+                    {% else %}
+
+                    <p class="library-no-audio">
+                        暂无试听文件
+                    </p>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- ========================= -->
+                <!-- 用户评分区域 -->
+                <!-- ========================= -->
+                <div class="rate-area library-rate-area">
+
+                    {% if session.get('user_id') %}
+
+                    <div class="library-rating-title">
+                        ★ 我的评分
+                    </div>
+
+                    <form
+                        class="library-rating-form"
+                        action="{{ url_for('rate') }}"
+                        method="post"
+                    >
+
+                        <input
+                            type="hidden"
+                            name="music_id"
+                            value="{{ song.music_id }}"
+                        >
+
+                        <input
+                            type="hidden"
+                            name="next"
+                            value="{{ request.full_path }}"
+                        >
+
+
+                        <label
+                            for="library-rating-{{ loop.index }}"
+                            class="library-rating-label"
+                        >
+                            为这首歌评分
+                        </label>
+
+                        <select
+                            id="library-rating-{{ loop.index }}"
+                            name="rating"
+                            required
+                        >
+
+                            <option value="">
+                                请选择评分
+                            </option>
+
+                            <option value="5">
+                                ★★★★★ 5 分
+                            </option>
+
+                            <option value="4">
+                                ★★★★ 4 分
+                            </option>
+
+                            <option value="3">
+                                ★★★ 3 分
+                            </option>
+
+                            <option value="2">
+                                ★★ 2 分
+                            </option>
+
+                            <option value="1">
+                                ★ 1 分
+                            </option>
+
+                        </select>
+
+
+                        <button type="submit">
+                            保存评分
+                        </button>
+
+                    </form>
+
+
+                    {% else %}
+
+                    <div class="library-login-tip">
+
+                        <span class="library-login-icon">
+                            ♫
+                        </span>
+
+                        <p>
+                            登录后即可为歌曲评分
+                        </p>
+
+                        <a href="{{ url_for('login') }}"
+                           class="library-login-link">
+                            前往登录 →
+                        </a>
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+            {% else %}
+
+            <!-- ========================= -->
+            <!-- 没有搜索结果 -->
+            <!-- ========================= -->
+            <div class="library-empty-state">
+
+                <div class="library-empty-icon">
+                    ♫
+                </div>
+
+                <h3>
+                    没有找到符合条件的歌曲
+                </h3>
+
+                <p>
+                    可以尝试更换搜索关键词，
+                    或者选择其他音乐类型。
+                </p>
+
+                <a
+                    class="button library-reset-button"
+                    href="{{ url_for('library') }}"
+                >
+                    查看全部歌曲 →
+                </a>
+
+            </div>
 
             {% endfor %}
 
-        </select>
+        </div>
 
-        <button type="submit">
-            搜索
-        </button>
+    </section>
 
-        <a class="small-link"
-           href="{{ url_for('library') }}">
-            清空
-        </a>
 
-    </form>
+    <!-- ========================= -->
+    <!-- 底部引导区域 -->
+    <!-- ========================= -->
+    <section class="library-bottom">
 
-</div>
+        <div class="library-bottom-content">
 
-<p>
-    共找到 {{ songs|length }} 首歌曲
-</p>
+            <span class="library-subtitle">
+                KEEP LISTENING
+            </span>
 
-{% for song in songs %}
+            <h2>
+                让音乐成为你的日常
+            </h2>
 
-<div class="song">
+            {% if session.get('user_id') %}
 
-    <div class="rank">
-        {{ song.music_id }}
-    </div>
+            <p>
+                每一次聆听与评分，
+                都能帮助系统进一步了解你的音乐偏好。
+            </p>
 
-    {% if song.cover_file %}
-    <img class="cover"
-         src="{{ url_for('static', filename=song.cover_file) }}"
-         alt="{{ song.title }}">
-    {% endif %}
+            <a
+                class="button library-bottom-button"
+                href="{{ url_for('recommend') }}"
+            >
+                ♫ 查看个性化推荐 →
+            </a>
 
-    <div class="song-info">
+            {% else %}
 
-        <h3>{{ song.title }}</h3>
+            <p>
+                登录后记录喜欢的音乐，
+                开始属于自己的个性化推荐体验。
+            </p>
 
-        <p>
-            歌手：{{ song.artist }}
-            &nbsp;&nbsp;
-            类型：{{ song.genre }}
-        </p>
+            <a
+                class="button library-bottom-button"
+                href="{{ url_for('login') }}"
+            >
+                ♫ 登录开始推荐 →
+            </a>
 
-        <p>
-            标签：{{ song.tags }}
-        </p>
+            {% endif %}
 
-        {% if song.audio_file %}
+        </div>
 
-        <audio controls preload="none">
-            <source src="{{ url_for('static', filename=song.audio_file) }}">
-        </audio>
-
-        {% else %}
-
-        <p class="gray">
-            暂无试听文件
-        </p>
-
-        {% endif %}
-
-    </div>
-
-    <div class="rate-area">
-
-    {% if session.get('user_id') %}
-
-    <form action="{{ url_for('rate') }}"
-          method="post">
-
-        <input type="hidden"
-               name="music_id"
-               value="{{ song.music_id }}">
-
-        <input type="hidden"
-               name="next"
-               value="{{ request.full_path }}">
-
-        <select name="rating" required>
-
-            <option value="">
-                评分
-            </option>
-
-            <option value="5">5 分</option>
-            <option value="4">4 分</option>
-            <option value="3">3 分</option>
-            <option value="2">2 分</option>
-            <option value="1">1 分</option>
-
-        </select>
-
-        <button type="submit">
-            保存
-        </button>
-
-    </form>
-
-    {% else %}
-
-    <p class="gray">
-        登录后可评分
-    </p>
-
-    {% endif %}
+    </section>
 
 </div>
-
-</div>
-
-{% endfor %}
 
 {% endblock %}

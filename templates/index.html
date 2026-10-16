@@ -1,261 +1,605 @@
+
 {% extends "base.html" %}
 
-{% block title %}首页{% endblock %}
+{% block title %}首页 - 个性化音乐推荐系统{% endblock %}
 
 {% block content %}
 
-<div class="welcome">
+<div class="music-home">
 
+    <!-- ========================= -->
+    <!-- 首页欢迎横幅 -->
+    <!-- ========================= -->
+    <section class="home-hero">
+
+        <div class="home-hero-content">
+
+            <div class="home-hero-label">
+                <span class="home-status-dot"></span>
+                YOUR PERSONAL MUSIC SPACE
+            </div>
+
+            {% if session.get('username') %}
+
+                <h1>
+                    欢迎回来，
+                    <span class="home-gradient-text">
+                        {{ session.get('username') }}
+                    </span>
+                </h1>
+
+                <p class="home-hero-description">
+                    每一首喜欢的歌，都值得被发现。
+                    根据你的历史评分和音乐偏好，
+                    探索专属于你的音乐世界。
+                </p>
+
+                <div class="home-hero-buttons">
+
+                    <a class="home-btn-primary"
+                       href="{{ url_for('recommend') }}">
+                        ♫ 查看我的推荐
+                    </a>
+
+                    <a class="home-btn-secondary"
+                       href="{{ url_for('library') }}">
+                        探索歌曲库 →
+                    </a>
+
+                </div>
+
+            {% else %}
+
+                <h1>
+                    发现属于你的
+                    <span class="home-gradient-text">
+                        音乐世界
+                    </span>
+                </h1>
+
+                <p class="home-hero-description">
+                    融合协同过滤与音乐兴趣特征，
+                    让每一次聆听都更懂你的喜好。
+                    登录后评分歌曲，开启个性化音乐之旅。
+                </p>
+
+                <div class="home-hero-buttons">
+
+                    <a class="home-btn-primary"
+                       href="{{ url_for('login') }}">
+                        ♫ 登录开始推荐
+                    </a>
+
+                    <a class="home-btn-secondary"
+                       href="{{ url_for('register') }}">
+                        注册账号 →
+                    </a>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- CSS 绘制的唱片装饰 -->
+        <div class="home-hero-art" aria-hidden="true">
+
+            <div class="home-record-glow"></div>
+
+            <div class="home-vinyl-record">
+
+                <div class="home-vinyl-label">
+                    <span>♫</span>
+                </div>
+
+            </div>
+
+            <span class="home-floating-note home-note-one">
+                ♪
+            </span>
+
+            <span class="home-floating-note home-note-two">
+                ♫
+            </span>
+
+        </div>
+
+    </section>
+
+
+    <!-- ========================= -->
+    <!-- 系统数据概览 -->
+    <!-- ========================= -->
+    <section class="home-section">
+
+        <div class="home-section-heading">
+            <div>
+                <span class="home-section-subtitle">
+                    MUSIC IN NUMBERS
+                </span>
+
+                <h2>音乐数据概览</h2>
+            </div>
+        </div>
+
+        <div class="home-stats-grid">
+
+            <div class="home-stat-card">
+
+                <span class="home-stat-icon">♙</span>
+
+                <strong class="home-stat-number">
+                    {{ stats.user_count }}
+                </strong>
+
+                <span class="home-stat-label">
+                    系统用户
+                </span>
+
+            </div>
+
+            <div class="home-stat-card">
+
+                <span class="home-stat-icon">♫</span>
+
+                <strong class="home-stat-number">
+                    {{ stats.music_count }}
+                </strong>
+
+                <span class="home-stat-label">
+                    收录歌曲
+                </span>
+
+            </div>
+
+            <div class="home-stat-card">
+
+                <span class="home-stat-icon">★</span>
+
+                <strong class="home-stat-number">
+                    {{ stats.rating_count }}
+                </strong>
+
+                <span class="home-stat-label">
+                    用户评分
+                </span>
+
+            </div>
+
+            <div class="home-stat-card">
+
+                <span class="home-stat-icon">◈</span>
+
+                <strong class="home-stat-number">
+                    {{ stats.matrix_density }}%
+                </strong>
+
+                <span class="home-stat-label">
+                    评分矩阵密度
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ========================= -->
+    <!-- 热门歌曲精选 TOP 4 -->
+    <!-- ========================= -->
+    <section class="home-section home-featured-section">
+
+        <div class="home-section-heading">
+
+            <div>
+                <span class="home-section-subtitle">
+                    TRENDING NOW
+                </span>
+
+                <h2>♫ 热门歌曲精选</h2>
+
+                <p class="home-section-description">
+                    根据用户评分与热度，
+                    发现值得聆听的音乐。
+                </p>
+            </div>
+
+            <a class="home-view-all"
+               href="{{ url_for('popular') }}">
+                查看全部热门音乐 →
+            </a>
+
+        </div>
+
+
+        <div class="home-tracks-grid">
+
+            {% for song in featured_songs %}
+
+            <div class="home-track-card">
+
+                <!-- 歌曲封面 -->
+                <div class="home-track-cover">
+
+                    {% if song.cover_file %}
+
+                    <img
+                        src="{{ url_for('static', filename=song.cover_file) }}"
+                        alt="{{ song.title }}"
+                        loading="lazy"
+                    >
+
+                    {% else %}
+
+                    <div class="home-track-placeholder">
+                        ♫
+                    </div>
+
+                    {% endif %}
+
+                    <span class="home-track-rank">
+                        TOP {{ loop.index }}
+                    </span>
+
+                </div>
+
+
+                <!-- 歌曲信息 -->
+                <div class="home-track-info">
+
+                    <h3 title="{{ song.title }}">
+                        {{ song.title }}
+                    </h3>
+
+                    <p class="home-track-artist">
+                        {{ song.artist }}
+                    </p>
+
+                    <div class="home-track-meta">
+
+                        <span class="home-track-genre">
+                            {{ song.genre }}
+                        </span>
+
+                        <span class="home-track-rating">
+                            ★ {{ "%.1f"|format(song.average_rating) }}
+                        </span>
+
+                    </div>
+
+
+                    <!-- 音乐试听 -->
+                    {% if song.audio_file %}
+
+                    <div class="home-track-player">
+
+                        <audio controls preload="none">
+                            <source
+                                src="{{ url_for('static', filename=song.audio_file) }}"
+                            >
+                            你的浏览器不支持音频播放。
+                        </audio>
+
+                    </div>
+
+                    {% endif %}
+
+
+                    <!-- 查看歌曲 -->
+                    <a class="home-track-link"
+                       href="{{ url_for('library', q=song.title) }}">
+                        查看歌曲 →
+                    </a>
+
+                </div>
+
+            </div>
+
+            {% else %}
+
+            <div class="home-tracks-empty">
+                暂无热门歌曲数据
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+    <!-- ========================= -->
+    <!-- 登录用户快捷入口 -->
+    <!-- ========================= -->
     {% if session.get('username') %}
 
-        <h1>
-            欢迎回来，{{ session.get('username') }}
-        </h1>
+    <section class="home-section">
 
-        <p>
-            你已经登录系统。
-            可以给喜欢的歌曲评分，
-            系统会根据你的评分记录为你生成个性化音乐推荐。
-        </p>
+        <div class="home-section-heading">
 
-        <a class="button"
-           href="{{ url_for('recommend') }}">
-            查看我的个性化推荐
-        </a>
+            <div>
+                <span class="home-section-subtitle">
+                    MADE FOR YOU
+                </span>
 
-    {% else %}
+                <h2>我的音乐空间</h2>
+            </div>
 
-        <h1>
-            个性化音乐推荐系统
-        </h1>
+        </div>
 
-        <p>
-            本系统使用用户协同过滤算法，
-            根据用户的历史评分计算用户之间的相似度，
-            并推荐可能喜欢的歌曲。
-        </p>
+        <div class="home-feature-grid">
 
-        <a class="button"
-           href="{{ url_for('login') }}">
-            登录后开始推荐
-        </a>
+            <a class="home-feature-card"
+               href="{{ url_for('recommend') }}">
 
-        <a class="button"
-           href="{{ url_for('register') }}">
-            注册账号
-        </a>
+                <div class="home-feature-icon home-icon-purple">
+                    ♫
+                </div>
+
+                <h3>个性化推荐</h3>
+
+                <p>
+                    根据历史评分和相似用户，
+                    为你发现可能喜欢的歌曲。
+                </p>
+
+                <span class="home-feature-link">
+                    查看推荐 →
+                </span>
+
+            </a>
+
+
+            <a class="home-feature-card"
+               href="{{ url_for('library') }}">
+
+                <div class="home-feature-icon home-icon-blue">
+                    ▶
+                </div>
+
+                <h3>探索歌曲库</h3>
+
+                <p>
+                    在线试听歌曲，
+                    给喜欢的音乐留下你的评分。
+                </p>
+
+                <span class="home-feature-link">
+                    开始探索 →
+                </span>
+
+            </a>
+
+
+            <a class="home-feature-card"
+               href="{{ url_for('my_ratings') }}">
+
+                <div class="home-feature-icon home-icon-pink">
+                    ★
+                </div>
+
+                <h3>我的评分</h3>
+
+                <p>
+                    查看、修改和删除评分，
+                    管理自己的音乐喜好记录。
+                </p>
+
+                <span class="home-feature-link">
+                    查看评分 →
+                </span>
+
+            </a>
+
+
+            <a class="home-feature-card"
+               href="{{ url_for('profile') }}">
+
+                <div class="home-feature-icon home-icon-cyan">
+                    ◉
+                </div>
+
+                <h3>个人中心</h3>
+
+                <p>
+                    查看账户信息，
+                    管理密码和个性化背景设置。
+                </p>
+
+                <span class="home-feature-link">
+                    进入个人中心 →
+                </span>
+
+            </a>
+
+        </div>
+
+    </section>
 
     {% endif %}
 
-</div>
 
+    <!-- ========================= -->
+    <!-- 系统核心功能 -->
+    <!-- ========================= -->
+    <section class="home-section">
 
-{% if session.get('username') %}
+        <div class="home-section-heading">
 
-<h2>我的快捷入口</h2>
+            <div>
 
-<div class="cards">
+                <span class="home-section-subtitle">
+                    EXPLORE THE MUSIC
+                </span>
 
-    <div class="card">
-        <h3>个性化推荐</h3>
-        <p>
-            根据你的历史评分和相似用户，
-            推荐你可能喜欢的歌曲。
-        </p>
+                <h2>探索音乐世界</h2>
 
-        <a href="{{ url_for('recommend') }}">
-            查看推荐
-        </a>
-    </div>
+                <p class="home-section-description">
+                    从热门歌曲到个性化推荐，
+                    找到适合你的音乐。
+                </p>
 
+            </div>
 
-    <div class="card">
-        <h3>歌曲库</h3>
-        <p>
-            浏览歌曲、在线试听，
-            并给喜欢的歌曲进行 1 到 5 分评分。
-        </p>
+        </div>
 
-        <a href="{{ url_for('library') }}">
-            去评分
-        </a>
-    </div>
 
+        <div class="home-feature-grid">
 
-    <div class="card">
-        <h3>我的评分</h3>
-        <p>
-            查看、修改或删除自己以前提交的歌曲评分。
-        </p>
+            <a class="home-feature-card"
+               href="{{ url_for('popular') }}">
 
-        <a href="{{ url_for('my_ratings') }}">
-            查看我的评分
-        </a>
-    </div>
+                <div class="home-feature-icon home-icon-orange">
+                    ♨
+                </div>
 
+                <h3>热门音乐</h3>
 
-    <div class="card">
-        <h3>个人中心</h3>
-        <p>
-            查看账号信息、评分数量，
-            或修改自己的登录密码。
-        </p>
+                <p>
+                    基于系统用户的评分数据，
+                    发现受到更多人喜爱的音乐。
+                </p>
 
-        <a href="{{ url_for('profile') }}">
-            进入个人中心
-        </a>
-    </div>
+                <span class="home-feature-link">
+                    查看热门 →
+                </span>
 
-</div>
+            </a>
 
-{% endif %}
 
+            <a class="home-feature-card"
+               href="{{ url_for('recommend') }}">
 
-<h2>系统功能</h2>
+                <div class="home-feature-icon home-icon-purple">
+                    ♫
+                </div>
 
-<div class="cards">
+                <h3>智能个性化推荐</h3>
 
-    <div class="card">
+                <p>
+                    利用用户协同过滤算法，
+                    根据相似用户发现潜在喜好。
+                </p>
 
-        <h3>热门音乐</h3>
+                <span class="home-feature-link">
+                    获取推荐 →
+                </span>
 
-        <p>
-            根据用户评分数据，
-            查看当前比较受欢迎的歌曲。
-        </p>
+            </a>
 
-        <a href="{{ url_for('popular') }}">
-            查看
-        </a>
 
-    </div>
+            <a class="home-feature-card"
+               href="{{ url_for('interest') }}">
 
+                <div class="home-feature-icon home-icon-pink">
+                    ♥
+                </div>
 
-    <div class="card">
+                <h3>兴趣音乐推荐</h3>
 
-        <h3>个性化推荐</h3>
+                <p>
+                    根据喜欢的音乐类型和标签，
+                    探索符合兴趣的音乐内容。
+                </p>
 
-        <p>
-            登录并完成歌曲评分后，
-            系统会根据相似用户生成个性化推荐。
-        </p>
+                <span class="home-feature-link">
+                    按兴趣探索 →
+                </span>
 
-        <a href="{{ url_for('recommend') }}">
-            查看
-        </a>
+            </a>
 
-    </div>
 
+            <a class="home-feature-card"
+               href="{{ url_for('library') }}">
 
-    <div class="card">
+                <div class="home-feature-icon home-icon-blue">
+                    ▶
+                </div>
 
-        <h3>兴趣推荐</h3>
+                <h3>音乐歌曲库</h3>
 
-        <p>
-            可以根据音乐类型和标签，
-            获取符合自己兴趣的歌曲推荐。
-        </p>
+                <p>
+                    搜索、浏览和在线试听歌曲，
+                    登录后还可以记录个人评分。
+                </p>
 
-        <a href="{{ url_for('interest') }}">
-            查看
-        </a>
+                <span class="home-feature-link">
+                    浏览歌曲 →
+                </span>
 
-    </div>
+            </a>
 
+        </div>
 
-    <div class="card">
+    </section>
 
-        <h3>歌曲库</h3>
 
-        <p>
-            搜索和浏览歌曲，
-            登录以后可以给歌曲进行评分。
-        </p>
+    <!-- ========================= -->
+    <!-- 底部用户引导 -->
+    <!-- ========================= -->
+    <section class="home-bottom-banner">
 
-        <a href="{{ url_for('library') }}">
-            查看
-        </a>
+        {% if session.get('username') %}
 
-    </div>
+            <div class="home-bottom-content">
 
-</div>
+                <span class="home-section-subtitle">
+                    YOUR MUSIC PROFILE
+                </span>
 
+                <h2>你的音乐旅程仍在继续</h2>
 
-<h2>当前数据</h2>
+                <p>
+                    当前登录用户：
+                    <strong>{{ session.get('username') }}</strong>
+                    · 用户编号：
+                    {{ session.get('user_id') }}
+                </p>
 
-<table>
+                <a class="home-btn-primary"
+                   href="{{ url_for('profile') }}">
+                    管理我的音乐空间 →
+                </a>
 
-    <tr>
-        <th>用户数量</th>
-        <th>歌曲数量</th>
-        <th>评分数量</th>
-        <th>评分矩阵密度</th>
-    </tr>
+            </div>
 
-    <tr>
-        <td>{{ stats.user_count }}</td>
-        <td>{{ stats.music_count }}</td>
-        <td>{{ stats.rating_count }}</td>
-        <td>{{ stats.matrix_density }}%</td>
-    </tr>
+        {% else %}
 
-</table>
+            <div class="home-bottom-content">
 
+                <span class="home-section-subtitle">
+                    START LISTENING
+                </span>
 
-{% if session.get('username') %}
+                <h2>准备好发现下一首喜欢的歌了吗？</h2>
 
-<div class="box"
-     style="margin-top: 30px;">
+                <p>
+                    创建账号，记录你的音乐偏好，
+                    开始属于自己的个性化推荐体验。
+                </p>
 
-    <h3>
-        当前登录账号
-    </h3>
+                <div class="home-hero-buttons">
 
-    <p>
-        用户名：
-        <strong>{{ session.get('username') }}</strong>
-    </p>
+                    <a class="home-btn-primary"
+                       href="{{ url_for('register') }}">
+                        免费注册
+                    </a>
 
-    <p>
-        用户编号：
-        <strong>{{ session.get('user_id') }}</strong>
-    </p>
+                    <a class="home-btn-secondary"
+                       href="{{ url_for('login') }}">
+                        已有账号？登录 →
+                    </a>
 
-    <p>
-        <a href="{{ url_for('profile') }}">
-            查看个人中心
-        </a>
-    </p>
+                </div>
 
-</div>
+            </div>
 
-{% else %}
+        {% endif %}
 
-<div class="box"
-     style="margin-top: 30px;">
-
-    <h3>
-        还没有登录？
-    </h3>
-
-    <p>
-        注册账号并登录后，
-        你可以保存自己的评分记录，
-        并获得真正属于自己的个性化音乐推荐。
-    </p>
-
-    <a href="{{ url_for('login') }}">
-        登录
-    </a>
-
-    &nbsp;&nbsp;
-
-    <a href="{{ url_for('register') }}">
-        注册账号
-    </a>
+    </section>
 
 </div>
-
-{% endif %}
 
 {% endblock %}

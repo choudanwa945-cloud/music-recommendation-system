@@ -1,51 +1,216 @@
+
 {% extends "base.html" %}
 
-{% block title %}用户登录{% endblock %}
+{% block title %}用户登录 - 个性化音乐推荐系统{% endblock %}
 
 {% block content %}
 
-<div class="box" style="max-width: 420px; margin: 50px auto;">
+<div class="login-page">
 
-    <h2 style="text-align: center;">
-        用户登录
-    </h2>
-    <form method="post">
+    <!-- ========================= -->
+    <!-- 登录页面标题 -->
+    <!-- ========================= -->
 
-        <p>
-            用户名
-        </p>
+    <div class="login-page-heading">
 
-        <input type="text"
-               name="username"
-               placeholder="请输入用户名"
-               required
-               style="width: 100%; box-sizing: border-box; padding: 10px;">
+        <span class="login-subtitle">
+            WELCOME BACK
+        </span>
+
+        <h1>开启你的音乐之旅</h1>
 
         <p>
-            密码
+            登录音乐推荐系统，
+            发现更多符合你喜好的旋律。
         </p>
 
-        <input type="password"
-               name="password"
-               placeholder="请输入密码"
-               required
-               style="width: 100%; box-sizing: border-box; padding: 10px;">
+    </div>
 
-        <br><br>
 
-        <button type="submit"
-                style="width: 100%; padding: 10px;">
-            登录
-        </button>
+    <!-- ========================= -->
+    <!-- 登录主体 -->
+    <!-- ========================= -->
 
-    </form>
+    <div class="login-layout">
 
-    <p style="text-align: center; margin-top: 20px;">
-        还没有账号？
-        <a href="{{ url_for('register') }}">
-            去注册
-        </a>
-    </p>
+        <!-- 左侧音乐介绍区域 -->
+
+        <section class="login-intro">
+
+            <div class="login-intro-content">
+
+                <div class="login-intro-icon">
+                    ♫
+                </div>
+
+                <span class="login-intro-label">
+                    YOUR PERSONAL MUSIC SPACE
+                </span>
+
+                <h2>
+                    让每一次聆听
+                    <span>都有新的发现</span>
+                </h2>
+
+                <p>
+                    在这里记录喜欢的音乐，
+                    探索热门歌曲，
+                    通过个性化推荐发现属于自己的音乐世界。
+                </p>
+
+                <div class="login-intro-features">
+
+                    <div>
+                        <span>★</span>
+                        记录音乐评分
+                    </div>
+
+                    <div>
+                        <span>♫</span>
+                        发现个性化推荐
+                    </div>
+
+                    <div>
+                        <span>♥</span>
+                        探索音乐兴趣
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="login-intro-decoration"
+                 aria-hidden="true">
+                ♪
+            </div>
+
+        </section>
+
+
+        <!-- ========================= -->
+        <!-- 右侧登录表单 -->
+        <!-- ========================= -->
+
+        <section class="box login-card">
+
+            <div class="login-card-heading">
+
+                <div class="login-card-icon">
+                    ♫
+                </div>
+
+                <span class="login-subtitle">
+                    MEMBER LOGIN
+                </span>
+
+                <h2>欢迎回来</h2>
+
+                <p>
+                    输入你的账号信息，继续探索音乐。
+                </p>
+
+            </div>
+
+
+            <form
+                class="login-form"
+                action="{{ url_for('login') }}"
+                method="post"
+            >
+
+                <!-- 用户名 -->
+
+                <div class="login-form-field">
+
+                    <label for="login-username">
+                        用户名
+                    </label>
+
+                    <input
+                        type="text"
+                        id="login-username"
+                        name="username"
+                        placeholder="请输入用户名"
+                        autocomplete="username"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- 密码 -->
+
+                <div class="login-form-field">
+
+                    <label for="login-password">
+                        密码
+                    </label>
+
+                    <input
+                        type="password"
+                        id="login-password"
+                        name="password"
+                        placeholder="请输入登录密码"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- 登录按钮 -->
+
+                <button
+                    type="submit"
+                    class="login-submit-button"
+                >
+                    ♫ 登录并开始探索 →
+                </button>
+
+            </form>
+
+
+            <!-- 注册入口 -->
+
+            <div class="login-register-area">
+
+                <p>
+                    还没有账号？
+                    <a href="{{ url_for('register') }}">
+                        立即注册 →
+                    </a>
+                </p>
+
+            </div>
+
+
+            <!-- 底部提示 -->
+
+            <div class="login-card-footer">
+
+                <span>♪</span>
+
+                登录后可以保存评分记录，
+                获取属于自己的个性化音乐推荐。
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- 页面底部 -->
+    <!-- ========================= -->
+
+    <div class="login-page-bottom">
+
+        <span>♫</span>
+
+        用音乐记录心情，让推荐更懂你的喜好。
+
+    </div>
 
 </div>
 
