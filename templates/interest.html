@@ -1,474 +1,554 @@
-
 {% extends "base.html" %}
 
-{% block title %}兴趣音乐推荐{% endblock %}
+{% block title %}兴趣探索 - MusicFlow{% endblock %}
 
 {% block content %}
+<style>
+/* MusicFlow 2.0 · 兴趣探索页独立样式，不影响其他页面 */
+#mf-interest-v2 {
+    --mf-ink: #f4f3ff;
+    --mf-muted: #aaaac7;
+    --mf-line: rgba(188, 181, 255, .13);
+    --mf-surface: #171a30;
+    --mf-surface-light: #1d203a;
+    --mf-purple: #a78bfa;
+    --mf-purple-bright: #b8a0ff;
+    max-width: 1080px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 32px 0 64px;
+    color: var(--mf-ink);
+    box-sizing: border-box;
+}
+#mf-interest-v2, #mf-interest-v2 * { box-sizing: border-box; }
+#mf-interest-v2 a { text-decoration: none; }
+#mf-interest-v2 button, #mf-interest-v2 input { font: inherit; }
+#mf-interest-v2 .mf-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    margin: 0 0 13px;
+    color: #c7b5ff;
+    letter-spacing: .15em;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+#mf-interest-v2 .mf-eyebrow::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    flex: 0 0 7px;
+    border-radius: 50%;
+    background: #65e2b7;
+    box-shadow: 0 0 0 4px rgba(101,226,183,.1);
+}
+#mf-interest-v2 .mf-intro {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 28px;
+    min-height: 230px;
+    padding: 36px 44px;
+    overflow: hidden;
+    border: 1px solid rgba(196,176,255,.19);
+    border-radius: 25px;
+    background: radial-gradient(circle at 91% 15%, rgba(160,101,255,.32), transparent 37%),
+                linear-gradient(113deg, #182144 0%, #251d48 56%, #462776 100%);
+}
+#mf-interest-v2 .mf-intro-copy { max-width: 630px; position: relative; z-index: 1; }
+#mf-interest-v2 .mf-intro h1 {
+    margin: 0 0 13px;
+    font-size: clamp(28px, 3vw, 40px);
+    letter-spacing: -.035em;
+    line-height: 1.22;
+    color: #fff;
+}
+#mf-interest-v2 .mf-intro p {
+    margin: 0;
+    color: #cbc8e7;
+    line-height: 1.85;
+    font-size: 14px;
+}
+#mf-interest-v2 .mf-intro-facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 20px;
+}
+#mf-interest-v2 .mf-intro-facts span {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    border: 1px solid rgba(219,208,255,.22);
+    background: rgba(255,255,255,.065);
+    color: #e3dcff;
+    padding: 7px 11px;
+    font-size: 12px;
+    border-radius: 99px;
+}
+#mf-interest-v2 .mf-intro-disc {
+    width: 164px;
+    height: 164px;
+    flex: 0 0 164px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    position: relative;
+    background: repeating-radial-gradient(circle, #131429 0px, #131429 5px, #202040 6px, #111427 9px);
+    box-shadow: 0 15px 40px rgba(9,8,24,.3), 0 0 0 18px rgba(189,150,255,.065);
+    transform: rotate(-13deg);
+}
+#mf-interest-v2 .mf-intro-disc::before {
+    content: "♫";
+    display: grid;
+    place-items: center;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    color: white;
+    font-size: 28px;
+    background: linear-gradient(145deg, #b38cff, #6c49d8);
+    border: 6px solid #1d1e3e;
+}
+#mf-interest-v2 .mf-intro-disc::after {
+    content: "";
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #e3d7ff;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+}
+#mf-interest-v2 .mf-section { margin-top: 32px; }
+#mf-interest-v2 .mf-section-head {
+    display: flex;
+    gap: 16px;
+    align-items: end;
+    justify-content: space-between;
+    margin-bottom: 17px;
+}
+#mf-interest-v2 .mf-section-head h2 { color: white; margin: 0 0 6px; font-size: 24px; line-height: 1.3; }
+#mf-interest-v2 .mf-section-head p { margin: 0; color: var(--mf-muted); font-size: 13px; line-height: 1.7; }
+#mf-interest-v2 .mf-section-head .mf-eyebrow { margin-bottom: 8px; }
+#mf-interest-v2 .mf-pill-count {
+    flex: 0 0 auto;
+    font-size: 12px;
+    font-weight: 700;
+    color: #d1bfff;
+    background: rgba(145,102,238,.14);
+    padding: 9px 13px;
+    border-radius: 99px;
+    border: 1px solid rgba(170,138,244,.22);
+}
+#mf-interest-v2 .mf-form-panel {
+    overflow: hidden;
+    border: 1px solid var(--mf-line);
+    background: linear-gradient(125deg, #1c203b, #171a30);
+    border-radius: 21px;
+}
+#mf-interest-v2 .mf-choice-group { padding: 26px 29px 28px; }
+#mf-interest-v2 .mf-choice-group + .mf-choice-group { border-top: 1px solid var(--mf-line); }
+#mf-interest-v2 .mf-choice-heading { display: flex; align-items: center; gap: 12px; margin-bottom: 19px; }
+#mf-interest-v2 .mf-choice-icon {
+    width: 42px; height: 42px;
+    display: grid; place-items: center;
+    flex: 0 0 42px;
+    color: #cfbaff;
+    background: rgba(146,100,238,.15);
+    border-radius: 13px;
+    font-size: 21px;
+}
+#mf-interest-v2 .mf-choice-heading h3 { color: #fff; font-size: 17px; margin: 0 0 3px; }
+#mf-interest-v2 .mf-choice-heading p { margin: 0; color: var(--mf-muted); font-size: 12px; }
+#mf-interest-v2 .mf-chip-list { display: flex; flex-wrap: wrap; gap: 10px; }
+#mf-interest-v2 .mf-chip { display: inline-block; position: relative; cursor: pointer; max-width: 100%; }
+#mf-interest-v2 .mf-chip input {
+    position: absolute;
+    height: 1px; width: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+#mf-interest-v2 .mf-chip-face {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 38px;
+    padding: 8px 14px;
+    border-radius: 99px;
+    border: 1px solid rgba(185,181,231,.18);
+    color: #cfcee5;
+    background: rgba(255,255,255,.035);
+    font-size: 13px;
+    font-weight: 600;
+    transition: border-color .17s, background .17s, color .17s, transform .17s;
+}
+#mf-interest-v2 .mf-chip-check { display: none; font-size: 12px; font-weight: 900; }
+#mf-interest-v2 .mf-chip:hover .mf-chip-face {
+    color: #fff;
+    border-color: rgba(172,139,250,.48);
+    background: rgba(164,121,255,.09);
+    transform: translateY(-1px);
+}
+#mf-interest-v2 .mf-chip input:checked + .mf-chip-face {
+    color: #f7f4ff;
+    border-color: rgba(188,155,255,.65);
+    background: linear-gradient(125deg, rgba(113,79,210,.53), rgba(131,87,225,.34));
+    box-shadow: 0 0 0 1px rgba(172,133,255,.1) inset;
+}
+#mf-interest-v2 .mf-chip input:checked + .mf-chip-face .mf-chip-check { display: inline; }
+#mf-interest-v2 .mf-chip input:focus-visible + .mf-chip-face {
+    outline: 3px solid #c9b4ff;
+    outline-offset: 3px;
+}
+#mf-interest-v2 .mf-no-options { margin: 0; color: var(--mf-muted); font-size: 13px; }
+#mf-interest-v2 .mf-actions {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 16px;
+    padding: 20px 29px;
+    border-top: 1px solid var(--mf-line);
+    background: rgba(10,12,27,.27);
+}
+#mf-interest-v2 .mf-actions-status { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+#mf-interest-v2 .mf-selected-count { color: #e3deff; font-size: 13px; font-weight: 600; }
+#mf-interest-v2 .mf-clear {
+    background: none; border: none; color: #aaa2d3;
+    font-size: 12px; cursor: pointer; padding: 7px;
+}
+#mf-interest-v2 .mf-clear:hover { color: white; }
+#mf-interest-v2 .mf-primary {
+    min-height: 43px;
+    display: inline-flex; align-items: center; justify-content: center;
+    gap: 9px;
+    background: linear-gradient(105deg, #a68cff, #9864ec);
+    color: #16102b;
+    border-radius: 11px;
+    border: 0;
+    padding: 11px 20px;
+    font-weight: 800;
+    font-size: 13px;
+    cursor: pointer;
+    box-shadow: 0 8px 22px rgba(120,75,207,.18);
+    transition: filter .17s, transform .17s;
+}
+#mf-interest-v2 .mf-primary:hover { filter: brightness(1.1); transform: translateY(-1px); }
+#mf-interest-v2 .mf-primary:focus-visible, #mf-interest-v2 .mf-clear:focus-visible {
+    outline: 3px solid #d0c0ff; outline-offset: 3px;
+}
+#mf-interest-v2 .mf-secondary-link {
+    display: inline-flex; align-items: center; gap: 7px;
+    color: #c9b0ff; font-size: 12px; font-weight: 700;
+}
+#mf-interest-v2 .mf-secondary-link:hover { color: #fff; }
+#mf-interest-v2 .mf-result-list {
+    display: grid;
+    gap: 13px;
+}
+#mf-interest-v2 .mf-track {
+    display: grid;
+    grid-template-columns: 28px 82px minmax(0, 1fr) minmax(230px, 290px);
+    gap: 17px;
+    align-items: center;
+    min-width: 0;
+    padding: 17px 20px;
+    background: linear-gradient(125deg, #1b2039, #171a2d);
+    border: 1px solid var(--mf-line);
+    border-radius: 18px;
+    transition: border-color .17s, transform .17s, background .17s;
+}
+#mf-interest-v2 .mf-track:hover {
+    border-color: rgba(178,143,249,.36);
+    background: linear-gradient(125deg, #202541, #191b33);
+    transform: translateY(-1px);
+}
+#mf-interest-v2 .mf-track-index { font-size: 12px; font-weight: 800; color: #9b98bd; font-variant-numeric: tabular-nums; }
+#mf-interest-v2 .mf-track-cover {
+    display: block; width: 82px; height: 82px;
+    border-radius: 13px; object-fit: cover;
+    background: #292345;
+}
+#mf-interest-v2 .mf-track-placeholder {
+    display: grid; place-items: center;
+    color: #d0b8ff; font-size: 26px;
+}
+#mf-interest-v2 .mf-track-detail { min-width: 0; }
+#mf-interest-v2 .mf-track-title-line { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+#mf-interest-v2 .mf-track-title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 1.45;
+    color: #fff;
+    overflow-wrap: anywhere;
+}
+#mf-interest-v2 .mf-match-badge {
+    color: #d6c5ff;
+    font-size: 10px; font-weight: 800;
+    padding: 5px 7px;
+    border-radius: 6px;
+    background: rgba(154,113,238,.17);
+}
+#mf-interest-v2 .mf-track-artist { color: #b8b6d0; font-size: 12px; margin: 5px 0 8px; }
+#mf-interest-v2 .mf-track-tags { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+#mf-interest-v2 .mf-track-genre {
+    color: #d4c0ff;
+    background: rgba(150,109,235,.14);
+    border-radius: 6px;
+    font-size: 11px;
+    padding: 5px 8px;
+}
+#mf-interest-v2 .mf-track-tagtext { font-size: 11px; color: #9695b7; line-height: 1.6; }
+#mf-interest-v2 .mf-track-action { min-width: 0; padding-left: 15px; border-left: 1px solid var(--mf-line); }
+#mf-interest-v2 .mf-track-score { margin: 0 0 11px; display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px; }
+#mf-interest-v2 .mf-track-score span { font-size: 11px; color: #a9a5c7; }
+#mf-interest-v2 .mf-track-score strong { font-size: 18px; color: #f8c66d; }
+#mf-interest-v2 .mf-track-action audio {
+    display: block;
+    width: 100%; height: 38px; max-width: 100%;
+    border-radius: 20px; background: #262943;
+    color-scheme: dark;
+}
+#mf-interest-v2 .mf-track-action .mf-secondary-link { margin-top: 10px; }
+#mf-interest-v2 .mf-no-audio { margin: 0; font-size: 12px; color: #9996b5; }
+#mf-interest-v2 .mf-empty {
+    display: flex; gap: 18px; align-items: center;
+    padding: 26px 28px;
+    border: 1px solid rgba(167,139,250,.22);
+    border-radius: 20px;
+    background: linear-gradient(120deg, #211e3b, #191c34);
+}
+#mf-interest-v2 .mf-empty-icon {
+    width: 52px; height: 52px; flex: 0 0 52px;
+    display: grid; place-items: center;
+    border-radius: 15px;
+    font-size: 26px;
+    color: #c9b0ff; background: rgba(148,105,232,.18);
+}
+#mf-interest-v2 .mf-empty h3 { margin: 0 0 6px; color: #fff; font-size: 17px; }
+#mf-interest-v2 .mf-empty p { margin: 0 0 8px; color: #b1abc9; line-height: 1.7; font-size: 13px; }
+#mf-interest-v2 .mf-bottom {
+    margin-top: 32px;
+    display: flex; align-items: center; justify-content: space-between; gap: 18px;
+    padding: 22px 25px;
+    border: 1px solid var(--mf-line);
+    border-radius: 18px;
+    background: rgba(160,126,246,.07);
+}
+#mf-interest-v2 .mf-bottom h3 { margin: 0 0 5px; color: #fff; font-size: 16px; }
+#mf-interest-v2 .mf-bottom p { margin: 0; color: #aaa6c8; font-size: 12px; line-height: 1.7; }
+@media (max-width: 920px) {
+    #mf-interest-v2 .mf-track { grid-template-columns: 25px 72px minmax(0, 1fr); }
+    #mf-interest-v2 .mf-track-cover { width: 72px; height: 72px; }
+    #mf-interest-v2 .mf-track-action { grid-column: 3; border-left: 0; padding-left: 0; }
+    #mf-interest-v2 .mf-intro { padding: 32px; }
+}
+@media (max-width: 640px) {
+    #mf-interest-v2 { padding: 18px 0 42px; }
+    #mf-interest-v2 .mf-intro { min-height: 0; padding: 27px 22px; border-radius: 19px; }
+    #mf-interest-v2 .mf-intro-disc { display: none; }
+    #mf-interest-v2 .mf-intro h1 { font-size: 29px; }
+    #mf-interest-v2 .mf-section { margin-top: 26px; }
+    #mf-interest-v2 .mf-section-head { align-items: start; }
+    #mf-interest-v2 .mf-section-head h2 { font-size: 21px; }
+    #mf-interest-v2 .mf-pill-count { font-size: 11px; padding: 7px 9px; }
+    #mf-interest-v2 .mf-choice-group { padding: 23px 17px; }
+    #mf-interest-v2 .mf-chip-list { gap: 8px; }
+    #mf-interest-v2 .mf-chip-face { min-height: 37px; padding: 8px 11px; }
+    #mf-interest-v2 .mf-actions { padding: 18px 17px; }
+    #mf-interest-v2 .mf-primary { width: 100%; }
+    #mf-interest-v2 .mf-track {
+        grid-template-columns: 20px 62px minmax(0, 1fr);
+        gap: 10px; padding: 15px 12px;
+    }
+    #mf-interest-v2 .mf-track-cover { width: 62px; height: 62px; border-radius: 10px; }
+    #mf-interest-v2 .mf-track-action { grid-column: 2 / -1; margin-top: 2px; }
+    #mf-interest-v2 .mf-track-title { font-size: 14px; }
+    #mf-interest-v2 .mf-track-tags { gap: 5px; }
+    #mf-interest-v2 .mf-empty { padding: 22px 18px; align-items: flex-start; }
+    #mf-interest-v2 .mf-bottom { align-items: stretch; flex-direction: column; }
+    #mf-interest-v2 .mf-bottom .mf-secondary-link { align-self: start; }
+}
+@media (prefers-reduced-motion: reduce) {
+    #mf-interest-v2 .mf-chip-face,
+    #mf-interest-v2 .mf-track,
+    #mf-interest-v2 .mf-primary { transition: none; }
+}
+</style>
 
-<div class="interest-page">
-
-    <!-- ========================= -->
-    <!-- 顶部介绍横幅 -->
-    <!-- ========================= -->
-    <section class="interest-hero">
-
-        <div class="interest-hero-content">
-
-            <span class="interest-subtitle">
-                DISCOVER YOUR TASTE
-            </span>
-
-            <h1>
-                ♫ 发现你的音乐偏好
-            </h1>
-
-            <p>
-                每个人都有独特的音乐品味。
-                选择你喜欢的音乐类型与标签，
-                让系统帮你发现符合兴趣的歌曲。
-            </p>
-
-            <div class="interest-hero-badge">
-                ♪ 无需历史评分，也能发现喜欢的音乐
+<div id="mf-interest-v2">
+    <header class="mf-intro">
+        <div class="mf-intro-copy">
+            <span class="mf-eyebrow">DISCOVER YOUR TASTE</span>
+            <h1>你的音乐品味，<br>由你来定义。</h1>
+            <p>挑选喜欢的音乐类型与心情标签，发现真正符合当下喜好的旋律。<br>无需历史评分，也可以开始探索。</p>
+            <div class="mf-intro-facts">
+                <span>✓ 多种兴趣自由组合</span>
+                <span>♫ 真实歌曲在线试听</span>
             </div>
-
         </div>
+        <div class="mf-intro-disc" aria-hidden="true"></div>
+    </header>
 
-        <div class="interest-hero-decoration"
-             aria-hidden="true">
-            ♫
-        </div>
-
-    </section>
-
-
-    <!-- ========================= -->
-    <!-- 兴趣偏好选择 -->
-    <!-- ========================= -->
-    <section class="interest-section">
-
-        <div class="interest-section-heading">
-
-            <div>
-
-                <span class="interest-subtitle">
-                    CHOOSE YOUR STYLE
-                </span>
-
-                <h2>定制你的音乐兴趣</h2>
-
-                <p class="interest-section-description">
-                    可以同时选择多个音乐类型和标签，
-                    系统会根据所选偏好匹配歌曲。
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <form
-            class="interest-form"
-            action="{{ url_for('interest') }}"
-            method="post"
-        >
-
-            <!-- ========================= -->
-            <!-- 音乐类型 -->
-            <!-- ========================= -->
-            <div class="box interest-choice-panel">
-
-                <div class="interest-choice-heading">
-
-                    <div class="interest-choice-icon">
-                        ♫
-                    </div>
-
-                    <div>
-
-                        <h3>喜欢的音乐类型</h3>
-
-                        <p>
-                            选择你经常聆听的音乐风格
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-                <div class="options interest-options">
-
-                    {% for item in genres %}
-
-                    <label class="interest-option">
-
-                        <input
-                            type="checkbox"
-                            name="genres"
-                            value="{{ item }}"
-                            {% if item in selected_genres %}
-                            checked
-                            {% endif %}
-                        >
-
-                        <span class="interest-option-text">
-                            {{ item }}
-                        </span>
-
-                    </label>
-
-                    {% else %}
-
-                    <p class="interest-muted">
-                        暂无可选择的音乐类型。
-                    </p>
-
-                    {% endfor %}
-
-                </div>
-
-            </div>
-
-
-            <!-- ========================= -->
-            <!-- 音乐标签 -->
-            <!-- ========================= -->
-            <div class="box interest-choice-panel">
-
-                <div class="interest-choice-heading">
-
-                    <div class="interest-choice-icon interest-tag-icon">
-                        ♥
-                    </div>
-
-                    <div>
-
-                        <h3>喜欢的音乐标签</h3>
-
-                        <p>
-                            选择符合你音乐心情和喜好的标签
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-                <div class="options interest-options">
-
-                    {% for item in tags %}
-
-                    <label class="interest-option">
-
-                        <input
-                            type="checkbox"
-                            name="tags"
-                            value="{{ item }}"
-                            {% if item in selected_tags %}
-                            checked
-                            {% endif %}
-                        >
-
-                        <span class="interest-option-text">
-                            {{ item }}
-                        </span>
-
-                    </label>
-
-                    {% else %}
-
-                    <p class="interest-muted">
-                        暂无可选择的音乐标签。
-                    </p>
-
-                    {% endfor %}
-
-                </div>
-
-            </div>
-
-
-            <!-- ========================= -->
-            <!-- 生成推荐 -->
-            <!-- ========================= -->
-            <div class="interest-submit-area">
-
-                <div class="interest-submit-description">
-
-                    <span class="interest-submit-symbol">
-                        ✦
-                    </span>
-
-                    <div>
-
-                        <strong>准备好探索了吗？</strong>
-
-                        <p>
-                            选择偏好后，生成你的兴趣推荐歌单。
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <button
-                    type="submit"
-                    class="interest-submit-button"
-                >
-                    ♫ 生成兴趣推荐 →
-                </button>
-
-            </div>
-
-        </form>
-
-    </section>
-
-
-    <!-- ========================= -->
-    <!-- 兴趣推荐结果 -->
-    <!-- ========================= -->
+    {# 用户已经提交选择时，将真实结果优先展示；首次进入时直接展示选择器 #}
     {% if songs is not none %}
-
-    <section class="interest-section interest-results-section">
-
-        <div class="interest-section-heading">
-
+    <section class="mf-section" id="interest-results" aria-labelledby="interest-results-title">
+        <div class="mf-section-head">
             <div>
-
-                <span class="interest-subtitle">
-                    MATCHED FOR YOU
-                </span>
-
-                <h2>为你发现的音乐</h2>
-
-                <p class="interest-section-description">
-                    根据你选择的类型和标签，
-                    找到与你兴趣相匹配的歌曲。
-                </p>
-
+                <span class="mf-eyebrow">YOUR DISCOVER MIX</span>
+                <h2 id="interest-results-title">为你发现的音乐</h2>
+                <p>按照你提交的兴趣条件，展示当前匹配的歌曲。</p>
             </div>
-
-
             {% if songs %}
-
-            <span class="interest-result-count">
-                ♫ 共匹配 {{ songs | length }} 首歌曲
-            </span>
-
+            <span class="mf-pill-count">{{ songs | length }} 首匹配歌曲</span>
             {% endif %}
-
         </div>
-
 
         {% if songs %}
-
-        <div class="interest-song-list">
-
+        <div class="mf-result-list">
             {% for song in songs %}
-
-            <div class="song interest-song">
-
-                <!-- 推荐排名 -->
-                <div class="rank interest-rank">
-                    {{ loop.index }}
+            <article class="mf-track">
+                <span class="mf-track-index">{{ "%02d" | format(loop.index) }}</span>
+                {% if song.cover_file %}
+                <img class="mf-track-cover"
+                     src="{{ url_for('static', filename=song.cover_file) }}"
+                     alt="《{{ song.title }}》的专辑封面" loading="lazy">
+                {% else %}
+                <div class="mf-track-cover mf-track-placeholder" aria-hidden="true">♫</div>
+                {% endif %}
+                <div class="mf-track-detail">
+                    <div class="mf-track-title-line">
+                        <h3 class="mf-track-title">{{ song.title }}</h3>
+                        <span class="mf-match-badge">兴趣匹配</span>
+                    </div>
+                    <p class="mf-track-artist">{{ song.artist }}</p>
+                    <div class="mf-track-tags">
+                        <span class="mf-track-genre">{{ song.genre }}</span>
+                        {% if song.tags %}<span class="mf-track-tagtext">{{ song.tags }}</span>{% endif %}
+                    </div>
                 </div>
-
-
-                <!-- 歌曲封面 -->
-                <div class="interest-cover-wrap">
-
-                    {% if song.cover_file %}
-
-                    <img
-                        class="cover interest-cover"
-                        src="{{ url_for('static', filename=song.cover_file) }}"
-                        alt="{{ song.title }}"
-                        loading="lazy"
-                    >
-
-                    {% else %}
-
-                    <div class="interest-cover-placeholder">
-                        ♫
+                <div class="mf-track-action">
+                    <div class="mf-track-score">
+                        <span>兴趣匹配分</span>
+                        <strong>★ {{ song.recommend_score }}</strong>
                     </div>
-
-                    {% endif %}
-
-                </div>
-
-
-                <!-- 歌曲信息 -->
-                <div class="song-info interest-song-info">
-
-                    <div class="interest-song-heading">
-
-                        <h3>
-                            {{ song.title }}
-                        </h3>
-
-                        <span class="interest-match-badge">
-                            兴趣匹配
-                        </span>
-
-                    </div>
-
-
-                    <p class="interest-artist">
-                        {{ song.artist }}
-                    </p>
-
-
-                    <!-- 歌曲类型和标签 -->
-                    <div class="interest-song-tags">
-
-                        <span class="interest-genre">
-                            {{ song.genre }}
-                        </span>
-
-                        {% if song.tags %}
-
-                        <span class="interest-tags">
-                            {{ song.tags }}
-                        </span>
-
-                        {% endif %}
-
-                    </div>
-
-
-                    <!-- 匹配评分 -->
-                    <div class="interest-score-area">
-
-                        <span class="interest-score-label">
-                            兴趣匹配分
-                        </span>
-
-                        <strong class="interest-score">
-                            ★ {{ song.recommend_score }}
-                        </strong>
-
-                    </div>
-
-
-                    <!-- 在线试听 -->
                     {% if song.audio_file %}
-
-                    <div class="interest-audio">
-
-                        <audio controls preload="none">
-
-                            <source
-                                src="{{ url_for('static', filename=song.audio_file) }}"
-                            >
-
-                            你的浏览器不支持音频播放。
-
-                        </audio>
-
-                    </div>
-
+                    <audio controls preload="metadata" aria-label="试听 {{ song.title }}">
+                        <source src="{{ url_for('static', filename=song.audio_file) }}">
+                        你的浏览器不支持音频播放。
+                    </audio>
                     {% else %}
-
-                    <p class="interest-muted">
-                        暂无试听文件
-                    </p>
-
+                    <p class="mf-no-audio">暂无试听文件</p>
                     {% endif %}
-
+                    <a class="mf-secondary-link" href="{{ url_for('library', q=song.title) }}">前往歌曲库评分 ↗</a>
                 </div>
-
-            </div>
-
+            </article>
             {% endfor %}
-
         </div>
-
-
         {% else %}
-
-        <!-- ========================= -->
-        <!-- 无匹配结果 -->
-        <!-- ========================= -->
-        <div class="box interest-empty-state">
-
-            <div class="interest-empty-icon">
-                ♫
+        <div class="mf-empty" role="status">
+            <div class="mf-empty-icon" aria-hidden="true">♫</div>
+            <div>
+                <h3>暂时没有匹配到歌曲</h3>
+                <p>可以在下方减少筛选条件，或改选其他音乐类型和标签后重新查找。</p>
+                <a class="mf-secondary-link" href="{{ url_for('library') }}">也可以浏览完整歌曲库 ↗</a>
             </div>
-
-            <h3>
-                暂时没有找到匹配的音乐
-            </h3>
-
-            <p>
-                当前所选的音乐类型和标签，
-                暂时没有匹配到歌曲。
-            </p>
-
-            <p class="interest-muted">
-                可以调整上方选择，
-                尝试其他音乐风格或标签。
-            </p>
-
-            <a
-                class="button interest-library-button"
-                href="{{ url_for('library') }}"
-            >
-                浏览完整歌曲库 →
-            </a>
-
         </div>
-
         {% endif %}
-
     </section>
-
     {% endif %}
 
-
-    <!-- ========================= -->
-    <!-- 页面底部引导 -->
-    <!-- ========================= -->
-    <section class="interest-bottom">
-
-        <div class="interest-bottom-content">
-
-            <span class="interest-subtitle">
-                MORE MUSIC TO DISCOVER
-            </span>
-
-            <h2>
-                音乐的世界不止一种可能
-            </h2>
-
-            <p>
-                除了按照兴趣探索，你还可以浏览热门歌曲，
-                或通过评分获得个性化音乐推荐。
-            </p>
-
-            <div class="interest-bottom-actions">
-
-                <a
-                    class="button interest-bottom-button"
-                    href="{{ url_for('popular') }}"
-                >
-                    ♫ 发现热门音乐
-                </a>
-
-                <a
-                    class="interest-bottom-link"
-                    href="{{ url_for('library') }}"
-                >
-                    探索歌曲库 →
-                </a>
-
+    <section class="mf-section" id="interest-preferences" aria-labelledby="interest-preferences-title">
+        <div class="mf-section-head">
+            <div>
+                <span class="mf-eyebrow">MAKE IT YOURS</span>
+                <h2 id="interest-preferences-title">选择你的音乐偏好</h2>
+                <p>可多选音乐类型与标签，随时调整组合并重新探索。</p>
             </div>
-
         </div>
 
+        <form id="mf-interest-form" class="mf-form-panel" action="{{ url_for('interest') }}" method="post">
+            <div class="mf-choice-group">
+                <div class="mf-choice-heading">
+                    <span class="mf-choice-icon" aria-hidden="true">♫</span>
+                    <div>
+                        <h3>音乐类型</h3>
+                        <p>从音乐风格出发，找到喜欢的声音</p>
+                    </div>
+                </div>
+                <div class="mf-chip-list" role="group" aria-label="选择音乐类型">
+                    {% for item in genres %}
+                    <label class="mf-chip">
+                        <input type="checkbox" name="genres" value="{{ item }}"
+                               {% if item in selected_genres %}checked{% endif %}>
+                        <span class="mf-chip-face"><span class="mf-chip-check" aria-hidden="true">✓</span>{{ item }}</span>
+                    </label>
+                    {% else %}
+                    <p class="mf-no-options">当前没有可选择的音乐类型。</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="mf-choice-group">
+                <div class="mf-choice-heading">
+                    <span class="mf-choice-icon" aria-hidden="true">♡</span>
+                    <div>
+                        <h3>心情与兴趣标签</h3>
+                        <p>用标签描述此刻的心情和聆听偏好</p>
+                    </div>
+                </div>
+                <div class="mf-chip-list" role="group" aria-label="选择音乐标签">
+                    {% for item in tags %}
+                    <label class="mf-chip">
+                        <input type="checkbox" name="tags" value="{{ item }}"
+                               {% if item in selected_tags %}checked{% endif %}>
+                        <span class="mf-chip-face"><span class="mf-chip-check" aria-hidden="true">✓</span>{{ item }}</span>
+                    </label>
+                    {% else %}
+                    <p class="mf-no-options">当前没有可选择的音乐标签。</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="mf-actions">
+                <div class="mf-actions-status">
+                    <span class="mf-selected-count" id="mf-interest-selected" aria-live="polite">已选择 0 项兴趣</span>
+                    <button class="mf-clear" type="button" id="mf-interest-clear">清空选择</button>
+                </div>
+                <button class="mf-primary" type="submit">♫ 生成兴趣推荐 <span aria-hidden="true">↗</span></button>
+            </div>
+        </form>
     </section>
 
+    <aside class="mf-bottom">
+        <div>
+            <h3>让音乐发现更多可能</h3>
+            <p>想换一种探索方式？看看热门榜单，或前往完整歌曲库试听与评分。</p>
+        </div>
+        <a class="mf-secondary-link" href="{{ url_for('popular') }}">发现热门音乐 ↗</a>
+    </aside>
 </div>
 
+<script>
+/* 仅负责本页的已选数量与清空操作，不改变后端的 POST 表单协议 */
+(function () {
+    var form = document.getElementById('mf-interest-form');
+    if (!form) return;
+    var items = form.querySelectorAll('input[type="checkbox"]');
+    var indicator = document.getElementById('mf-interest-selected');
+    var clearButton = document.getElementById('mf-interest-clear');
+    function updateCount() {
+        var count = 0;
+        items.forEach(function (item) { if (item.checked) count += 1; });
+        indicator.textContent = '已选择 ' + count + ' 项兴趣';
+    }
+    items.forEach(function (item) { item.addEventListener('change', updateCount); });
+    clearButton.addEventListener('click', function () {
+        items.forEach(function (item) { item.checked = false; });
+        updateCount();
+    });
+    updateCount();
+}());
+</script>
 {% endblock %}

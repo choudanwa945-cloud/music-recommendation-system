@@ -1,605 +1,310 @@
-
 {% extends "base.html" %}
 
-{% block title %}首页 - 个性化音乐推荐系统{% endblock %}
+{% block title %}发现音乐 - 个性化音乐推荐系统{% endblock %}
 
 {% block content %}
+<style>
+/* 首页第二版：所有样式只作用于 .discover-home，不影响其他页面 */
+.discover-home {
+    --dh-text: #f5f5fb;
+    --dh-muted: #a6a8bc;
+    --dh-line: rgba(255, 255, 255, .085);
+    --dh-card: #171925;
+    --dh-accent: #a58af8;
+    color: var(--dh-text);
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 26px 18px 72px;
+    font-family: inherit;
+}
+.discover-home *, .discover-home *::before, .discover-home *::after { box-sizing: border-box; }
+.discover-home a { text-decoration: none; }
+.discover-home button, .discover-home a { -webkit-tap-highlight-color: transparent; }
+.discover-home a:focus-visible { outline: 3px solid #c4b5fd; outline-offset: 4px; }
 
-<div class="music-home">
+.dh-overline { color: #b7a5ff; font-size: 11px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+.dh-muted { color: var(--dh-muted); }
+.dh-hero {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(270px, .8fr);
+    gap: 34px;
+    min-height: 362px;
+    align-items: center;
+    overflow: hidden;
+    isolation: isolate;
+    padding: clamp(30px, 5vw, 66px);
+    border: 1px solid rgba(190, 163, 255, .18);
+    border-radius: 26px;
+    background:
+        radial-gradient(ellipse at 82% 28%, rgba(156, 105, 249, .26), transparent 38%),
+        radial-gradient(ellipse at 12% 94%, rgba(67, 68, 150, .27), transparent 48%),
+        linear-gradient(125deg, #161628 0%, #18162a 46%, #201b35 100%);
+}
+.dh-hero::after {
+    content: ""; position: absolute; inset: auto -120px -320px auto;
+    width: 540px; height: 540px; border: 1px solid rgba(255, 255, 255, .07);
+    border-radius: 50%; box-shadow: 0 0 0 78px rgba(255, 255, 255, .018), 0 0 0 160px rgba(255, 255, 255, .014);
+    pointer-events: none; z-index: -1;
+}
+.dh-hero-copy { position: relative; z-index: 1; }
+.dh-hero-kicker { display: flex; align-items: center; gap: 10px; margin-bottom: 22px; }
+.dh-hero-dot { width: 7px; height: 7px; flex: none; border-radius: 50%; background: #adf1b9; box-shadow: 0 0 0 5px rgba(173, 241, 185, .11); }
+.dh-hero h1 { max-width: 640px; margin: 0; color: #fff; font-size: clamp(34px, 4.35vw, 59px); letter-spacing: -.045em; line-height: 1.17; font-weight: 800; }
+.dh-hero h1 .dh-highlight { background: linear-gradient(100deg, #e0ccff, #ad98ff 55%, #7dd6e5); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.dh-hero p { max-width: 470px; margin: 20px 0 26px; font-size: 14px; line-height: 1.9; color: #bfc0d3; }
+.dh-hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.dh-primary, .dh-ghost { display: inline-flex; align-items: center; justify-content: center; min-height: 43px; padding: 11px 19px; border-radius: 12px; font-size: 13px; font-weight: 750; transition: transform .2s ease, background .2s ease, box-shadow .2s ease; }
+.dh-primary { background: #a78bfa; color: #111024 !important; box-shadow: 0 7px 24px rgba(116, 76, 228, .2); }
+.dh-primary:hover { background: #c1afff; transform: translateY(-2px); box-shadow: 0 12px 30px rgba(116, 76, 228, .28); }
+.dh-ghost { border: 1px solid rgba(255, 255, 255, .17); background: rgba(255, 255, 255, .06); color: #f5f5fb !important; }
+.dh-ghost:hover { background: rgba(255, 255, 255, .13); transform: translateY(-2px); }
+.dh-hero-art { position: relative; display: flex; justify-content: center; align-items: center; min-width: 0; }
+.dh-album-aura { width: min(100%, 286px); aspect-ratio: 1; position: relative; }
+.dh-album-aura::before { content: ""; position: absolute; inset: -15px; border-radius: 30px; border: 1px solid rgba(255,255,255,.075); transform: rotate(-8deg); }
+.dh-hero-cover { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 22px; border: 1px solid rgba(255,255,255,.14); box-shadow: 0 30px 75px rgba(0,0,0,.46); transform: rotate(4deg); background: linear-gradient(140deg, #453570, #242940); }
+.dh-hero-cover-fallback { width: 100%; height: 100%; display: grid; place-items: center; color: #dfd2ff; font-size: 96px; }
+.dh-floating-card { position: absolute; left: -45px; bottom: 12px; max-width: 240px; padding: 14px 18px; border: 1px solid rgba(255,255,255,.17); border-radius: 15px; background: rgba(20, 19, 35, .86); backdrop-filter: blur(16px); box-shadow: 0 12px 38px rgba(0,0,0,.3); }
+.dh-floating-card small { display: block; color: #b3a0fd; font-size: 10px; letter-spacing: .14em; font-weight: 800; margin-bottom: 5px; }
+.dh-floating-card strong, .dh-floating-card span { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dh-floating-card strong { color: white; font-size: 14px; }
+.dh-floating-card span { color: #b0afc5; font-size: 12px; margin-top: 4px; }
 
-    <!-- ========================= -->
-    <!-- 首页欢迎横幅 -->
-    <!-- ========================= -->
-    <section class="home-hero">
+.dh-metrics { margin-top: 18px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border: 1px solid var(--dh-line); border-radius: 17px; background: rgba(22, 24, 36, .9); }
+.dh-metric { padding: 23px 27px; min-width: 0; position: relative; }
+.dh-metric + .dh-metric::before { content: ""; position: absolute; left: 0; top: 23px; bottom: 23px; width: 1px; background: var(--dh-line); }
+.dh-metric strong { display: block; font-size: clamp(22px, 2.5vw, 30px); line-height: 1.2; font-weight: 750; letter-spacing: -.03em; color: #fff; font-variant-numeric: tabular-nums; }
+.dh-metric span { display: block; margin-top: 7px; color: var(--dh-muted); font-size: 12px; }
 
-        <div class="home-hero-content">
+.dh-section { margin-top: 52px; }
+.dh-heading { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
+.dh-heading h2 { margin: 7px 0 0; font-size: clamp(22px, 2.3vw, 28px); line-height: 1.25; font-weight: 780; letter-spacing: -.03em; color: #f6f4ff; }
+.dh-heading p { margin: 8px 0 0; color: var(--dh-muted); font-size: 13px; line-height: 1.65; }
+.dh-text-link { flex: none; display: inline-flex; gap: 8px; align-items: center; font-size: 13px; color: #bdabff !important; font-weight: 700; }
+.dh-text-link:hover { color: #e1d7ff !important; }
 
-            <div class="home-hero-label">
-                <span class="home-status-dot"></span>
-                YOUR PERSONAL MUSIC SPACE
+.dh-list { border: 1px solid var(--dh-line); border-radius: 18px; overflow: hidden; background: rgba(22,24,36,.82); }
+.dh-list-header { display: grid; grid-template-columns: 40px minmax(200px, 1fr) minmax(90px, 140px) minmax(160px, 265px); gap: 15px; align-items: center; padding: 12px 22px; border-bottom: 1px solid var(--dh-line); font-size: 11px; font-weight: 750; color: #8589a5; text-transform: uppercase; letter-spacing: .08em; }
+.dh-song { display: grid; grid-template-columns: 40px minmax(200px, 1fr) minmax(90px, 140px) minmax(160px, 265px); gap: 15px; align-items: center; min-height: 94px; padding: 13px 22px; border-bottom: 1px solid rgba(255,255,255,.055); transition: background .18s ease; }
+.dh-song:last-child { border-bottom: 0; }
+.dh-song:hover { background: rgba(168,139,250,.07); }
+.dh-song-index { color: #8589a6; font-weight: 720; font-size: 14px; font-variant-numeric: tabular-nums; }
+.dh-song-index.top { color: #b7a0ff; }
+.dh-song-main { display: flex; align-items: center; gap: 15px; min-width: 0; }
+.dh-song-cover { height: 60px; width: 60px; flex: none; object-fit: cover; border-radius: 10px; display: block; background: #2a2542; }
+.dh-song-placeholder { display: grid; place-items: center; color: #d8c5ff; font-size: 27px; }
+.dh-song-info { min-width: 0; }
+.dh-song-info h3 { margin: 0; color: #f2f1f8; font-size: 14px; font-weight: 760; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.dh-song-info p { margin: 6px 0 0; color: #a4a7bd; font-size: 12px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.dh-song-info a { color: #c3b1ff !important; font-size: 11px; display: inline-block; margin-top: 6px; }
+.dh-song-info a:hover { text-decoration: underline; }
+.dh-song-detail { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; }
+.dh-tag { color: #bbbee0; background: rgba(147, 145, 192, .12); padding: 5px 8px; border-radius: 6px; font-size: 11px; }
+.dh-rating { color: #f6ce87; font-size: 12px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.dh-song-audio { width: 100%; min-width: 0; }
+.dh-song-audio audio { width: 100%; height: 36px; display: block; border-radius: 18px; }
+.dh-song-noaudio { font-size: 12px; color: #7f8199; }
+.dh-empty { padding: 38px 24px; text-align: center; color: var(--dh-muted); font-size: 14px; }
+
+.dh-path-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.dh-path { position: relative; display: flex; flex-direction: column; min-height: 194px; gap: 15px; padding: 25px; background: #191b29; border: 1px solid var(--dh-line); border-radius: 18px; color: white !important; overflow: hidden; transition: transform .2s ease, border-color .2s ease, background .2s ease; }
+.dh-path:hover { transform: translateY(-3px); border-color: rgba(181,153,255,.46); background: #202135; }
+.dh-path-icon { display: grid; place-items: center; width: 40px; height: 40px; background: rgba(169,143,246,.16); border: 1px solid rgba(169,143,246,.18); border-radius: 12px; color: #cebaff; font-size: 21px; }
+.dh-path h3 { color: #fff; margin: 0; font-size: 18px; font-weight: 760; }
+.dh-path p { color: #a6a8bf; font-size: 12px; line-height: 1.8; margin: 7px 0 0; }
+.dh-path-arrow { margin-top: auto; color: #c4b1ff; font-size: 12px; font-weight: 720; }
+
+.dh-closing { margin-top: 48px; padding: 31px 36px; display: flex; justify-content: space-between; align-items: center; gap: 22px; border: 1px solid rgba(177,145,251,.18); border-radius: 19px; background: linear-gradient(100deg, #211d36, #171a2c 72%); }
+.dh-closing h2 { margin: 0; color: white; font-size: 20px; font-weight: 760; }
+.dh-closing p { margin: 8px 0 0; color: #aeb0c8; font-size: 12px; line-height: 1.7; }
+.dh-closing .dh-primary { flex: none; }
+
+@media (max-width: 980px) {
+    .dh-hero { grid-template-columns: minmax(0, 1.1fr) minmax(220px, .8fr); gap: 22px; }
+    .dh-floating-card { left: -20px; }
+    .dh-list-header, .dh-song { grid-template-columns: 25px minmax(170px,1fr) minmax(75px,110px) minmax(155px,220px); gap: 10px; padding-left: 14px; padding-right: 14px; }
+    .dh-metric { padding: 20px; }
+}
+@media (max-width: 720px) {
+    .discover-home { padding: 14px 8px 55px; }
+    .dh-hero { grid-template-columns: 1fr; padding: 29px 23px; gap: 28px; }
+    .dh-hero h1 { font-size: clamp(31px, 7vw, 43px); }
+    .dh-album-aura { width: 210px; }
+    .dh-floating-card { left: -45px; bottom: -8px; }
+    .dh-metrics { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .dh-metric:nth-child(3), .dh-metric:nth-child(4) { border-top: 1px solid var(--dh-line); }
+    .dh-metric:nth-child(3)::before { display: none; }
+    .dh-list-header { display: none; }
+    .dh-song { grid-template-columns: 24px minmax(0,1fr); gap: 10px; padding: 15px; }
+    .dh-song-detail { grid-column: 2; margin-top: -4px; }
+    .dh-song-audio { grid-column: 2; }
+    .dh-song-cover { width: 52px; height: 52px; }
+    .dh-path-grid { grid-template-columns: 1fr; }
+    .dh-path { min-height: 145px; }
+    .dh-closing { padding: 27px 22px; align-items: flex-start; flex-direction: column; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .discover-home a, .dh-song { transition: none !important; }
+}
+</style>
+
+<main class="discover-home">
+    <!-- 1. 首屏：依旧使用 base.html 的全站导航，此处不重复添加导航栏 -->
+    <section class="dh-hero" aria-labelledby="dh-page-title">
+        <div class="dh-hero-copy">
+            <div class="dh-hero-kicker">
+                <span class="dh-hero-dot" aria-hidden="true"></span>
+                <span class="dh-overline">YOUR MUSIC. YOUR MOMENT.</span>
             </div>
 
             {% if session.get('username') %}
-
-                <h1>
-                    欢迎回来，
-                    <span class="home-gradient-text">
-                        {{ session.get('username') }}
-                    </span>
-                </h1>
-
-                <p class="home-hero-description">
-                    每一首喜欢的歌，都值得被发现。
-                    根据你的历史评分和音乐偏好，
-                    探索专属于你的音乐世界。
-                </p>
-
-                <div class="home-hero-buttons">
-
-                    <a class="home-btn-primary"
-                       href="{{ url_for('recommend') }}">
-                        ♫ 查看我的推荐
-                    </a>
-
-                    <a class="home-btn-secondary"
-                       href="{{ url_for('library') }}">
-                        探索歌曲库 →
-                    </a>
-
+                <h1 id="dh-page-title">欢迎回来，<br><span class="dh-highlight">{{ session.get('username') }}</span></h1>
+                <p>每次聆听，都是一次新的发现。结合你的评分记录和兴趣偏好，找到更适合此刻心情的音乐。</p>
+                <div class="dh-hero-actions">
+                    <a class="dh-primary" href="{{ url_for('recommend') }}">查看我的推荐 &nbsp;↗</a>
+                    <a class="dh-ghost" href="#dh-featured">试听热门歌曲 &nbsp;↓</a>
                 </div>
-
             {% else %}
-
-                <h1>
-                    发现属于你的
-                    <span class="home-gradient-text">
-                        音乐世界
-                    </span>
-                </h1>
-
-                <p class="home-hero-description">
-                    融合协同过滤与音乐兴趣特征，
-                    让每一次聆听都更懂你的喜好。
-                    登录后评分歌曲，开启个性化音乐之旅。
-                </p>
-
-                <div class="home-hero-buttons">
-
-                    <a class="home-btn-primary"
-                       href="{{ url_for('login') }}">
-                        ♫ 登录开始推荐
-                    </a>
-
-                    <a class="home-btn-secondary"
-                       href="{{ url_for('register') }}">
-                        注册账号 →
-                    </a>
-
+                <h1 id="dh-page-title">好音乐，<br><span class="dh-highlight">值得被发现。</span></h1>
+                <p>从熟悉的旋律到意想不到的惊喜。融合协同过滤与音乐兴趣特征，开启属于你的个性化聆听体验。</p>
+                <div class="dh-hero-actions">
+                    <a class="dh-primary" href="{{ url_for('register') }}">免费开启音乐之旅 &nbsp;↗</a>
+                    <a class="dh-ghost" href="#dh-featured">先听听热门歌曲 &nbsp;↓</a>
                 </div>
-
             {% endif %}
-
         </div>
 
-
-        <!-- CSS 绘制的唱片装饰 -->
-        <div class="home-hero-art" aria-hidden="true">
-
-            <div class="home-record-glow"></div>
-
-            <div class="home-vinyl-record">
-
-                <div class="home-vinyl-label">
-                    <span>♫</span>
-                </div>
-
-            </div>
-
-            <span class="home-floating-note home-note-one">
-                ♪
-            </span>
-
-            <span class="home-floating-note home-note-two">
-                ♫
-            </span>
-
-        </div>
-
-    </section>
-
-
-    <!-- ========================= -->
-    <!-- 系统数据概览 -->
-    <!-- ========================= -->
-    <section class="home-section">
-
-        <div class="home-section-heading">
-            <div>
-                <span class="home-section-subtitle">
-                    MUSIC IN NUMBERS
-                </span>
-
-                <h2>音乐数据概览</h2>
-            </div>
-        </div>
-
-        <div class="home-stats-grid">
-
-            <div class="home-stat-card">
-
-                <span class="home-stat-icon">♙</span>
-
-                <strong class="home-stat-number">
-                    {{ stats.user_count }}
-                </strong>
-
-                <span class="home-stat-label">
-                    系统用户
-                </span>
-
-            </div>
-
-            <div class="home-stat-card">
-
-                <span class="home-stat-icon">♫</span>
-
-                <strong class="home-stat-number">
-                    {{ stats.music_count }}
-                </strong>
-
-                <span class="home-stat-label">
-                    收录歌曲
-                </span>
-
-            </div>
-
-            <div class="home-stat-card">
-
-                <span class="home-stat-icon">★</span>
-
-                <strong class="home-stat-number">
-                    {{ stats.rating_count }}
-                </strong>
-
-                <span class="home-stat-label">
-                    用户评分
-                </span>
-
-            </div>
-
-            <div class="home-stat-card">
-
-                <span class="home-stat-icon">◈</span>
-
-                <strong class="home-stat-number">
-                    {{ stats.matrix_density }}%
-                </strong>
-
-                <span class="home-stat-label">
-                    评分矩阵密度
-                </span>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-
-    <!-- ========================= -->
-    <!-- 热门歌曲精选 TOP 4 -->
-    <!-- ========================= -->
-    <section class="home-section home-featured-section">
-
-        <div class="home-section-heading">
-
-            <div>
-                <span class="home-section-subtitle">
-                    TRENDING NOW
-                </span>
-
-                <h2>♫ 热门歌曲精选</h2>
-
-                <p class="home-section-description">
-                    根据用户评分与热度，
-                    发现值得聆听的音乐。
-                </p>
-            </div>
-
-            <a class="home-view-all"
-               href="{{ url_for('popular') }}">
-                查看全部热门音乐 →
-            </a>
-
-        </div>
-
-
-        <div class="home-tracks-grid">
-
-            {% for song in featured_songs %}
-
-            <div class="home-track-card">
-
-                <!-- 歌曲封面 -->
-                <div class="home-track-cover">
-
-                    {% if song.cover_file %}
-
-                    <img
-                        src="{{ url_for('static', filename=song.cover_file) }}"
-                        alt="{{ song.title }}"
-                        loading="lazy"
-                    >
-
+        <div class="dh-hero-art">
+            <div class="dh-album-aura">
+                {% if featured_songs %}
+                    {% set top_song = featured_songs|first %}
+                    {% if top_song.cover_file %}
+                        <img class="dh-hero-cover"
+                             src="{{ url_for('static', filename=top_song.cover_file) }}"
+                             alt="精选歌曲《{{ top_song.title }}》的封面">
                     {% else %}
-
-                    <div class="home-track-placeholder">
-                        ♫
-                    </div>
-
+                        <div class="dh-hero-cover dh-hero-cover-fallback" aria-hidden="true">♫</div>
                     {% endif %}
-
-                    <span class="home-track-rank">
-                        TOP {{ loop.index }}
-                    </span>
-
-                </div>
-
-
-                <!-- 歌曲信息 -->
-                <div class="home-track-info">
-
-                    <h3 title="{{ song.title }}">
-                        {{ song.title }}
-                    </h3>
-
-                    <p class="home-track-artist">
-                        {{ song.artist }}
-                    </p>
-
-                    <div class="home-track-meta">
-
-                        <span class="home-track-genre">
-                            {{ song.genre }}
-                        </span>
-
-                        <span class="home-track-rating">
-                            ★ {{ "%.1f"|format(song.average_rating) }}
-                        </span>
-
+                    <div class="dh-floating-card">
+                        <small>FEATURED TRACK</small>
+                        <strong title="{{ top_song.title }}">{{ top_song.title }}</strong>
+                        <span title="{{ top_song.artist }}">{{ top_song.artist }}</span>
                     </div>
-
-
-                    <!-- 音乐试听 -->
-                    {% if song.audio_file %}
-
-                    <div class="home-track-player">
-
-                        <audio controls preload="none">
-                            <source
-                                src="{{ url_for('static', filename=song.audio_file) }}"
-                            >
-                            你的浏览器不支持音频播放。
-                        </audio>
-
-                    </div>
-
-                    {% endif %}
-
-
-                    <!-- 查看歌曲 -->
-                    <a class="home-track-link"
-                       href="{{ url_for('library', q=song.title) }}">
-                        查看歌曲 →
-                    </a>
-
-                </div>
-
+                {% else %}
+                    <div class="dh-hero-cover dh-hero-cover-fallback" aria-hidden="true">♫</div>
+                {% endif %}
             </div>
+        </div>
+    </section>
 
+    <!-- 2. 轻量数据概览：沿用 app.py 传入的 stats -->
+    <section class="dh-metrics" aria-label="音乐系统数据概览">
+        <div class="dh-metric"><strong>{{ stats.music_count }}</strong><span>收录歌曲</span></div>
+        <div class="dh-metric"><strong>{{ stats.user_count }}</strong><span>系统用户</span></div>
+        <div class="dh-metric"><strong>{{ stats.rating_count }}</strong><span>用户评分</span></div>
+        <div class="dh-metric"><strong>{{ stats.matrix_density }}%</strong><span>评分矩阵密度</span></div>
+    </section>
+
+    <!-- 3. 精选歌曲：密集型曲目列表，保持音频试听功能 -->
+    <section id="dh-featured" class="dh-section" aria-labelledby="dh-featured-title">
+        <div class="dh-heading">
+            <div>
+                <div class="dh-overline">CURATED FOR DISCOVERY</div>
+                <h2 id="dh-featured-title">热门歌曲精选</h2>
+                <p>从现有评分数据中发现值得试听的旋律。</p>
+            </div>
+            <a class="dh-text-link" href="{{ url_for('popular') }}">查看热门榜单 <span aria-hidden="true">↗</span></a>
+        </div>
+
+        <div class="dh-list">
+            {% if featured_songs %}
+                <div class="dh-list-header" aria-hidden="true">
+                    <span>#</span><span>歌曲</span><span>风格 / 评分</span><span>在线试听</span>
+                </div>
+                {% for song in featured_songs %}
+                    <article class="dh-song">
+                        <span class="dh-song-index {% if loop.first %}top{% endif %}">{{ "%02d"|format(loop.index) }}</span>
+                        <div class="dh-song-main">
+                            {% if song.cover_file %}
+                                <img class="dh-song-cover"
+                                     src="{{ url_for('static', filename=song.cover_file) }}"
+                                     alt="{{ song.title }}的封面" loading="lazy">
+                            {% else %}
+                                <div class="dh-song-cover dh-song-placeholder" aria-hidden="true">♫</div>
+                            {% endif %}
+                            <div class="dh-song-info">
+                                <h3 title="{{ song.title }}">{{ song.title }}</h3>
+                                <p title="{{ song.artist }}">{{ song.artist }}</p>
+                                <a href="{{ url_for('library', q=song.title) }}">查看歌曲详情 →</a>
+                            </div>
+                        </div>
+                        <div class="dh-song-detail">
+                            <span class="dh-tag">{{ song.genre }}</span>
+                            <span class="dh-rating">★ {{ "%.1f"|format(song.average_rating) }}</span>
+                        </div>
+                        <div class="dh-song-audio">
+                            {% if song.audio_file %}
+                                <audio controls preload="none" aria-label="试听{{ song.title }}">
+                                    <source src="{{ url_for('static', filename=song.audio_file) }}" type="audio/mpeg">
+                                    你的浏览器不支持音频播放。
+                                </audio>
+                            {% else %}
+                                <span class="dh-song-noaudio">暂无试听音频</span>
+                            {% endif %}
+                        </div>
+                    </article>
+                {% endfor %}
             {% else %}
-
-            <div class="home-tracks-empty">
-                暂无热门歌曲数据
-            </div>
-
-            {% endfor %}
-
+                <div class="dh-empty">暂时没有热门歌曲数据，可以先去歌曲库探索音乐。</div>
+            {% endif %}
         </div>
-
     </section>
 
-    <!-- ========================= -->
-    <!-- 登录用户快捷入口 -->
-    <!-- ========================= -->
-    {% if session.get('username') %}
-
-    <section class="home-section">
-
-        <div class="home-section-heading">
-
+    <!-- 4. 核心入口：不再重复堆叠两套功能卡片 -->
+    <section class="dh-section" aria-labelledby="dh-explore-title">
+        <div class="dh-heading">
             <div>
-                <span class="home-section-subtitle">
-                    MADE FOR YOU
-                </span>
-
-                <h2>我的音乐空间</h2>
+                <div class="dh-overline">EXPLORE YOUR WAY</div>
+                <h2 id="dh-explore-title">按你的方式发现音乐</h2>
+                <p>从热门榜单、相似用户到个人兴趣，选择适合你的探索方式。</p>
             </div>
-
+            <a class="dh-text-link" href="{{ url_for('library') }}">进入完整歌曲库 <span aria-hidden="true">↗</span></a>
         </div>
 
-        <div class="home-feature-grid">
-
-            <a class="home-feature-card"
-               href="{{ url_for('recommend') }}">
-
-                <div class="home-feature-icon home-icon-purple">
-                    ♫
-                </div>
-
-                <h3>个性化推荐</h3>
-
-                <p>
-                    根据历史评分和相似用户，
-                    为你发现可能喜欢的歌曲。
-                </p>
-
-                <span class="home-feature-link">
-                    查看推荐 →
-                </span>
-
+        <div class="dh-path-grid">
+            <a class="dh-path" href="{{ url_for('popular') }}">
+                <span class="dh-path-icon" aria-hidden="true">↗</span>
+                <div><h3>热门音乐</h3><p>看看哪些歌曲正在受到更多用户的喜爱。</p></div>
+                <span class="dh-path-arrow">探索榜单 →</span>
             </a>
-
-
-            <a class="home-feature-card"
-               href="{{ url_for('library') }}">
-
-                <div class="home-feature-icon home-icon-blue">
-                    ▶
-                </div>
-
-                <h3>探索歌曲库</h3>
-
-                <p>
-                    在线试听歌曲，
-                    给喜欢的音乐留下你的评分。
-                </p>
-
-                <span class="home-feature-link">
-                    开始探索 →
-                </span>
-
+            <a class="dh-path" href="{{ url_for('recommend') }}">
+                <span class="dh-path-icon" aria-hidden="true">✦</span>
+                <div><h3>个性化推荐</h3><p>结合你的评分记录与相似用户，寻找可能喜欢的歌曲。</p></div>
+                <span class="dh-path-arrow">查看专属推荐 →</span>
             </a>
-
-
-            <a class="home-feature-card"
-               href="{{ url_for('my_ratings') }}">
-
-                <div class="home-feature-icon home-icon-pink">
-                    ★
-                </div>
-
-                <h3>我的评分</h3>
-
-                <p>
-                    查看、修改和删除评分，
-                    管理自己的音乐喜好记录。
-                </p>
-
-                <span class="home-feature-link">
-                    查看评分 →
-                </span>
-
+            <a class="dh-path" href="{{ url_for('interest') }}">
+                <span class="dh-path-icon" aria-hidden="true">♡</span>
+                <div><h3>兴趣探索</h3><p>根据音乐类型和兴趣标签，从熟悉的风格开始聆听。</p></div>
+                <span class="dh-path-arrow">按兴趣筛选 →</span>
             </a>
-
-
-            <a class="home-feature-card"
-               href="{{ url_for('profile') }}">
-
-                <div class="home-feature-icon home-icon-cyan">
-                    ◉
-                </div>
-
-                <h3>个人中心</h3>
-
-                <p>
-                    查看账户信息，
-                    管理密码和个性化背景设置。
-                </p>
-
-                <span class="home-feature-link">
-                    进入个人中心 →
-                </span>
-
-            </a>
-
         </div>
-
     </section>
 
-    {% endif %}
-
-
-    <!-- ========================= -->
-    <!-- 系统核心功能 -->
-    <!-- ========================= -->
-    <section class="home-section">
-
-        <div class="home-section-heading">
-
-            <div>
-
-                <span class="home-section-subtitle">
-                    EXPLORE THE MUSIC
-                </span>
-
-                <h2>探索音乐世界</h2>
-
-                <p class="home-section-description">
-                    从热门歌曲到个性化推荐，
-                    找到适合你的音乐。
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <div class="home-feature-grid">
-
-            <a class="home-feature-card"
-               href="{{ url_for('popular') }}">
-
-                <div class="home-feature-icon home-icon-orange">
-                    ♨
-                </div>
-
-                <h3>热门音乐</h3>
-
-                <p>
-                    基于系统用户的评分数据，
-                    发现受到更多人喜爱的音乐。
-                </p>
-
-                <span class="home-feature-link">
-                    查看热门 →
-                </span>
-
-            </a>
-
-
-            <a class="home-feature-card"
-               href="{{ url_for('recommend') }}">
-
-                <div class="home-feature-icon home-icon-purple">
-                    ♫
-                </div>
-
-                <h3>智能个性化推荐</h3>
-
-                <p>
-                    利用用户协同过滤算法，
-                    根据相似用户发现潜在喜好。
-                </p>
-
-                <span class="home-feature-link">
-                    获取推荐 →
-                </span>
-
-            </a>
-
-
-            <a class="home-feature-card"
-               href="{{ url_for('interest') }}">
-
-                <div class="home-feature-icon home-icon-pink">
-                    ♥
-                </div>
-
-                <h3>兴趣音乐推荐</h3>
-
-                <p>
-                    根据喜欢的音乐类型和标签，
-                    探索符合兴趣的音乐内容。
-                </p>
-
-                <span class="home-feature-link">
-                    按兴趣探索 →
-                </span>
-
-            </a>
-
-
-            <a class="home-feature-card"
-               href="{{ url_for('library') }}">
-
-                <div class="home-feature-icon home-icon-blue">
-                    ▶
-                </div>
-
-                <h3>音乐歌曲库</h3>
-
-                <p>
-                    搜索、浏览和在线试听歌曲，
-                    登录后还可以记录个人评分。
-                </p>
-
-                <span class="home-feature-link">
-                    浏览歌曲 →
-                </span>
-
-            </a>
-
-        </div>
-
-    </section>
-
-
-    <!-- ========================= -->
-    <!-- 底部用户引导 -->
-    <!-- ========================= -->
-    <section class="home-bottom-banner">
-
+    <!-- 5. 轻量末屏引导：已登录与未登录使用不同入口 -->
+    <section class="dh-closing" aria-label="下一步探索">
         {% if session.get('username') %}
-
-            <div class="home-bottom-content">
-
-                <span class="home-section-subtitle">
-                    YOUR MUSIC PROFILE
-                </span>
-
-                <h2>你的音乐旅程仍在继续</h2>
-
-                <p>
-                    当前登录用户：
-                    <strong>{{ session.get('username') }}</strong>
-                    · 用户编号：
-                    {{ session.get('user_id') }}
-                </p>
-
-                <a class="home-btn-primary"
-                   href="{{ url_for('profile') }}">
-                    管理我的音乐空间 →
-                </a>
-
+            <div>
+                <h2>收藏此刻的音乐心情。</h2>
+                <p>查看已有评分，继续完善你的音乐偏好。</p>
             </div>
-
+            <a class="dh-primary" href="{{ url_for('my_ratings') }}">管理我的评分 ↗</a>
         {% else %}
-
-            <div class="home-bottom-content">
-
-                <span class="home-section-subtitle">
-                    START LISTENING
-                </span>
-
-                <h2>准备好发现下一首喜欢的歌了吗？</h2>
-
-                <p>
-                    创建账号，记录你的音乐偏好，
-                    开始属于自己的个性化推荐体验。
-                </p>
-
-                <div class="home-hero-buttons">
-
-                    <a class="home-btn-primary"
-                       href="{{ url_for('register') }}">
-                        免费注册
-                    </a>
-
-                    <a class="home-btn-secondary"
-                       href="{{ url_for('login') }}">
-                        已有账号？登录 →
-                    </a>
-
-                </div>
-
+            <div>
+                <h2>越了解你的喜好，推荐就越贴近你。</h2>
+                <p>创建账号、试听并评分，开始积累自己的音乐偏好。</p>
             </div>
-
+            <a class="dh-primary" href="{{ url_for('register') }}">创建免费账号 ↗</a>
         {% endif %}
-
     </section>
-
-</div>
-
+</main>
 {% endblock %}

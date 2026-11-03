@@ -1,387 +1,349 @@
-
 {% extends "base.html" %}
 
-{% block title %}我的评分 - 音乐推荐系统{% endblock %}
+{% block title %}我的评分 · MusicFlow{% endblock %}
 
 {% block content %}
 
-<div class="my-ratings-page">
+<style>
+/* MusicFlow 2.0 · 我的评分：只作用于此页面，不修改全站样式 */
+.mf-my-ratings {
+    --mr-text: #f5f3ff;
+    --mr-muted: #aab3d4;
+    --mr-accent: #a78bfa;
+    --mr-line: rgba(176, 163, 237, .17);
+    --mr-panel: rgba(28, 35, 61, .94);
+    color: var(--mr-text);
+    width: 100%;
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 28px 0 54px;
+}
+.mf-my-ratings, .mf-my-ratings * { box-sizing: border-box; }
+.mf-my-ratings a { text-decoration: none; }
+.mf-my-ratings button, .mf-my-ratings select { font: inherit; }
+.mf-my-ratings .mr-eyebrow {
+    color: #c7b6ff; font-size: 12px; font-weight: 800;
+    letter-spacing: 2px; text-transform: uppercase;
+}
+.mf-my-ratings .mr-eyebrow::before {
+    content: ""; display: inline-block; width: 7px; height: 7px;
+    margin-right: 9px; border-radius: 50%; background: #6ee7c4;
+    box-shadow: 0 0 0 5px rgba(110,231,196,.11); vertical-align: 1px;
+}
+.mf-my-ratings .mr-hero {
+    border: 1px solid rgba(173,151,255,.29);
+    border-radius: 26px;
+    background: radial-gradient(circle at 92% 12%, rgba(162,92,230,.22), transparent 41%),
+                linear-gradient(120deg, #1a2345, #30244e 68%, #503078);
+    padding: 40px 44px;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 30px; overflow: hidden; position: relative;
+}
+.mf-my-ratings .mr-hero::after {
+    content: ""; pointer-events: none; position: absolute;
+    width: 300px; height: 300px; border: 1px solid rgba(205,185,255,.1);
+    border-radius: 50%; right: -90px; top: -115px;
+}
+.mf-my-ratings .mr-hero-copy { position: relative; z-index: 1; max-width: 660px; }
+.mf-my-ratings .mr-hero h1 {
+    color: #fff; font-size: clamp(30px, 3.8vw, 45px);
+    letter-spacing: -.8px; line-height: 1.23; margin: 16px 0 12px;
+}
+.mf-my-ratings .mr-hero p {
+    color: #d1ccea; line-height: 1.8; font-size: 14px;
+    max-width: 580px; margin: 0;
+}
+.mf-my-ratings .mr-hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 21px; }
+.mf-my-ratings .mr-hero-link, .mf-my-ratings .mr-footer-link {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 10px 16px; border-radius: 11px;
+    color: #fff; background: rgba(255,255,255,.09);
+    border: 1px solid rgba(204,190,255,.23);
+    font-size: 13px; font-weight: 700; transition: background .2s, transform .2s;
+}
+.mf-my-ratings .mr-hero-link:hover, .mf-my-ratings .mr-footer-link:hover {
+    background: rgba(255,255,255,.16); transform: translateY(-1px);
+}
+.mf-my-ratings .mr-hero-number {
+    position: relative; z-index: 1; text-align: center; flex: 0 0 190px;
+    padding: 21px 18px; border: 1px solid rgba(216,198,255,.25);
+    border-radius: 20px; background: rgba(20,20,47,.3);
+}
+.mf-my-ratings .mr-hero-number strong {
+    display: block; font-size: 54px; line-height: 1.15; font-weight: 800;
+    font-variant-numeric: tabular-nums; color: #fff;
+}
+.mf-my-ratings .mr-hero-number span { display: block; margin-top: 9px; color: #ded3ff; font-size: 13px; }
+.mf-my-ratings .mr-section { margin-top: 38px; }
+.mf-my-ratings .mr-section-title { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
+.mf-my-ratings .mr-section-title h2 { color: #fff; font-size: 26px; margin: 8px 0 5px; }
+.mf-my-ratings .mr-section-title p { color: var(--mr-muted); font-size: 13px; margin: 0; }
+.mf-my-ratings .mr-count-pill {
+    border: 1px solid rgba(171,148,250,.23); color: #d2c2ff;
+    background: rgba(139,92,246,.12); border-radius: 50px;
+    font-size: 12px; white-space: nowrap; padding: 9px 14px; font-weight: 700;
+}
+.mf-my-ratings .mr-list { display: grid; gap: 14px; }
+.mf-my-ratings .mr-track {
+    display: grid; grid-template-columns: minmax(0, 1fr) 266px;
+    min-width: 0; border: 1px solid var(--mr-line);
+    background: var(--mr-panel); border-radius: 19px; overflow: hidden;
+    transition: border-color .22s, transform .22s, box-shadow .22s;
+}
+.mf-my-ratings .mr-track:hover {
+    border-color: rgba(169,139,255,.46); transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(0,0,0,.15);
+}
+.mf-my-ratings .mr-track-main {
+    display: grid; grid-template-columns: 46px 92px minmax(0,1fr);
+    align-items: start; column-gap: 17px; padding: 24px 22px;
+    min-width: 0;
+}
+.mf-my-ratings .mr-track-number {
+    display: grid; place-items: center; width: 43px; height: 43px;
+    border-radius: 12px; background: rgba(139,92,246,.21);
+    color: #bda9ff; font-size: 14px; font-weight: 800;
+    font-variant-numeric: tabular-nums;
+}
+.mf-my-ratings .mr-cover, .mf-my-ratings .mr-cover-empty {
+    display: block; width: 92px; height: 92px; border-radius: 14px;
+    object-fit: cover; border: 1px solid rgba(199,180,255,.15);
+    background: linear-gradient(135deg,#242450,#6842a0);
+}
+.mf-my-ratings .mr-cover-empty { display: grid; place-items: center; font-size: 32px; color: #d9caff; }
+.mf-my-ratings .mr-song-details { min-width: 0; }
+.mf-my-ratings .mr-song-title-line { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.mf-my-ratings .mr-song-title-line h3 { color: #fff; font-size: 19px; line-height: 1.4; margin: -2px 0 0; overflow-wrap: anywhere; }
+.mf-my-ratings .mr-saved-tag {
+    color: #d9c8ff; background: rgba(139,92,246,.16);
+    border-radius: 7px; font-size: 11px; font-weight: 750; padding: 4px 8px;
+}
+.mf-my-ratings .mr-artist { color: #b6c2e4; font-size: 13px; margin: 6px 0 0; }
+.mf-my-ratings .mr-tags { display: flex; gap: 7px; flex-wrap: wrap; align-items: center; margin: 13px 0; }
+.mf-my-ratings .mr-genre {
+    background: rgba(142,113,230,.18); color: #d2c0ff;
+    border-radius: 7px; font-size: 11px; padding: 4px 9px;
+}
+.mf-my-ratings .mr-tag-text { color: #9caace; font-size: 12px; overflow-wrap: anywhere; }
+.mf-my-ratings .mr-current-rating { display: flex; flex-wrap: wrap; align-items: baseline; gap: 9px; margin-bottom: 13px; }
+.mf-my-ratings .mr-current-rating span { color: var(--mr-muted); font-size: 12px; }
+.mf-my-ratings .mr-current-rating strong { color: #ffc875; font-size: 20px; line-height: 1.3; }
+.mf-my-ratings .mr-audio { max-width: 360px; width: 100%; }
+.mf-my-ratings .mr-audio audio { display: block; height: 39px; max-width: 100%; width: 100%; }
+.mf-my-ratings .mr-no-audio { color: var(--mr-muted); font-size: 12px; }
+.mf-my-ratings .mr-actions {
+    border-left: 1px solid var(--mr-line); padding: 22px;
+    background: rgba(14,17,42,.34);
+    display: flex; flex-direction: column; justify-content: center; gap: 12px;
+}
+.mf-my-ratings .mr-actions-title { color: #ddd0ff; font-weight: 800; font-size: 13px; }
+.mf-my-ratings .mr-edit-form { display: grid; gap: 9px; }
+.mf-my-ratings .mr-edit-form label { font-size: 12px; color: #b7c2df; }
+.mf-my-ratings .mr-edit-form select {
+    appearance: auto; width: 100%; min-height: 41px; border-radius: 10px;
+    padding: 0 11px; border: 1px solid rgba(173,158,233,.32);
+    color: #fff; background: #151b34; cursor: pointer;
+}
+.mf-my-ratings .mr-edit-form select option { color: #fff; background: #151b34; }
+.mf-my-ratings .mr-save {
+    background: linear-gradient(120deg,#7e58df,#a56cf0);
+    color: #fff; border: 0; border-radius: 10px;
+    min-height: 40px; padding: 9px 12px; font-weight: 800;
+    font-size: 12px; cursor: pointer; transition: filter .2s;
+}
+.mf-my-ratings .mr-save:hover { filter: brightness(1.12); }
+.mf-my-ratings .mr-delete-form { padding-top: 12px; margin-top: 3px; border-top: 1px solid var(--mr-line); }
+.mf-my-ratings .mr-delete {
+    display: block; width: 100%; min-height: 37px;
+    border-radius: 10px; padding: 8px 12px;
+    color: #ffa0bc; background: rgba(175,61,104,.10);
+    border: 1px solid rgba(239,113,159,.34);
+    font-size: 12px; font-weight: 750; cursor: pointer;
+    transition: background .2s;
+}
+.mf-my-ratings .mr-delete:hover { background: rgba(175,61,104,.2); }
+/* 仅突出删除操作，与“保存修改”区别开 */
+.mf-my-ratings .mr-delete-form > button.mr-delete {
+    color: #ffb2c5 !important;
+    background: rgba(171,55,95,.17) !important;
+    border: 1px solid rgba(255,123,155,.5) !important;
+}
+.mf-my-ratings .mr-delete-form > button.mr-delete:hover {
+    background: rgba(171,55,95,.3) !important;
+}
+.mf-my-ratings :is(a, button, select):focus-visible { outline: 2px solid #c4a5ff; outline-offset: 3px; }
+.mf-my-ratings .mr-empty {
+    padding: 52px 25px; background: rgba(28,35,61,.94);
+    border: 1px solid var(--mr-line); border-radius: 20px; text-align: center;
+}
+.mf-my-ratings .mr-empty-icon { font-size: 35px; color: #ad8efc; margin-bottom: 12px; }
+.mf-my-ratings .mr-empty h3 { color: #fff; margin: 0 0 9px; font-size: 21px; }
+.mf-my-ratings .mr-empty p { color: var(--mr-muted); margin: 0 auto 21px; max-width: 470px; font-size: 13px; line-height: 1.75; }
+.mf-my-ratings .mr-primary-link {
+    display: inline-flex; justify-content: center; align-items: center;
+    padding: 11px 18px; border-radius: 11px;
+    background: linear-gradient(120deg,#815be6,#a56cf0);
+    color: white; font-weight: 800; font-size: 13px;
+}
+.mf-my-ratings .mr-primary-link:hover { filter: brightness(1.12); }
+.mf-my-ratings .mr-footer {
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;
+    gap: 18px; margin-top: 25px; padding: 20px 24px;
+    border: 1px solid var(--mr-line); border-radius: 18px;
+    background: linear-gradient(120deg, rgba(33,40,73,.95), rgba(60,39,91,.92));
+}
+.mf-my-ratings .mr-footer h2 { font-size: 17px; margin: 0 0 5px; color: #fff; }
+.mf-my-ratings .mr-footer p { margin: 0; color: #b3bddc; font-size: 12px; }
+.mf-my-ratings .mr-footer-links { display: flex; flex-wrap: wrap; gap: 8px; }
+@media (max-width: 900px) {
+    .mf-my-ratings .mr-track { grid-template-columns: 1fr; }
+    .mf-my-ratings .mr-actions { border-left: 0; border-top: 1px solid var(--mr-line); }
+    .mf-my-ratings .mr-edit-form { grid-template-columns: minmax(0,1fr) auto; align-items: end; }
+    .mf-my-ratings .mr-edit-form label { grid-column: 1 / -1; }
+    .mf-my-ratings .mr-edit-form select { grid-column: 1; }
+    .mf-my-ratings .mr-edit-form .mr-save { grid-column: 2; padding-inline: 18px; }
+    .mf-my-ratings .mr-delete-form { padding-top: 0; border-top: 0; margin-top: 0; }
+}
+@media (max-width: 620px) {
+    .mf-my-ratings { padding-top: 16px; }
+    .mf-my-ratings .mr-hero { padding: 27px 22px; flex-direction: column; align-items: stretch; gap: 19px; }
+    .mf-my-ratings .mr-hero-number { flex: auto; display: flex; align-items: baseline; justify-content: space-between; gap: 15px; text-align: left; padding: 12px 16px; }
+    .mf-my-ratings .mr-hero-number strong { font-size: 30px; }
+    .mf-my-ratings .mr-hero-number span { margin-top: 0; }
+    .mf-my-ratings .mr-section-title { align-items: start; flex-direction: column; }
+    .mf-my-ratings .mr-track-main { grid-template-columns: 32px 72px minmax(0,1fr); gap: 10px; padding: 17px 13px; }
+    .mf-my-ratings .mr-track-number { width: 30px; height: 34px; font-size: 12px; }
+    .mf-my-ratings .mr-cover, .mf-my-ratings .mr-cover-empty { width: 72px; height: 72px; border-radius: 10px; }
+    .mf-my-ratings .mr-song-title-line h3 { font-size: 16px; }
+    .mf-my-ratings .mr-actions { padding: 17px; }
+    .mf-my-ratings .mr-edit-form { grid-template-columns: 1fr; }
+    .mf-my-ratings .mr-edit-form select, .mf-my-ratings .mr-edit-form .mr-save { grid-column: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .mf-my-ratings .mr-track, .mf-my-ratings .mr-save,
+    .mf-my-ratings .mr-delete, .mf-my-ratings .mr-hero-link,
+    .mf-my-ratings .mr-footer-link { transition: none; }
+}
+</style>
 
-    <!-- ========================= -->
-    <!-- 顶部欢迎横幅 -->
-    <!-- ========================= -->
-    <section class="my-ratings-hero">
-
-        <div class="my-ratings-hero-content">
-
-            <span class="my-ratings-subtitle">
-                MY MUSIC COLLECTION
-            </span>
-
-            <h1>
-                ★ 我的音乐评分
-            </h1>
-
-            <p>
-                每一次评分，都是一次音乐偏好的记录。
-                在这里回顾你喜欢的歌曲，
-                管理评分，让推荐系统更加了解你。
-            </p>
-
-            <div class="my-ratings-hero-badge">
-                ♫ 我的专属音乐记录
+<div class="mf-my-ratings">
+    <section class="mr-hero" aria-labelledby="mr-page-title">
+        <div class="mr-hero-copy">
+            <span class="mr-eyebrow">YOUR MUSIC JOURNAL</span>
+            <h1 id="mr-page-title">每一首喜欢的歌，<br>都值得被记录。</h1>
+            <p>回顾你的音乐评分，随时调整喜好。每一次真实的评价，都是个性化推荐的重要依据。</p>
+            <div class="mr-hero-actions">
+                <a class="mr-hero-link" href="{{ url_for('library') }}">♫ 继续发现歌曲 ↗</a>
+                <a class="mr-hero-link" href="{{ url_for('profile') }}">返回个人中心 →</a>
             </div>
-
         </div>
-
-        <div class="my-ratings-hero-decoration"
-             aria-hidden="true">
-            ★
+        <div class="mr-hero-number" aria-label="已评分歌曲数量">
+            <strong>{{ ratings | length }}</strong>
+            <span>首已评分歌曲<br>YOUR RATINGS</span>
         </div>
-
     </section>
 
-
-    <!-- ========================= -->
-    <!-- 个人评分统计 -->
-    <!-- ========================= -->
-    <section class="my-ratings-section">
-
-        <div class="my-ratings-section-heading">
-
+    <section class="mr-section" aria-labelledby="mr-list-title">
+        <div class="mr-section-title">
             <div>
-
-                <span class="my-ratings-subtitle">
-                    YOUR RATING HISTORY
-                </span>
-
-                <h2>我的评分记录</h2>
-
-                <p>
-                    查看、修改或删除已经提交的歌曲评分。
-                </p>
-
+                <span class="mr-eyebrow">MY RATED TRACKS</span>
+                <h2 id="mr-list-title">我的评分记录</h2>
+                <p>试听、修改评分或删除不再需要的记录。</p>
             </div>
-
-            <span class="my-ratings-count">
-                ★ 已评分 {{ ratings | length }} 首歌曲
-            </span>
-
+            <span class="mr-count-pill">★ 已评分 {{ ratings | length }} 首</span>
         </div>
-
 
         {% if ratings %}
-
-        <!-- ========================= -->
-        <!-- 已评分歌曲列表 -->
-        <!-- ========================= -->
-        <div class="my-ratings-list">
-
+        <div class="mr-list">
             {% for item in ratings %}
-
-            <div class="song my-rating-song">
-
-                <!-- 歌曲编号 -->
-                <div class="rank my-rating-rank">
-                    {{ item.music_id }}
-                </div>
-
-
-                <!-- 歌曲封面 -->
-                <div class="my-rating-cover-wrap">
+            <article class="mr-track">
+                <div class="mr-track-main">
+                    <span class="mr-track-number" title="歌曲编号">{{ item.music_id }}</span>
 
                     {% if item.cover_file %}
-
-                    <img
-                        class="cover my-rating-cover"
-                        src="{{ url_for('static', filename=item.cover_file) }}"
-                        alt="{{ item.title }}"
-                        loading="lazy"
-                    >
-
+                    <img class="mr-cover"
+                         src="{{ url_for('static', filename=item.cover_file) }}"
+                         alt="{{ item.title }} 的专辑封面" loading="lazy">
                     {% else %}
-
-                    <div class="my-rating-cover-placeholder">
-                        ♫
-                    </div>
-
+                    <span class="mr-cover-empty" aria-label="暂无专辑封面">♫</span>
                     {% endif %}
 
-                </div>
-
-
-                <!-- 歌曲信息 -->
-                <div class="song-info my-rating-song-info">
-
-                    <div class="my-rating-song-heading">
-
-                        <h3>
-                            {{ item.title }}
-                        </h3>
-
-                        <span class="my-rating-saved-badge">
-                            已评分
-                        </span>
-
-                    </div>
-
-
-                    <p class="my-rating-artist">
-                        {{ item.artist }}
-                    </p>
-
-
-                    <!-- 音乐类型和标签 -->
-                    <div class="my-rating-song-tags">
-
-                        <span class="my-rating-genre">
-                            {{ item.genre }}
-                        </span>
-
-                        {% if item.tags %}
-
-                        <span class="my-rating-tags">
-                            {{ item.tags }}
-                        </span>
-
+                    <div class="mr-song-details">
+                        <div class="mr-song-title-line">
+                            <h3>{{ item.title }}</h3>
+                            <span class="mr-saved-tag">已评分</span>
+                        </div>
+                        <p class="mr-artist">{{ item.artist }}</p>
+                        <div class="mr-tags">
+                            {% if item.genre %}<span class="mr-genre">{{ item.genre }}</span>{% endif %}
+                            {% if item.tags %}<span class="mr-tag-text">{{ item.tags }}</span>{% endif %}
+                        </div>
+                        <div class="mr-current-rating">
+                            <span>我的评分</span>
+                            <strong>★ {{ item.rating }} 分</strong>
+                        </div>
+                        {% if item.audio_file %}
+                        <div class="mr-audio">
+                            <audio controls preload="none" aria-label="试听 {{ item.title }}">
+                                <source src="{{ url_for('static', filename=item.audio_file) }}" type="audio/mpeg">
+                                你的浏览器不支持音频播放。
+                            </audio>
+                        </div>
+                        {% else %}
+                        <p class="mr-no-audio">暂无试听文件</p>
                         {% endif %}
-
                     </div>
-
-
-                    <!-- 当前评分 -->
-                    <div class="my-rating-current">
-
-                        <span class="my-rating-current-label">
-                            我的评分
-                        </span>
-
-                        <strong class="my-rating-current-score">
-                            ★ {{ item.rating }} 分
-                        </strong>
-
-                    </div>
-
-
-                    <!-- 在线试听 -->
-                    {% if item.audio_file %}
-
-                    <div class="my-rating-audio">
-
-                        <audio controls preload="none">
-
-                            <source
-                                src="{{ url_for('static', filename=item.audio_file) }}"
-                            >
-
-                            你的浏览器不支持音频播放。
-
-                        </audio>
-
-                    </div>
-
-                    {% else %}
-
-                    <p class="my-rating-muted">
-                        暂无试听文件
-                    </p>
-
-                    {% endif %}
-
                 </div>
 
-
-                <!-- ========================= -->
-                <!-- 评分管理区域 -->
-                <!-- ========================= -->
-                <div class="rate-area my-rating-actions">
-
-                    <div class="my-rating-actions-title">
-                        ★ 评分管理
-                    </div>
-
-
-                    <!-- 修改评分 -->
-                    <form
-                        class="my-rating-edit-form"
-                        action="{{ url_for('rate') }}"
-                        method="post"
-                    >
-
-                        <input
-                            type="hidden"
-                            name="music_id"
-                            value="{{ item.music_id }}"
-                        >
-
-                        <input
-                            type="hidden"
-                            name="next"
-                            value="{{ url_for('my_ratings') }}"
-                        >
-
-                        <label
-                            for="my-rating-select-{{ loop.index }}"
-                        >
-                            修改当前评分
-                        </label>
-
-                        <select
-                            id="my-rating-select-{{ loop.index }}"
-                            name="rating"
-                            required
-                        >
-
-                            <option value="">
-                                请选择评分
-                            </option>
-
-                            <option value="5"
-                                {% if item.rating|int == 5 %}selected{% endif %}>
-                                ★★★★★ 5 分
-                            </option>
-
-                            <option value="4"
-                                {% if item.rating|int == 4 %}selected{% endif %}>
-                                ★★★★ 4 分
-                            </option>
-
-                            <option value="3"
-                                {% if item.rating|int == 3 %}selected{% endif %}>
-                                ★★★ 3 分
-                            </option>
-
-                            <option value="2"
-                                {% if item.rating|int == 2 %}selected{% endif %}>
-                                ★★ 2 分
-                            </option>
-
-                            <option value="1"
-                                {% if item.rating|int == 1 %}selected{% endif %}>
-                                ★ 1 分
-                            </option>
-
+                <aside class="mr-actions" aria-label="{{ item.title }} 的评分管理">
+                    <div class="mr-actions-title">★ 评分管理</div>
+                    <form class="mr-edit-form" action="{{ url_for('rate') }}" method="post">
+                        <input type="hidden" name="music_id" value="{{ item.music_id }}">
+                        <input type="hidden" name="next" value="{{ url_for('my_ratings') }}">
+                        <label for="mr-rating-{{ loop.index }}">修改当前评分</label>
+                        <select id="mr-rating-{{ loop.index }}" name="rating" required>
+                            <option value="" disabled>请选择评分</option>
+                            <option value="5" {% if item.rating|int == 5 %}selected{% endif %}>★★★★★ 5 分</option>
+                            <option value="4" {% if item.rating|int == 4 %}selected{% endif %}>★★★★ 4 分</option>
+                            <option value="3" {% if item.rating|int == 3 %}selected{% endif %}>★★★ 3 分</option>
+                            <option value="2" {% if item.rating|int == 2 %}selected{% endif %}>★★ 2 分</option>
+                            <option value="1" {% if item.rating|int == 1 %}selected{% endif %}>★ 1 分</option>
                         </select>
-
-                        <button
-                            class="my-rating-save-button"
-                            type="submit"
-                        >
-                            保存修改
-                        </button>
-
+                        <button class="mr-save" type="submit">保存修改</button>
                     </form>
-
-
-                    <!-- 删除评分 -->
-                    <form
-                        class="my-rating-delete-form"
-                        action="{{ url_for('delete_rating') }}"
-                        method="post"
-                    >
-
-                        <input
-                            type="hidden"
-                            name="music_id"
-                            value="{{ item.music_id }}"
-                        >
-
-                        <button
-                            class="my-rating-delete-button"
-                            type="submit"
-                            onclick="return confirm('确定要删除这条评分吗？');"
-                        >
+                    <form class="mr-delete-form"
+                          action="{{ url_for('delete_rating') }}"
+                          method="post"
+                          onsubmit="return window.confirm('确定要删除这首歌曲的评分吗？\n点击“取消”将保留评分记录。');">
+                        <input type="hidden" name="music_id" value="{{ item.music_id }}">
+                        <button class="mr-delete" type="submit">
                             删除评分
                         </button>
-
                     </form>
-
-                </div>
-
-            </div>
-
+                </aside>
+            </article>
             {% endfor %}
-
         </div>
-
-
         {% else %}
-
-        <!-- ========================= -->
-        <!-- 暂无评分记录 -->
-        <!-- ========================= -->
-        <div class="box my-ratings-empty">
-
-            <div class="my-ratings-empty-icon">
-                ♫
-            </div>
-
-            <h3>
-                你的音乐评分记录还是空的
-            </h3>
-
-            <p>
-                前往歌曲库试听喜欢的音乐，
-                给歌曲留下你的第一条评分。
-            </p>
-
-            <a
-                class="button my-ratings-empty-button"
-                href="{{ url_for('library') }}"
-            >
-                ♫ 前往歌曲库评分 →
-            </a>
-
+        <div class="mr-empty">
+            <div class="mr-empty-icon" aria-hidden="true">♫</div>
+            <h3>还没有留下音乐评分</h3>
+            <p>前往歌曲库听听喜欢的音乐，为第一首歌曲留下评分。之后就能在这里统一管理。</p>
+            <a class="mr-primary-link" href="{{ url_for('library') }}">前往歌曲库评分 →</a>
         </div>
-
         {% endif %}
-
     </section>
 
-
-    <!-- ========================= -->
-    <!-- 页面底部引导 -->
-    <!-- ========================= -->
-    <section class="my-ratings-bottom">
-
-        <div class="my-ratings-bottom-content">
-
-            <span class="my-ratings-subtitle">
-                KEEP DISCOVERING
-            </span>
-
-            <h2>
-                让每一次评分都有意义
-            </h2>
-
-            <p>
-                持续探索不同的音乐，
-                通过真实评分记录你的偏好，
-                发现更多适合自己的歌曲。
-            </p>
-
-            <div class="my-ratings-bottom-actions">
-
-                <a
-                    class="button my-ratings-bottom-button"
-                    href="{{ url_for('library') }}"
-                >
-                    ♫ 继续探索音乐 →
-                </a>
-
-                <a
-                    class="my-ratings-recommend-link"
-                    href="{{ url_for('recommend') }}"
-                >
-                    查看个性化推荐 →
-                </a>
-
-            </div>
-
+    <section class="mr-footer" aria-label="继续探索音乐">
+        <div>
+            <h2>继续听，继续发现。</h2>
+            <p>更多真实评分，可以帮助系统了解你的音乐偏好。</p>
         </div>
-
+        <div class="mr-footer-links">
+            <a class="mr-footer-link" href="{{ url_for('recommend') }}">查看个性化推荐 ↗</a>
+            <a class="mr-footer-link" href="{{ url_for('library') }}">探索歌曲库 →</a>
+        </div>
     </section>
-
 </div>
 
 {% endblock %}

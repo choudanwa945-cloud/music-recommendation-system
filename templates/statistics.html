@@ -1,463 +1,542 @@
-
 {% extends "base.html" %}
 
-{% block title %}数据统计 - 音乐推荐系统{% endblock %}
+{% block title %}数据统计 · MusicFlow{% endblock %}
 
 {% block content %}
+<style>
+/* MusicFlow Analytics 2.0 — 仅作用于本页面，不覆盖全站基础样式 */
+.mfstats {
+    --mf-panel: #191e36;
+    --mf-panel-deep: #151a2e;
+    --mf-border: rgba(170, 159, 235, .16);
+    --mf-faint: #a5afd0;
+    --mf-strong: #f7f5ff;
+    --mf-purple: #b59bff;
+    --mf-accent: #9268ed;
+    color: var(--mf-strong);
+    width: 100%;
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 24px 0 76px;
+    line-height: 1.65;
+}
+.mfstats *, .mfstats *::before, .mfstats *::after { box-sizing: border-box; }
+.mfstats h1, .mfstats h2, .mfstats h3, .mfstats p { margin: 0; }
+.mfstats a { text-decoration: none; }
+.mfstats .mfstats-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    color: #c4b1ff;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+}
+.mfstats .mfstats-eyebrow::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #64e4bd;
+    box-shadow: 0 0 0 4px rgba(100, 228, 189, .1);
+}
+.mfstats .mfstats-intro {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 270px;
+    align-items: center;
+    min-height: 235px;
+    gap: 28px;
+    padding: 32px 40px;
+    border: 1px solid rgba(178, 148, 255, .25);
+    border-radius: 25px;
+    background: linear-gradient(112deg, #1a2443 0%, #292350 55%, #503078 100%);
+}
+.mfstats .mfstats-intro::after {
+    content: "";
+    position: absolute;
+    width: 360px;
+    height: 360px;
+    border: 1px solid rgba(211, 188, 255, .11);
+    border-radius: 50%;
+    right: -110px;
+    bottom: -275px;
+    pointer-events: none;
+}
+.mfstats .mfstats-intro h1 {
+    font-size: clamp(27px, 3vw, 39px);
+    line-height: 1.27;
+    letter-spacing: -.04em;
+    margin: 12px 0;
+    font-weight: 850;
+}
+.mfstats .mfstats-intro h1 span {
+    color: #d5bcff;
+}
+.mfstats .mfstats-intro p {
+    max-width: 610px;
+    font-size: 14px;
+    color: #d2d5ed;
+}
+.mfstats .mfstats-hero-links { display: flex; flex-wrap: wrap; gap: 11px; margin-top: 21px; }
+.mfstats .mfstats-pill {
+    display: inline-flex;
+    gap: 7px;
+    align-items: center;
+    padding: 6px 13px;
+    border-radius: 999px;
+    border: 1px solid rgba(224, 215, 255, .2);
+    background: rgba(255, 255, 255, .07);
+    color: #e6e0ff;
+    font-size: 12px;
+    font-weight: 600;
+}
+.mfstats .mfstats-hero-art {
+    position: relative;
+    width: 225px;
+    height: 150px;
+    margin-left: auto;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 12px;
+}
+.mfstats .mfstats-hero-art::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 100%;
+    background: radial-gradient(ellipse, rgba(174, 132, 255, .19), transparent 70%);
+}
+.mfstats .mfstats-hero-art i {
+    position: relative;
+    display: block;
+    width: 23px;
+    height: var(--h);
+    border-radius: 11px 11px 5px 5px;
+    border: 1px solid rgba(233, 220, 255, .22);
+    background: linear-gradient(180deg, #c6aaff, #7355c8);
+    box-shadow: 0 7px 23px rgba(102, 71, 179, .2);
+    opacity: .88;
+}
+.mfstats .mfstats-section { margin-top: 33px; }
+.mfstats .mfstats-section-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 17px;
+}
+.mfstats .mfstats-section-head h2 {
+    font-size: 24px;
+    font-weight: 800;
+    margin-top: 5px;
+    letter-spacing: -.025em;
+}
+.mfstats .mfstats-section-desc { font-size: 13px; color: var(--mf-faint); margin-top: 5px; }
+.mfstats .mfstats-small-hint { color: var(--mf-faint); font-size: 12px; white-space: nowrap; }
+.mfstats .mfstats-kpis {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+}
+.mfstats .mfstats-kpi {
+    min-width: 0;
+    min-height: 145px;
+    padding: 21px 22px 18px;
+    background: var(--mf-panel);
+    border: 1px solid var(--mf-border);
+    border-radius: 19px;
+    transition: transform .2s ease, border-color .2s ease;
+}
+.mfstats .mfstats-kpi:hover { transform: translateY(-2px); border-color: rgba(185, 158, 255, .42); }
+.mfstats .mfstats-kpi-top { display: flex; align-items: center; justify-content: space-between; }
+.mfstats .mfstats-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 39px;
+    height: 39px;
+    border-radius: 12px;
+    background: rgba(153, 112, 251, .17);
+    color: #b7a0ff;
+    font-size: 21px;
+}
+.mfstats .mfstats-icon.mfstats-icon-blue { background: rgba(92, 152, 254, .13); color: #88b6ff; }
+.mfstats .mfstats-icon.mfstats-icon-pink { background: rgba(246, 114, 175, .13); color: #ff9bc7; }
+.mfstats .mfstats-icon.mfstats-icon-mint { background: rgba(76, 208, 192, .12); color: #72dece; }
+.mfstats .mfstats-kpi strong {
+    display: block;
+    font-size: clamp(28px, 2.7vw, 35px);
+    line-height: 1.25;
+    margin-top: 12px;
+    color: #fff;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -.02em;
+}
+.mfstats .mfstats-kpi p { font-size: 13px; color: #c1c8e7; margin-top: 6px; font-weight: 650; }
+.mfstats .mfstats-panels {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 15px;
+}
+.mfstats .mfstats-panel {
+    min-width: 0;
+    padding: 25px 27px;
+    background: var(--mf-panel-deep);
+    border: 1px solid var(--mf-border);
+    border-radius: 20px;
+}
+.mfstats .mfstats-panel-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+}
+.mfstats .mfstats-panel h3 { font-size: 19px; font-weight: 800; }
+.mfstats .mfstats-panel-desc { color: var(--mf-faint); font-size: 12px; margin-top: 4px; }
+.mfstats .mfstats-chip {
+    display: inline-block;
+    white-space: nowrap;
+    font-size: 11px;
+    color: #c8bcf6;
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: #292544;
+}
+.mfstats .mfstats-big-number {
+    display: flex;
+    align-items: baseline;
+    gap: 13px;
+    margin-top: 26px;
+}
+.mfstats .mfstats-big-number strong {
+    font-size: clamp(35px, 4vw, 51px);
+    line-height: 1.1;
+    color: #d0b6ff;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -.04em;
+}
+.mfstats .mfstats-big-number span { font-size: 13px; color: var(--mf-faint); }
+.mfstats .mfstats-meter {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 11px;
+    border-radius: 999px;
+    background: #34354f;
+    margin-top: 19px;
+}
+.mfstats .mfstats-meter > span {
+    display: block;
+    width: var(--meter-width, 0%);
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #7f6cea, #c7a7ff);
+}
+.mfstats .mfstats-meter.mfstats-meter-mint > span {
+    background: linear-gradient(90deg, #5c92e4, #73dfc5);
+}
+.mfstats .mfstats-meter-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-size: 11px;
+    color: #a6b0d4;
+}
+.mfstats .mfstats-mini-stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 21px;
+}
+.mfstats .mfstats-mini-stat {
+    border: 1px solid rgba(173, 161, 237, .13);
+    background: #202540;
+    border-radius: 12px;
+    padding: 12px 15px;
+}
+.mfstats .mfstats-mini-stat span { display: block; font-size: 11px; color: var(--mf-faint); }
+.mfstats .mfstats-mini-stat strong {
+    display: block;
+    font-size: 22px;
+    color: #f3edff;
+    font-variant-numeric: tabular-nums;
+    margin-top: 2px;
+}
+.mfstats .mfstats-matrix-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 18px 21px;
+    margin-top: 16px;
+    border-radius: 17px;
+    border: 1px solid var(--mf-border);
+    background: #191c34;
+}
+.mfstats .mfstats-matrix-note-symbol {
+    flex: 0 0 auto;
+    width: 33px;
+    height: 33px;
+    display: grid;
+    place-items: center;
+    border-radius: 10px;
+    background: #302a54;
+    color: #c5b2ff;
+}
+.mfstats .mfstats-matrix-note h3 { font-size: 14px; margin-bottom: 3px; }
+.mfstats .mfstats-matrix-note p { color: #aeb8d9; font-size: 12px; }
+.mfstats .mfstats-details {
+    margin-top: 31px;
+    background: var(--mf-panel-deep);
+    border: 1px solid var(--mf-border);
+    border-radius: 19px;
+    overflow: hidden;
+}
+.mfstats .mfstats-details summary {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    list-style: none;
+    padding: 20px 24px;
+    color: #f7f5ff;
+    font-size: 15px;
+    font-weight: 750;
+}
+.mfstats .mfstats-details summary::-webkit-details-marker { display: none; }
+.mfstats .mfstats-details summary::after {
+    content: "+";
+    font-size: 22px;
+    color: #b59bff;
+    line-height: 1;
+}
+.mfstats .mfstats-details[open] summary::after { content: "−"; }
+.mfstats .mfstats-details summary:hover { background: rgba(167, 140, 255, .06); }
+.mfstats .mfstats-detail-content { padding: 0 23px 21px; overflow-x: auto; }
+.mfstats .mfstats-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 430px;
+    font-size: 13px;
+}
+.mfstats .mfstats-table th, .mfstats .mfstats-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid rgba(174, 169, 221, .12);
+}
+.mfstats .mfstats-table th { text-align: left; color: #cbc2f3; background: #242440; }
+.mfstats .mfstats-table td { color: #bfc7e5; }
+.mfstats .mfstats-table th:last-child, .mfstats .mfstats-table td:last-child {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    color: #dfd0ff;
+}
+.mfstats .mfstats-table tr:last-child td { border-bottom: none; }
+.mfstats .mfstats-last-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 22px 25px;
+    margin-top: 24px;
+    border-radius: 18px;
+    border: 1px solid rgba(178, 150, 255, .2);
+    background: linear-gradient(115deg, #202442, #322454);
+}
+.mfstats .mfstats-last-row h2 { font-size: 17px; }
+.mfstats .mfstats-last-row p { font-size: 12px; color: #b7bee1; margin-top: 4px; }
+.mfstats .mfstats-action {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    border-radius: 10px;
+    background: #a58aef;
+    color: #141122 !important;
+    padding: 11px 17px;
+    font-size: 12px;
+    font-weight: 800;
+    transition: background .18s, transform .18s;
+}
+.mfstats .mfstats-action:hover { background: #c5b0ff; transform: translateY(-1px); }
+.mfstats a:focus-visible, .mfstats summary:focus-visible {
+    outline: 2px solid #b59bff;
+    outline-offset: 3px;
+}
+@media (max-width: 940px) {
+    .mfstats .mfstats-intro { grid-template-columns: minmax(0,1fr) 175px; padding: 28px; }
+    .mfstats .mfstats-hero-art { transform: scale(.75); transform-origin: right center; }
+    .mfstats .mfstats-kpis { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .mfstats .mfstats-panels { grid-template-columns: 1fr; }
+}
+@media (max-width: 620px) {
+    .mfstats { padding: 16px 0 48px; }
+    .mfstats .mfstats-intro { grid-template-columns: 1fr; min-height: unset; padding: 25px 22px; border-radius: 19px; }
+    .mfstats .mfstats-hero-art { display: none; }
+    .mfstats .mfstats-intro h1 { font-size: 29px; }
+    .mfstats .mfstats-section-head { align-items: flex-start; flex-direction: column; }
+    .mfstats .mfstats-section-head h2 { font-size: 21px; }
+    .mfstats .mfstats-kpis { gap: 9px; }
+    .mfstats .mfstats-kpi { padding: 16px; min-height: 126px; }
+    .mfstats .mfstats-kpi strong { font-size: 27px; }
+    .mfstats .mfstats-panel { padding: 21px 19px; }
+    .mfstats .mfstats-last-row { align-items: stretch; flex-direction: column; }
+    .mfstats .mfstats-action { justify-content: center; }
+    .mfstats .mfstats-small-hint { white-space: normal; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .mfstats .mfstats-kpi, .mfstats .mfstats-action { transition: none; }
+}
+</style>
 
-<div class="statistics-page">
-
-    <!-- ========================= -->
-    <!-- 顶部数据分析横幅 -->
-    <!-- ========================= -->
-    <section class="statistics-hero">
-
-        <div class="statistics-hero-content">
-
-            <span class="statistics-subtitle">
-                MUSIC DATA ANALYTICS
-            </span>
-
-            <h1>
-                ♫ 音乐数据分析中心
-            </h1>
-
-            <p>
-                用数据记录每一次音乐发现。
-                从用户数量、歌曲规模到评分矩阵，
-                直观了解音乐推荐系统的数据情况。
-            </p>
-
-            <div class="statistics-hero-badge">
-                ◈ 系统数据统计概览
+<div class="mfstats">
+    <!-- 页面概览：数据全部来自 Flask 提供的 stats，不生成虚构指标 -->
+    <header class="mfstats-intro">
+        <div>
+            <span class="mfstats-eyebrow">MUSICFLOW ANALYTICS</span>
+            <h1>从数字里，<br><span>看见音乐偏好。</span></h1>
+            <p>用真实的用户评分与音乐数据，了解系统规模、评分表现和协同过滤所依赖的数据基础。</p>
+            <div class="mfstats-hero-links">
+                <span class="mfstats-pill">♫ 实时读取系统统计</span>
+                <span class="mfstats-pill">▦ 评分矩阵分析</span>
             </div>
-
         </div>
-
-        <div class="statistics-hero-decoration"
-             aria-hidden="true">
-            ◉
+        <div class="mfstats-hero-art" aria-hidden="true">
+            <i style="--h: 34%"></i>
+            <i style="--h: 61%"></i>
+            <i style="--h: 46%"></i>
+            <i style="--h: 89%"></i>
+            <i style="--h: 68%"></i>
+            <i style="--h: 100%"></i>
+            <i style="--h: 55%"></i>
         </div>
+    </header>
 
+    <!-- 核心指标 -->
+    <section class="mfstats-section" aria-labelledby="mfstats-overview-title">
+        <div class="mfstats-section-head">
+            <div>
+                <span class="mfstats-eyebrow">AT A GLANCE</span>
+                <h2 id="mfstats-overview-title">系统数据总览</h2>
+                <p class="mfstats-section-desc">当前用户、歌曲与评分数据概况。</p>
+            </div>
+            <span class="mfstats-small-hint">数据以系统实际统计结果为准</span>
+        </div>
+        <div class="mfstats-kpis">
+            <article class="mfstats-kpi">
+                <div class="mfstats-kpi-top"><span class="mfstats-icon" aria-hidden="true">♙</span></div>
+                <strong>{{ stats.user_count }}</strong>
+                <p>系统用户</p>
+            </article>
+            <article class="mfstats-kpi">
+                <div class="mfstats-kpi-top"><span class="mfstats-icon mfstats-icon-blue" aria-hidden="true">♫</span></div>
+                <strong>{{ stats.music_count }}</strong>
+                <p>收录歌曲</p>
+            </article>
+            <article class="mfstats-kpi">
+                <div class="mfstats-kpi-top"><span class="mfstats-icon mfstats-icon-pink" aria-hidden="true">★</span></div>
+                <strong>{{ stats.rating_count }}</strong>
+                <p>用户评分记录</p>
+            </article>
+            <article class="mfstats-kpi">
+                <div class="mfstats-kpi-top"><span class="mfstats-icon mfstats-icon-mint" aria-hidden="true">▦</span></div>
+                <strong>{{ stats.matrix_density }}%</strong>
+                <p>评分矩阵密度</p>
+            </article>
+        </div>
     </section>
 
-
-    <!-- ========================= -->
-    <!-- 核心数据概览 -->
-    <!-- ========================= -->
-    <section class="statistics-section">
-
-        <div class="statistics-section-heading">
-
-            <span class="statistics-subtitle">
-                SYSTEM OVERVIEW
-            </span>
-
-            <h2>核心数据概览</h2>
-
-            <p>
-                系统当前的用户、音乐及评分数据。
-            </p>
-
+    <!-- 仅用已有真实指标进行可视化，不假设后端提供评分分布 -->
+    <section class="mfstats-section" aria-labelledby="mfstats-insights-title">
+        <div class="mfstats-section-head">
+            <div>
+                <span class="mfstats-eyebrow">DATA INSIGHTS</span>
+                <h2 id="mfstats-insights-title">评分与矩阵分析</h2>
+                <p class="mfstats-section-desc">平均评分水平与评分矩阵稀疏程度。</p>
+            </div>
         </div>
-
-
-        <div class="statistics-overview-grid">
-
-            <!-- 用户数量 -->
-            <div class="statistics-overview-card">
-
-                <div class="statistics-card-icon stats-icon-purple">
-                    ♙
+        <div class="mfstats-panels">
+            <article class="mfstats-panel">
+                <div class="mfstats-panel-head">
+                    <div>
+                        <h3>用户评分表现</h3>
+                        <p class="mfstats-panel-desc">下方进度条按 5 分满分比例展示平均值</p>
+                    </div>
+                    <span class="mfstats-chip">RATING</span>
                 </div>
-
-                <div class="statistics-card-number">
-                    {{ stats.user_count }}
+                <div class="mfstats-big-number">
+                    <strong>★ {{ stats.average_rating }}</strong>
+                    <span>平均评分 / 5 分</span>
                 </div>
-
-                <div class="statistics-card-label">
-                    系统用户
+                <div class="mfstats-meter" role="img" aria-label="平均评分 {{ stats.average_rating }} 分，满分 5 分" style="--meter-width: {{ stats.average_rating|float * 20 }}%;">
+                    <span></span>
                 </div>
-
-                <div class="statistics-card-description">
-                    USER COUNT
+                <div class="mfstats-meter-labels"><span>0 分</span><span>5 分</span></div>
+                <div class="mfstats-mini-stats">
+                    <div class="mfstats-mini-stat"><span>最低评分</span><strong>{{ stats.min_rating }}</strong></div>
+                    <div class="mfstats-mini-stat"><span>最高评分</span><strong>{{ stats.max_rating }}</strong></div>
                 </div>
-
-            </div>
-
-
-            <!-- 歌曲数量 -->
-            <div class="statistics-overview-card">
-
-                <div class="statistics-card-icon stats-icon-blue">
-                    ♫
+            </article>
+            <article class="mfstats-panel">
+                <div class="mfstats-panel-head">
+                    <div>
+                        <h3>协同过滤数据基础</h3>
+                        <p class="mfstats-panel-desc">当前用户－歌曲评分矩阵的填充比例</p>
+                    </div>
+                    <span class="mfstats-chip">MATRIX</span>
                 </div>
-
-                <div class="statistics-card-number">
-                    {{ stats.music_count }}
-                </div>
-
-                <div class="statistics-card-label">
-                    收录歌曲
-                </div>
-
-                <div class="statistics-card-description">
-                    MUSIC LIBRARY
-                </div>
-
-            </div>
-
-
-            <!-- 评分数量 -->
-            <div class="statistics-overview-card">
-
-                <div class="statistics-card-icon stats-icon-pink">
-                    ★
-                </div>
-
-                <div class="statistics-card-number">
-                    {{ stats.rating_count }}
-                </div>
-
-                <div class="statistics-card-label">
-                    用户评分
-                </div>
-
-                <div class="statistics-card-description">
-                    TOTAL RATINGS
-                </div>
-
-            </div>
-
-
-            <!-- 评分矩阵密度 -->
-            <div class="statistics-overview-card">
-
-                <div class="statistics-card-icon stats-icon-cyan">
-                    ◈
-                </div>
-
-                <div class="statistics-card-number">
-                    {{ stats.matrix_density }}%
-                </div>
-
-                <div class="statistics-card-label">
-                    评分矩阵密度
-                </div>
-
-                <div class="statistics-card-description">
-                    MATRIX DENSITY
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- ========================= -->
-    <!-- 评分数据分析 -->
-    <!-- ========================= -->
-    <section class="statistics-section">
-
-        <div class="statistics-section-heading">
-
-            <span class="statistics-subtitle">
-                RATING ANALYSIS
-            </span>
-
-            <h2>用户评分分析</h2>
-
-            <p>
-                查看用户评分的平均值、最高值和最低值。
-            </p>
-
-        </div>
-
-
-        <div class="statistics-rating-grid">
-
-            <div class="statistics-rating-card">
-
-                <span class="statistics-rating-symbol">
-                    ★
-                </span>
-
-                <span class="statistics-rating-title">
-                    平均评分
-                </span>
-
-                <strong class="statistics-rating-value">
-                    {{ stats.average_rating }}
-                </strong>
-
-                <span class="statistics-rating-description">
-                    AVERAGE RATING
-                </span>
-
-            </div>
-
-
-            <div class="statistics-rating-card">
-
-                <span class="statistics-rating-symbol">
-                    ↑
-                </span>
-
-                <span class="statistics-rating-title">
-                    最高评分
-                </span>
-
-                <strong class="statistics-rating-value">
-                    {{ stats.max_rating }}
-                </strong>
-
-                <span class="statistics-rating-description">
-                    MAXIMUM RATING
-                </span>
-
-            </div>
-
-
-            <div class="statistics-rating-card">
-
-                <span class="statistics-rating-symbol">
-                    ↓
-                </span>
-
-                <span class="statistics-rating-title">
-                    最低评分
-                </span>
-
-                <strong class="statistics-rating-value">
-                    {{ stats.min_rating }}
-                </strong>
-
-                <span class="statistics-rating-description">
-                    MINIMUM RATING
-                </span>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- ========================= -->
-    <!-- 评分矩阵分析 -->
-    <!-- ========================= -->
-    <section class="statistics-section">
-
-        <div class="statistics-section-heading">
-
-            <span class="statistics-subtitle">
-                COLLABORATIVE FILTERING DATA
-            </span>
-
-            <h2>评分矩阵分析</h2>
-
-            <p>
-                用户协同过滤算法使用评分矩阵，
-                根据用户之间的评分情况计算相似度。
-            </p>
-
-        </div>
-
-
-        <div class="statistics-matrix-panel">
-
-            <div class="statistics-matrix-heading">
-
-                <div class="statistics-matrix-icon">
-                    ▦
-                </div>
-
-                <div>
-
-                    <h3>用户－歌曲评分矩阵</h3>
-
-                    <p>
-                        展示评分矩阵的规模与数据密度
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="statistics-matrix-grid">
-
-                <div class="statistics-matrix-item">
-
-                    <span>矩阵行数</span>
-
-                    <strong>
-                        {{ stats.matrix_rows }}
-                    </strong>
-
-                </div>
-
-
-                <div class="statistics-matrix-item">
-
-                    <span>矩阵列数</span>
-
-                    <strong>
-                        {{ stats.matrix_cols }}
-                    </strong>
-
-                </div>
-
-
-                <div class="statistics-matrix-item">
-
+                <div class="mfstats-big-number">
+                    <strong>{{ stats.matrix_density }}%</strong>
                     <span>矩阵密度</span>
-
-                    <strong>
-                        {{ stats.matrix_density }}%
-                    </strong>
-
                 </div>
-
-            </div>
-
-
-            <div class="statistics-matrix-note">
-
-                <strong>数据说明</strong>
-
-                <p>
-                    评分矩阵用于表示用户与歌曲之间的评分关系。
-                    矩阵密度反映已有评分在矩阵中的占比，
-                    是观察推荐系统数据稀疏程度的指标之一。
-                </p>
-
-            </div>
-
+                <div class="mfstats-meter mfstats-meter-mint" role="img" aria-label="评分矩阵密度 {{ stats.matrix_density }}%" style="--meter-width: {{ stats.matrix_density|float }}%;">
+                    <span></span>
+                </div>
+                <div class="mfstats-meter-labels"><span>0% · 稀疏</span><span>100% · 完全填充</span></div>
+                <div class="mfstats-mini-stats">
+                    <div class="mfstats-mini-stat"><span>矩阵行数（用户）</span><strong>{{ stats.matrix_rows }}</strong></div>
+                    <div class="mfstats-mini-stat"><span>矩阵列数（歌曲）</span><strong>{{ stats.matrix_cols }}</strong></div>
+                </div>
+            </article>
         </div>
-
+        <div class="mfstats-matrix-note">
+            <div class="mfstats-matrix-note-symbol" aria-hidden="true">i</div>
+            <div>
+                <h3>关于歌曲总量与评分矩阵列数</h3>
+                <p>歌曲库共 {{ stats.music_count }} 首，当前评分矩阵包含 {{ stats.matrix_cols }} 列。两者统计口径可能不同：未形成评分记录的歌曲可能未被纳入矩阵。矩阵的具体构建规则以后台算法为准；此处不把两者强行写成相同数值。</p>
+            </div>
+        </div>
     </section>
 
-
-    <!-- ========================= -->
-    <!-- 完整统计数据明细 -->
-    <!-- ========================= -->
-    <section class="statistics-section">
-
-        <div class="statistics-section-heading">
-
-            <span class="statistics-subtitle">
-                DETAILED STATISTICS
-            </span>
-
-            <h2>完整数据明细</h2>
-
-            <p>
-                查看系统各项统计指标的具体数值。
-            </p>
-
-        </div>
-
-
-        <div class="statistics-table-wrap">
-
-            <table class="statistics-detail-table">
-
-                <thead>
-                    <tr>
-                        <th>统计项目</th>
-                        <th>当前数值</th>
-                    </tr>
-                </thead>
-
+    <!-- 保留完整原始指标，默认收起，减轻页面视觉负担 -->
+    <details class="mfstats-details">
+        <summary>查看完整统计明细</summary>
+        <div class="mfstats-detail-content">
+            <table class="mfstats-table">
+                <thead><tr><th scope="col">统计指标</th><th scope="col">当前数值</th></tr></thead>
                 <tbody>
-
-                    <tr>
-                        <td>用户数量</td>
-                        <td>{{ stats.user_count }}</td>
-                    </tr>
-
-                    <tr>
-                        <td>音乐数量</td>
-                        <td>{{ stats.music_count }}</td>
-                    </tr>
-
-                    <tr>
-                        <td>评分数量</td>
-                        <td>{{ stats.rating_count }}</td>
-                    </tr>
-
-                    <tr>
-                        <td>平均评分</td>
-                        <td>{{ stats.average_rating }}</td>
-                    </tr>
-
-                    <tr>
-                        <td>最高评分</td>
-                        <td>{{ stats.max_rating }}</td>
-                    </tr>
-
-                    <tr>
-                        <td>最低评分</td>
-                        <td>{{ stats.min_rating }}</td>
-                    </tr>
-
-                    <tr>
-                        <td>评分矩阵大小</td>
-                        <td>
-                            {{ stats.matrix_rows }}
-                            ×
-                            {{ stats.matrix_cols }}
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>评分矩阵密度</td>
-                        <td>
-                            {{ stats.matrix_density }}%
-                        </td>
-                    </tr>
-
+                    <tr><td>用户数量</td><td>{{ stats.user_count }}</td></tr>
+                    <tr><td>音乐数量</td><td>{{ stats.music_count }}</td></tr>
+                    <tr><td>评分记录数量</td><td>{{ stats.rating_count }}</td></tr>
+                    <tr><td>平均评分</td><td>{{ stats.average_rating }}</td></tr>
+                    <tr><td>最高评分</td><td>{{ stats.max_rating }}</td></tr>
+                    <tr><td>最低评分</td><td>{{ stats.min_rating }}</td></tr>
+                    <tr><td>评分矩阵大小</td><td>{{ stats.matrix_rows }} × {{ stats.matrix_cols }}</td></tr>
+                    <tr><td>评分矩阵密度</td><td>{{ stats.matrix_density }}%</td></tr>
                 </tbody>
-
             </table>
-
         </div>
+    </details>
 
-    </section>
-
-
-    <!-- ========================= -->
-    <!-- 页面底部 -->
-    <!-- ========================= -->
-    <section class="statistics-bottom">
-
-        <div class="statistics-bottom-content">
-
-            <span class="statistics-subtitle">
-                DISCOVER MORE
-            </span>
-
-            <h2>
-                让数据帮助你发现音乐
-            </h2>
-
-            <p>
-                通过用户评分与协同过滤算法，
-                探索更多符合个人喜好的歌曲。
-            </p>
-
-            <a class="button statistics-bottom-button"
-               href="{{ url_for('recommend') }}">
-                ♫ 探索个性化推荐 →
-            </a>
-
+    <section class="mfstats-last-row" aria-label="探索推荐">
+        <div>
+            <h2>让数据成为下一首好歌的起点</h2>
+            <p>基于真实评分与用户兴趣，继续探索适合自己的音乐。</p>
         </div>
-
+        <a class="mfstats-action" href="{{ url_for('recommend') }}">查看个性化推荐 →</a>
     </section>
-
 </div>
-
 {% endblock %}

@@ -1,229 +1,503 @@
-
 {% extends "base.html" %}
 
-{% block title %}热门音乐排行榜{% endblock %}
+{% block title %}热门音乐排行榜 - MusicFlow{% endblock %}
 
 {% block content %}
 
-<div class="popular-page">
+<style>
+/* =====================================================
+   MusicFlow 2.0 / 热门音乐排行榜
+   样式限定在 .mfchart-page 内，不影响其他页面。
+   ===================================================== */
+.mfchart-page {
+    --mfchart-ink: #f6f5ff;
+    --mfchart-muted: #a9abc6;
+    --mfchart-line: rgba(184, 172, 255, .13);
+    --mfchart-panel: #171b30;
+    --mfchart-violet: #aa91ff;
+    --mfchart-gold: #f3c879;
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 37px 0 65px;
+    color: var(--mfchart-ink);
+    font-family: Inter, "Segoe UI", "Microsoft YaHei", sans-serif;
+}
+.mfchart-page *, .mfchart-page *::before, .mfchart-page *::after { box-sizing: border-box; }
+.mfchart-page a { text-decoration: none; }
+.mfchart-page a:focus-visible,
+.mfchart-page audio:focus-visible {
+    outline: 3px solid #b4a1ff;
+    outline-offset: 4px;
+}
 
-    <!-- ========================= -->
-    <!-- 榜单顶部介绍 -->
-    <!-- ========================= -->
-    <section class="popular-hero">
+/* 简洁而有辨识度的榜单头图区 */
+.mfchart-hero {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 34px;
+    min-height: 216px;
+    padding: 35px 43px;
+    overflow: hidden;
+    border: 1px solid rgba(164, 135, 255, .30);
+    border-radius: 24px;
+    background:
+        radial-gradient(circle at 93% 14%, rgba(158, 89, 238, .28), transparent 37%),
+        linear-gradient(115deg, #1c2444 0%, #252346 53%, #43316a 100%);
+    isolation: isolate;
+}
+.mfchart-hero::after {
+    content: "";
+    position: absolute;
+    right: -110px;
+    bottom: -210px;
+    width: 430px;
+    height: 430px;
+    border: 1px solid rgba(218, 196, 255, .11);
+    border-radius: 50%;
+    box-shadow: 0 0 0 58px rgba(192, 161, 255, .035),
+                0 0 0 116px rgba(192, 161, 255, .035);
+    pointer-events: none;
+    z-index: -1;
+}
+.mfchart-hero-copy { position: relative; z-index: 1; max-width: 680px; }
+.mfchart-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    color: #d1bcff;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+}
+.mfchart-eyebrow-dot {
+    width: 7px;
+    height: 7px;
+    background: #86e7c6;
+    border-radius: 50%;
+    box-shadow: 0 0 0 5px rgba(134, 231, 198, .10);
+}
+.mfchart-hero h1 {
+    margin: 15px 0 12px;
+    font-size: clamp(30px, 3.4vw, 43px);
+    font-weight: 800;
+    line-height: 1.23;
+    letter-spacing: -.045em;
+    color: #fff;
+}
+.mfchart-hero h1 em {
+    font-style: normal;
+    color: #c2afff;
+}
+.mfchart-hero p {
+    margin: 0;
+    max-width: 615px;
+    color: #c8c7df;
+    font-size: 14px;
+    line-height: 1.9;
+}
+.mfchart-formula {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    max-width: 100%;
+    margin-top: 17px;
+    padding: 8px 12px;
+    border: 1px solid rgba(226, 208, 255, .16);
+    border-radius: 9px;
+    background: rgba(255,255,255,.055);
+    color: #d7d2ec;
+    font-size: 12px;
+    line-height: 1.5;
+}
+.mfchart-hero-mark {
+    flex: 0 0 auto;
+    width: 136px;
+    height: 136px;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(230, 215, 255, .19);
+    border-radius: 34px;
+    transform: rotate(9deg);
+    background: linear-gradient(145deg, rgba(237,207,255,.14),rgba(130,93,202,.05));
+    box-shadow: inset 0 0 25px rgba(184,144,255,.10), 0 25px 65px rgba(12,9,33,.16);
+}
+.mfchart-hero-mark span {
+    transform: rotate(-9deg);
+    font-size: 75px;
+    line-height: 1;
+    color: #d0baff;
+    text-shadow: 0 10px 28px rgba(25,10,50,.22);
+}
 
-        <div class="popular-hero-content">
+/* 标题与排名概览 */
+.mfchart-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 20px;
+    margin: 41px 0 20px;
+}
+.mfchart-heading h2 {
+    margin: 8px 0 5px;
+    color: #fff;
+    font-size: clamp(23px,2.5vw,29px);
+    font-weight: 800;
+    letter-spacing: -.04em;
+}
+.mfchart-heading p {
+    margin: 0;
+    color: var(--mfchart-muted);
+    font-size: 13px;
+    line-height: 1.8;
+}
+.mfchart-heading-aside {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 13px;
+    border: 1px solid var(--mfchart-line);
+    border-radius: 999px;
+    background: rgba(151, 122, 233, .095);
+    color: #c7b8ff;
+    font-size: 12px;
+    white-space: nowrap;
+}
+.mfchart-heading-aside .mfchart-small-star { font-size: 15px; color: var(--mfchart-gold); }
 
-            <span class="popular-subtitle">
-                MUSIC TOP CHART
-            </span>
+/* 单行卡片：信息完整，减少无效留白 */
+.mfchart-list { display: grid; gap: 12px; }
+.mfchart-track {
+    position: relative;
+    display: grid;
+    grid-template-columns: 51px 98px minmax(0, 1fr) minmax(232px, 293px);
+    align-items: center;
+    gap: 22px;
+    min-height: 150px;
+    padding: 19px 24px;
+    border: 1px solid var(--mfchart-line);
+    border-radius: 19px;
+    background: linear-gradient(120deg, #1c2239 0%, #171b2e 86%);
+    transition: background .2s ease, border-color .2s ease, transform .2s ease, box-shadow .2s ease;
+}
+.mfchart-track:hover {
+    transform: translateY(-2px);
+    border-color: rgba(185, 163, 255, .33);
+    background: linear-gradient(120deg, #242943, #1b1d32);
+    box-shadow: 0 12px 30px rgba(4,5,18,.18);
+}
+.mfchart-track--gold {
+    min-height: 164px;
+    border-color: rgba(242, 194, 104, .36);
+    background: linear-gradient(115deg,#282942 0%,#1c2338 70%);
+}
+.mfchart-track--gold:hover { border-color: rgba(242, 194, 104, .6); }
+.mfchart-track--silver { border-color: rgba(184, 194, 219, .26); }
+.mfchart-track--bronze { border-color: rgba(205, 154, 123, .26); }
+.mfchart-rank { display: flex; justify-content: center; align-items: center; }
+.mfchart-rank-label {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    color: #aba6d1;
+    font-size: 17px;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+}
+.mfchart-track--gold .mfchart-rank-label {
+    width: 49px;
+    height: 49px;
+    background: linear-gradient(140deg,#fae0a1,#d69d43);
+    color: #372512;
+    box-shadow: 0 6px 21px rgba(223,164,75,.19);
+    font-size: 27px;
+}
+.mfchart-track--silver .mfchart-rank-label { background: rgba(200,213,234,.12); color: #cbd5eb; }
+.mfchart-track--bronze .mfchart-rank-label { background: rgba(215,155,120,.12); color: #e2aa89; }
+.mfchart-cover-box {
+    width: 98px;
+    height: 98px;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #302853;
+    box-shadow: 0 9px 24px rgba(0,0,0,.22);
+}
+.mfchart-cover-box img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.mfchart-cover-fallback {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    color: #cab5ff;
+    font-size: 36px;
+}
+.mfchart-song-main { min-width: 0; }
+.mfchart-title-line {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    flex-wrap: wrap;
+}
+.mfchart-title-line h3 {
+    margin: 0;
+    color: #fff;
+    font-size: 19px;
+    font-weight: 750;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+}
+.mfchart-placement {
+    border-radius: 7px;
+    padding: 4px 7px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .045em;
+    color: #c5b8ff;
+    background: rgba(160,139,249,.16);
+}
+.mfchart-track--gold .mfchart-placement { color: #f5d28e; background: rgba(231,181,100,.13); }
+.mfchart-track--silver .mfchart-placement { color: #cbd5eb; background: rgba(200,213,234,.10); }
+.mfchart-track--bronze .mfchart-placement { color: #e4ae8d; background: rgba(215,155,120,.11); }
+.mfchart-artist {
+    margin: 4px 0 9px;
+    color: #b9bdd7;
+    font-size: 13px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+.mfchart-tags {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    color: #9ea3bf;
+    font-size: 12px;
+}
+.mfchart-genre {
+    padding: 4px 9px;
+    background: rgba(163, 141, 252, .15);
+    border-radius: 7px;
+    color: #c4b5ff;
+    font-size: 11px;
+    line-height: 1.4;
+}
+.mfchart-tag-text { overflow-wrap: anywhere; }
+.mfchart-track-side {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 0;
+    padding-left: 22px;
+    border-left: 1px solid var(--mfchart-line);
+}
+.mfchart-metrics { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+.mfchart-rating {
+    font-size: 20px;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.2;
+    color: #f5cd84;
+}
+.mfchart-rating-star { margin-right: 4px; color: #f4bd59; }
+.mfchart-votes { color: #aeb3cd; font-size: 12px; }
+.mfchart-track-side audio {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: 38px;
+    border-radius: 20px;
+}
+.mfchart-no-audio { color: #999bb7; font-size: 12px; }
+.mfchart-link {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 650;
+    color: #c0afff;
+    transition: color .2s ease;
+}
+.mfchart-link:hover { color: #f0eaff; }
 
-            <h1>
-                ♫ 热门音乐排行榜
-            </h1>
+/* 空结果与末尾入口 */
+.mfchart-empty {
+    padding: 48px 20px;
+    border: 1px solid var(--mfchart-line);
+    border-radius: 18px;
+    background: var(--mfchart-panel);
+    text-align: center;
+    color: var(--mfchart-muted);
+}
+.mfchart-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 22px;
+    margin-top: 27px;
+    padding: 23px 29px;
+    border: 1px solid rgba(173,149,252,.20);
+    border-radius: 18px;
+    background: linear-gradient(115deg,rgba(112,93,190,.16),rgba(86,75,144,.08));
+}
+.mfchart-bottom h3 { color: #f6f3ff; font-size: 18px; margin: 0 0 7px; }
+.mfchart-bottom p { color: #aaa9c6; font-size: 13px; line-height: 1.65; margin: 0; }
+.mfchart-bottom-btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 18px;
+    white-space: nowrap;
+    border-radius: 10px;
+    background: #a68afa;
+    color: #181329 !important;
+    font-size: 13px;
+    font-weight: 800;
+    transition: background .2s ease, transform .2s ease;
+}
+.mfchart-bottom-btn:hover { background: #c1afff; transform: translateY(-1px); }
 
-            <p>
-                发现大家都在喜欢的音乐。
-                根据用户评分与评分人数，
-                为你呈现当前最受欢迎的歌曲。
-            </p>
+@media (max-width: 960px) {
+    .mfchart-page { padding-top: 24px; }
+    .mfchart-track { grid-template-columns: 42px 84px minmax(0, 1fr); gap: 16px; padding: 17px 19px; }
+    .mfchart-cover-box { width: 84px; height: 84px; }
+    .mfchart-track-side {
+        grid-column: 3;
+        margin-top: 1px;
+        padding: 0;
+        border-left: 0;
+        gap: 9px;
+    }
+    .mfchart-track-side audio { max-width: 380px; }
+}
+@media (max-width: 620px) {
+    .mfchart-page { padding: 16px 0 42px; }
+    .mfchart-hero { min-height: 0; padding: 28px 22px; border-radius: 17px; }
+    .mfchart-hero-mark { display: none; }
+    .mfchart-hero h1 { font-size: 30px; }
+    .mfchart-hero p { font-size: 13px; }
+    .mfchart-formula { font-size: 11px; }
+    .mfchart-heading { flex-wrap: wrap; align-items: flex-start; margin-top: 31px; }
+    .mfchart-heading-aside { white-space: normal; }
+    .mfchart-track { grid-template-columns: 34px 74px minmax(0,1fr); gap: 10px; padding: 15px 12px; border-radius: 14px; }
+    .mfchart-rank-label { width: 32px; height: 36px; font-size: 14px; }
+    .mfchart-track--gold .mfchart-rank-label { width: 34px; height: 39px; font-size: 21px; }
+    .mfchart-cover-box { width: 74px; height: 74px; border-radius: 10px; }
+    .mfchart-title-line h3 { font-size: 16px; }
+    .mfchart-artist { font-size: 12px; }
+    .mfchart-track-side { grid-column: 1 / -1; padding: 10px 4px 0; border-top: 1px solid var(--mfchart-line); }
+    .mfchart-track-side audio { max-width: none; }
+    .mfchart-tags { gap: 5px; }
+    .mfchart-bottom { padding: 20px; flex-direction: column; align-items: flex-start; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .mfchart-track, .mfchart-link, .mfchart-bottom-btn { transition: none; }
+    .mfchart-track:hover, .mfchart-bottom-btn:hover { transform: none; }
+}
+</style>
 
-            <div class="popular-formula">
+<div class="mfchart-page">
+
+    <!-- 榜单介绍：更紧凑，让音乐内容尽早进入视野 -->
+    <header class="mfchart-hero">
+        <div class="mfchart-hero-copy">
+            <span class="mfchart-eyebrow"><span class="mfchart-eyebrow-dot"></span> MUSICFLOW CHARTS</span>
+            <h1>好音乐，<em>值得上榜。</em></h1>
+            <p>来自真实听众的评分与反馈，发现此刻最受欢迎的旋律。每一个排名，都有数据作为依据。</p>
+            <div class="mfchart-formula" title="采用现有系统的热门评分公式">
+                <span aria-hidden="true">✦</span>
                 热门得分 = 平均评分 × log(评分人数 + 1)
             </div>
+        </div>
+        <div class="mfchart-hero-mark" aria-hidden="true"><span>★</span></div>
+    </header>
 
+    <section aria-labelledby="mfchart-title">
+        <div class="mfchart-heading">
+            <div>
+                <span class="mfchart-eyebrow">TRENDING TRACKS</span>
+                <h2 id="mfchart-title">热门歌曲 TOP 10</h2>
+                <p>按系统综合热门得分排序，每一首都值得试听。</p>
+            </div>
+            <span class="mfchart-heading-aside">
+                <span class="mfchart-small-star" aria-hidden="true">★</span>
+                {{ songs | length }} 首上榜歌曲
+            </span>
         </div>
 
-        <div class="popular-hero-decoration"
-             aria-hidden="true">
-            ★
-        </div>
+        <div class="mfchart-list">
+            {% for song in songs %}
+            <article class="mfchart-track{% if loop.index == 1 %} mfchart-track--gold{% elif loop.index == 2 %} mfchart-track--silver{% elif loop.index == 3 %} mfchart-track--bronze{% endif %}" aria-label="第 {{ loop.index }} 名，{{ song.title }}">
+                <div class="mfchart-rank" aria-label="第 {{ loop.index }} 名">
+                    <span class="mfchart-rank-label" aria-hidden="true">
+                        {% if loop.index == 1 %}♛{% else %}{{ '%02d' | format(loop.index) }}{% endif %}
+                    </span>
+                </div>
 
+                <div class="mfchart-cover-box">
+                    {% if song.cover_file %}
+                    <img src="{{ url_for('static', filename=song.cover_file) }}"
+                         alt="{{ song.title }} 的封面"
+                         loading="lazy">
+                    {% else %}
+                    <span class="mfchart-cover-fallback" aria-hidden="true">♫</span>
+                    {% endif %}
+                </div>
+
+                <div class="mfchart-song-main">
+                    <div class="mfchart-title-line">
+                        <h3>{{ song.title }}</h3>
+                        {% if loop.index <= 3 %}
+                        <span class="mfchart-placement">TOP {{ loop.index }}</span>
+                        {% endif %}
+                    </div>
+                    <p class="mfchart-artist">{{ song.artist }}</p>
+                    <div class="mfchart-tags">
+                        {% if song.genre %}<span class="mfchart-genre">{{ song.genre }}</span>{% endif %}
+                        {% if song.tags %}<span class="mfchart-tag-text">{{ song.tags }}</span>{% endif %}
+                    </div>
+                    <a class="mfchart-link" href="{{ url_for('library', q=song.title) }}" aria-label="在歌曲库查看 {{ song.title }}">查看歌曲详情 →</a>
+                </div>
+
+                <div class="mfchart-track-side">
+                    <div class="mfchart-metrics">
+                        <strong class="mfchart-rating"><span class="mfchart-rating-star" aria-hidden="true">★</span>{{ '%.2f' | format(song.average_rating) }}</strong>
+                        <span class="mfchart-votes">{{ song.rating_count }} 人评分</span>
+                    </div>
+                    {% if song.audio_file %}
+                    <audio controls preload="metadata" aria-label="试听 {{ song.title }}">
+                        <source src="{{ url_for('static', filename=song.audio_file) }}" type="audio/mpeg">
+                        你的浏览器不支持音频播放。
+                    </audio>
+                    {% else %}
+                    <span class="mfchart-no-audio">暂无试听音频</span>
+                    {% endif %}
+                </div>
+            </article>
+            {% else %}
+            <div class="mfchart-empty">
+                <p>暂时没有热门音乐数据，欢迎前往歌曲库探索。</p>
+            </div>
+            {% endfor %}
+        </div>
     </section>
 
-
-    <!-- ========================= -->
-    <!-- 榜单标题 -->
-    <!-- ========================= -->
-    <div class="popular-section-heading">
-
+    <footer class="mfchart-bottom">
         <div>
-            <span class="popular-subtitle">
-                TRENDING TRACKS
-            </span>
-
-            <h2>热门歌曲 TOP 10</h2>
+            <h3>榜单之外，还有更多好音乐。</h3>
+            <p>探索完整歌曲库，试听不同风格的旋律，并记录自己的评分。</p>
         </div>
-
-        <span class="popular-list-tip">
-            按综合热门得分排序
-        </span>
-
-    </div>
-
-
-    <!-- ========================= -->
-    <!-- 音乐排行榜 -->
-    <!-- ========================= -->
-    <div class="popular-list">
-
-        {% for song in songs %}
-
-        <div class="song popular-song
-                    {% if loop.index == 1 %}popular-top-one{% endif %}
-                    {% if loop.index == 2 %}popular-top-two{% endif %}
-                    {% if loop.index == 3 %}popular-top-three{% endif %}">
-
-            <!-- 排名 -->
-            <div class="rank popular-rank">
-
-                {% if loop.index == 1 %}
-                    ♛
-                {% elif loop.index == 2 %}
-                    2
-                {% elif loop.index == 3 %}
-                    3
-                {% else %}
-                    {{ loop.index }}
-                {% endif %}
-
-            </div>
-
-
-            <!-- 歌曲封面 -->
-            <div class="popular-cover-wrap">
-
-                {% if song.cover_file %}
-
-                    <img
-                        class="cover popular-cover"
-                        src="{{ url_for('static', filename=song.cover_file) }}"
-                        alt="{{ song.title }}"
-                        loading="lazy"
-                    >
-
-                {% else %}
-
-                    <div class="popular-cover-placeholder">
-                        ♫
-                    </div>
-
-                {% endif %}
-
-            </div>
-
-
-            <!-- 歌曲信息 -->
-            <div class="song-info popular-song-info">
-
-                <div class="popular-song-heading">
-
-                    <h3>
-                        {{ song.title }}
-                    </h3>
-
-                    {% if loop.index <= 3 %}
-
-                    <span class="popular-top-badge">
-                        TOP {{ loop.index }}
-                    </span>
-
-                    {% endif %}
-
-                </div>
-
-
-                <p class="popular-artist">
-                    {{ song.artist }}
-                </p>
-
-
-                <div class="popular-song-tags">
-
-                    <span class="popular-genre">
-                        {{ song.genre }}
-                    </span>
-
-                    {% if song.tags %}
-
-                    <span class="popular-tags">
-                        {{ song.tags }}
-                    </span>
-
-                    {% endif %}
-
-                </div>
-
-
-                <!-- 热门数据 -->
-                <div class="popular-song-stats">
-
-                    <span class="popular-score">
-                        ★ {{ "%.2f"|format(song.average_rating) }}
-                    </span>
-
-                    <span class="popular-rating-count">
-                        {{ song.rating_count }} 人评分
-                    </span>
-
-                </div>
-
-
-                <!-- 在线试听 -->
-                {% if song.audio_file %}
-
-                <div class="popular-audio">
-
-                    <audio controls preload="none">
-
-                        <source
-                            src="{{ url_for('static', filename=song.audio_file) }}"
-                        >
-
-                        你的浏览器不支持音频播放。
-
-                    </audio>
-
-                </div>
-
-                {% endif %}
-
-            </div>
-
-        </div>
-
-        {% else %}
-
-        <div class="box popular-empty">
-            暂时没有热门音乐数据。
-        </div>
-
-        {% endfor %}
-
-    </div>
-
-
-    <!-- ========================= -->
-    <!-- 底部引导 -->
-    <!-- ========================= -->
-    <div class="popular-bottom">
-
-        <h3>
-            还想发现更多音乐？
-        </h3>
-
-        <p>
-            浏览完整歌曲库，
-            聆听音乐并记录自己的喜好。
-        </p>
-
-        <a class="button popular-explore-button"
-           href="{{ url_for('library') }}">
-            ♫ 探索歌曲库 →
-        </a>
-
-    </div>
-
+        <a class="mfchart-bottom-btn" href="{{ url_for('library') }}">探索完整歌曲库 ↗</a>
+    </footer>
 </div>
 
 {% endblock %}

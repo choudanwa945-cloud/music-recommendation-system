@@ -1,217 +1,586 @@
-
 {% extends "base.html" %}
 
-{% block title %}用户登录 - 个性化音乐推荐系统{% endblock %}
+{% block title %}用户登录 - MusicFlow{% endblock %}
 
 {% block content %}
 
-<div class="login-page">
+<style>
+/* MusicFlow 2.0 | 登录页独立样式，不修改全站 CSS */
+.mf-login-v2,
+.mf-login-v2 * { box-sizing: border-box; }
 
-    <!-- ========================= -->
-    <!-- 登录页面标题 -->
-    <!-- ========================= -->
+.mf-login-v2 {
+    --mf-text: #f5f3ff;
+    --mf-muted: #bbb9d4;
+    --mf-purple: #a98bff;
+    --mf-line: rgba(189, 171, 255, .19);
+    width: 100%;
+    max-width: 1130px;
+    margin: 34px auto 28px;
+    color: var(--mf-text);
+    font-family: inherit;
+}
 
-    <div class="login-page-heading">
+.mf-login-v2 .mf-auth-shell {
+    display: grid;
+    grid-template-columns: 1.12fr .88fr;
+    min-height: 600px;
+    border: 1px solid rgba(182, 153, 255, .37);
+    border-radius: 26px;
+    overflow: hidden;
+    background: #1a1b34;
+    box-shadow: 0 24px 65px rgba(2, 4, 22, .22);
+}
 
-        <span class="login-subtitle">
-            WELCOME BACK
-        </span>
+.mf-login-v2 .mf-auth-intro {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0;
+    padding: 45px 49px;
+    background:
+        radial-gradient(circle at 79% 11%, rgba(171, 93, 255, .43), transparent 40%),
+        radial-gradient(circle at 83% 90%, rgba(139, 92, 246, .36), transparent 44%),
+        linear-gradient(140deg, #1a274d 0%, #37245f 56%, #593486 100%);
+}
 
-        <h1>开启你的音乐之旅</h1>
+.mf-login-v2 .mf-auth-intro::before,
+.mf-login-v2 .mf-auth-intro::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+    z-index: -1;
+    border: 1px solid rgba(212, 193, 255, .11);
+    border-radius: 50%;
+}
+.mf-login-v2 .mf-auth-intro::before { width: 680px; height: 680px; left: 34%; top: -91%; }
+.mf-login-v2 .mf-auth-intro::after { width: 570px; height: 570px; left: 53%; bottom: -99%; }
 
-        <p>
-            登录音乐推荐系统，
-            发现更多符合你喜好的旋律。
-        </p>
+.mf-login-v2 .mf-auth-brand {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    margin-bottom: 37px;
+}
+.mf-login-v2 .mf-auth-brand-mark {
+    width: 59px;
+    height: 59px;
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    border-radius: 17px;
+    background: linear-gradient(140deg, #7558e9, #a459ed);
+    color: #fff;
+    font-size: 31px;
+    box-shadow: 0 9px 24px rgba(124, 70, 235, .22);
+}
+.mf-login-v2 .mf-auth-brand-name {
+    font-size: 25px;
+    letter-spacing: -.7px;
+    line-height: 1.1;
+    font-weight: 800;
+}
+.mf-login-v2 .mf-auth-brand-note {
+    margin-top: 4px;
+    color: #d1cbe4;
+    font-size: 12px;
+}
 
-    </div>
+.mf-login-v2 .mf-auth-intro h1 {
+    margin: 0;
+    max-width: 450px;
+    font-size: clamp(32px, 3.05vw, 45px);
+    line-height: 1.29;
+    letter-spacing: -1.4px;
+    font-weight: 830;
+    color: #fff;
+}
+.mf-login-v2 .mf-auth-intro h1 span {
+    display: block;
+    color: #c7a8ff;
+}
+.mf-login-v2 .mf-auth-intro-description {
+    max-width: 420px;
+    margin: 18px 0 25px;
+    color: #ded8f0;
+    font-size: 14px;
+    line-height: 1.9;
+}
 
+.mf-login-v2 .mf-auth-features {
+    display: grid;
+    gap: 15px;
+    max-width: 365px;
+    position: relative;
+    z-index: 1;
+}
+.mf-login-v2 .mf-auth-feature {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.mf-login-v2 .mf-auth-feature-icon {
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 36px;
+    height: 36px;
+    border-radius: 11px;
+    color: #d5beff;
+    background: rgba(218, 193, 255, .13);
+    font-size: 19px;
+}
+.mf-login-v2 .mf-auth-feature b {
+    display: block;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+}
+.mf-login-v2 .mf-auth-feature small {
+    display: block;
+    margin-top: 3px;
+    color: #c9c0df;
+    font-size: 11px;
+    line-height: 1.5;
+}
 
-    <!-- ========================= -->
-    <!-- 登录主体 -->
-    <!-- ========================= -->
+/* 纯 CSS 耳机装饰，不需要外部图片 */
+.mf-login-v2 .mf-auth-headphones {
+    position: absolute;
+    width: 150px;
+    height: 160px;
+    right: 10px;
+    bottom: 30px;
+    opacity: .6;
+    transform: rotate(17deg);
+    pointer-events: none;
+}
+.mf-login-v2 .mf-auth-headphones .mf-hp-arch {
+    position: absolute;
+    top: 0;
+    left: 20px;
+    width: 112px;
+    height: 115px;
+    border: 16px solid #b688ff;
+    border-bottom: 0;
+    border-radius: 90px 90px 0 0;
+    box-shadow: 0 0 0 4px rgba(119, 61, 190, .18) inset;
+}
+.mf-login-v2 .mf-auth-headphones .mf-hp-ear {
+    position: absolute;
+    bottom: 16px;
+    width: 40px;
+    height: 77px;
+    background: linear-gradient(130deg, #c9a1ff, #7451d4);
+    border: 5px solid rgba(73, 36, 138, .5);
+    border-radius: 23px;
+    box-shadow: 0 10px 18px rgba(12, 5, 40, .24);
+}
+.mf-login-v2 .mf-auth-headphones .mf-hp-ear:nth-of-type(2) { left: 7px; }
+.mf-login-v2 .mf-auth-headphones .mf-hp-ear:last-of-type { right: 5px; }
 
-    <div class="login-layout">
+.mf-login-v2 .mf-auth-form-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 42px 44px;
+    border-left: 1px solid rgba(204, 181, 255, .2);
+    background:
+        radial-gradient(circle at 72% 5%, rgba(127, 99, 209, .13), transparent 47%),
+        linear-gradient(150deg, #242943, #171a31 95%);
+}
+.mf-login-v2 .mf-auth-form-kicker {
+    color: #ad8bff;
+    font-size: 29px;
+    line-height: 1;
+    margin-bottom: 9px;
+}
+.mf-login-v2 .mf-auth-form-panel h2 {
+    color: #fff;
+    margin: 0 0 10px;
+    font-size: 31px;
+    font-weight: 800;
+    letter-spacing: -.8px;
+}
+.mf-login-v2 .mf-auth-form-subtitle {
+    margin: 0 0 32px;
+    color: var(--mf-muted);
+    font-size: 13px;
+    line-height: 1.8;
+}
+.mf-login-v2 .mf-auth-form { margin: 0; }
+.mf-login-v2 .mf-auth-field { margin-bottom: 20px; }
+.mf-login-v2 .mf-auth-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 10px;
+    color: #efedff;
+    font-size: 13px;
+    font-weight: 700;
+}
+.mf-login-v2 .mf-auth-label svg {
+    width: 16px;
+    height: 16px;
+    color: #bfa8ff;
+    stroke: currentColor;
+}
+.mf-login-v2 .mf-auth-input-wrap { position: relative; }
+.mf-login-v2 .mf-auth-input {
+    display: block;
+    width: 100%;
+    height: 49px;
+    min-width: 0;
+    border: 1px solid rgba(167, 158, 222, .34);
+    border-radius: 11px;
+    outline: none;
+    background: rgba(13, 18, 41, .55);
+    color: #fff;
+    font-family: inherit;
+    font-size: 14px;
+    padding: 0 15px;
+    appearance: none;
+    box-shadow: none;
+    transition: border-color .2s, box-shadow .2s, background .2s;
+}
+.mf-login-v2 .mf-auth-input::placeholder { color: #9193b2; }
+.mf-login-v2 .mf-auth-input:focus {
+    border-color: #af81ff;
+    background: rgba(17, 20, 45, .75);
+    box-shadow: 0 0 0 3px rgba(158, 111, 255, .18);
+}
+.mf-login-v2 .mf-auth-input-password { padding-right: 54px; }
+.mf-login-v2 .mf-auth-eye {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 42px;
+    height: 39px;
+    padding: 0;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    display: grid;
+    place-items: center;
+    color: #c9c2df;
+    cursor: pointer;
+}
+.mf-login-v2 .mf-auth-eye:hover,
+.mf-login-v2 .mf-auth-eye:focus-visible {
+    color: #fff;
+    background: rgba(185, 155, 255, .12);
+    outline: none;
+}
+.mf-login-v2 .mf-auth-eye svg { width: 21px; height: 21px; stroke: currentColor; }
+.mf-login-v2 .mf-auth-submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    width: 100%;
+    min-height: 52px;
+    margin-top: 26px;
+    padding: 12px 18px;
+    border: 0;
+    border-radius: 11px;
+    background: linear-gradient(105deg, #7952e7, #a55be9);
+    color: #fff;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 750;
+    cursor: pointer;
+    box-shadow: 0 8px 22px rgba(125, 70, 226, .17);
+    transition: filter .2s, transform .2s;
+}
+.mf-login-v2 .mf-auth-submit:hover { filter: brightness(1.1); transform: translateY(-1px); }
+.mf-login-v2 .mf-auth-submit:active { transform: translateY(0); }
+.mf-login-v2 .mf-auth-submit:focus-visible { outline: 3px solid #d9c7ff; outline-offset: 3px; }
 
-        <!-- 左侧音乐介绍区域 -->
+.mf-login-v2 .mf-auth-register {
+    margin-top: 23px;
+    border-top: 1px solid var(--mf-line);
+    padding-top: 23px;
+    color: #c8c5dd;
+    font-size: 13px;
+    text-align: center;
+}
+.mf-login-v2 .mf-auth-register a {
+    color: #c5a1ff;
+    font-weight: 750;
+    text-decoration: none;
+}
+.mf-login-v2 .mf-auth-register a:hover { color: #e3d4ff; text-decoration: underline; }
+.mf-login-v2 .mf-auth-security {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 24px;
+    padding: 13px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(166, 145, 231, .16);
+    background: rgba(130, 102, 222, .08);
+    color: #b6b2d2;
+    font-size: 11px;
+    line-height: 1.7;
+}
+.mf-login-v2 .mf-auth-security svg {
+    flex: 0 0 auto;
+    margin-top: 1px;
+    width: 18px;
+    height: 18px;
+    color: #b89cf9;
+    stroke: currentColor;
+}
 
-        <section class="login-intro">
+@media (max-width: 900px) {
+    .mf-login-v2 .mf-auth-shell { grid-template-columns: .95fr 1.05fr; }
+    .mf-login-v2 .mf-auth-intro { padding: 35px 28px; }
+    .mf-login-v2 .mf-auth-form-panel { padding: 38px 28px; }
+    .mf-login-v2 .mf-auth-headphones { opacity: .25; }
+}
+@media (max-width: 700px) {
+    .mf-login-v2 { margin: 17px auto 24px; }
+    .mf-login-v2 .mf-auth-shell { display: flex; flex-direction: column; border-radius: 20px; min-height: 0; }
+    .mf-login-v2 .mf-auth-intro { padding: 26px 23px; }
+    .mf-login-v2 .mf-auth-brand { margin-bottom: 16px; }
+    .mf-login-v2 .mf-auth-brand-mark { width: 44px; height: 44px; font-size: 24px; border-radius: 12px; }
+    .mf-login-v2 .mf-auth-brand-name { font-size: 21px; }
+    .mf-login-v2 .mf-auth-intro h1 { font-size: 28px; letter-spacing: -.6px; }
+    .mf-login-v2 .mf-auth-intro-description { margin: 12px 0 0; font-size: 12px; }
+    .mf-login-v2 .mf-auth-features,
+    .mf-login-v2 .mf-auth-headphones { display: none; }
+    .mf-login-v2 .mf-auth-form-panel { border-left: 0; border-top: 1px solid var(--mf-line); padding: 29px 23px; }
+    .mf-login-v2 .mf-auth-form-panel h2 { font-size: 26px; }
+    .mf-login-v2 .mf-auth-form-subtitle { margin-bottom: 23px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .mf-login-v2 .mf-auth-input,
+    .mf-login-v2 .mf-auth-submit { transition: none; }
+}
+</style>
 
-            <div class="login-intro-content">
+<main class="mf-login-v2" aria-label="MusicFlow 用户登录">
+    <div class="mf-auth-shell">
 
-                <div class="login-intro-icon">
-                    ♫
+        <section class="mf-auth-intro" aria-label="MusicFlow 介绍">
+            <div class="mf-auth-brand">
+                <div class="mf-auth-brand-mark" aria-hidden="true">♫</div>
+                <div>
+                    <div class="mf-auth-brand-name">MusicFlow</div>
+                    <div class="mf-auth-brand-note">让好音乐被发现</div>
                 </div>
-
-                <span class="login-intro-label">
-                    YOUR PERSONAL MUSIC SPACE
-                </span>
-
-                <h2>
-                    让每一次聆听
-                    <span>都有新的发现</span>
-                </h2>
-
-                <p>
-                    在这里记录喜欢的音乐，
-                    探索热门歌曲，
-                    通过个性化推荐发现属于自己的音乐世界。
-                </p>
-
-                <div class="login-intro-features">
-
-                    <div>
-                        <span>★</span>
-                        记录音乐评分
-                    </div>
-
-                    <div>
-                        <span>♫</span>
-                        发现个性化推荐
-                    </div>
-
-                    <div>
-                        <span>♥</span>
-                        探索音乐兴趣
-                    </div>
-
-                </div>
-
             </div>
 
-            <div class="login-intro-decoration"
-                 aria-hidden="true">
-                ♪
+            <h1>发现新音乐，<span>遇见更懂你的旋律。</span></h1>
+            <p class="mf-auth-intro-description">
+                记录真实的音乐偏好，探索热门歌曲，
+                通过个性化推荐发现值得聆听的旋律。
+            </p>
+
+            <div class="mf-auth-features">
+                <div class="mf-auth-feature">
+                    <span class="mf-auth-feature-icon" aria-hidden="true">★</span>
+                    <div><b>记录你的音乐品味</b><small>用评分积累属于自己的音乐偏好</small></div>
+                </div>
+                <div class="mf-auth-feature">
+                    <span class="mf-auth-feature-icon" aria-hidden="true">♫</span>
+                    <div><b>发现个性化推荐</b><small>结合评分记录，寻找可能喜欢的歌曲</small></div>
+                </div>
+                <div class="mf-auth-feature">
+                    <span class="mf-auth-feature-icon" aria-hidden="true">♥</span>
+                    <div><b>探索多样音乐</b><small>从热门榜单到兴趣标签，发现更多好歌</small></div>
+                </div>
             </div>
 
+            <div class="mf-auth-headphones" aria-hidden="true">
+                <span class="mf-hp-arch"></span>
+                <span class="mf-hp-ear"></span>
+                <span class="mf-hp-ear"></span>
+            </div>
         </section>
 
+        <section class="mf-auth-form-panel" aria-labelledby="mf-login-heading">
+            <div class="mf-auth-form-kicker" aria-hidden="true">♫</div>
+            <h2 id="mf-login-heading">欢迎回来</h2>
+            <p class="mf-auth-form-subtitle">登录你的账号，继续探索专属的音乐世界。</p>
 
-        <!-- ========================= -->
-        <!-- 右侧登录表单 -->
-        <!-- ========================= -->
-
-        <section class="box login-card">
-
-            <div class="login-card-heading">
-
-                <div class="login-card-icon">
-                    ♫
-                </div>
-
-                <span class="login-subtitle">
-                    MEMBER LOGIN
-                </span>
-
-                <h2>欢迎回来</h2>
-
-                <p>
-                    输入你的账号信息，继续探索音乐。
-                </p>
-
-            </div>
-
-
-            <form
-                class="login-form"
-                action="{{ url_for('login') }}"
-                method="post"
-            >
-
-                <!-- 用户名 -->
-
-                <div class="login-form-field">
-
-                    <label for="login-username">
+            <form class="mf-auth-form" action="{{ url_for('login') }}" method="post">
+                <div class="mf-auth-field">
+                    <label class="mf-auth-label" for="mf-login-username">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="7" r="4"/><path d="M4.5 21v-2a7.5 7.5 0 0 1 15 0v2"/></svg>
                         用户名
                     </label>
-
-                    <input
-                        type="text"
-                        id="login-username"
-                        name="username"
-                        placeholder="请输入用户名"
-                        autocomplete="username"
-                        required
-                    >
-
+                    <input class="mf-auth-input" type="text" id="mf-login-username"
+                           name="username" placeholder="请输入用户名" autocomplete="username" required>
                 </div>
 
-
-                <!-- 密码 -->
-
-                <div class="login-form-field">
-
-                    <label for="login-password">
+                <div class="mf-auth-field">
+                    <label class="mf-auth-label" for="mf-login-password">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
                         密码
                     </label>
-
-                    <input
-                        type="password"
-                        id="login-password"
-                        name="password"
-                        placeholder="请输入登录密码"
-                        autocomplete="current-password"
-                        required
-                    >
-
+                    <div class="mf-auth-input-wrap">
+                        <input class="mf-auth-input mf-auth-input-password" type="password"
+                               id="mf-login-password" name="password" placeholder="请输入登录密码"
+                               autocomplete="current-password" required>
+                        <button class="mf-auth-eye" id="mf-login-password-toggle" type="button"
+                                aria-label="显示密码" aria-pressed="false" title="显示密码">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
 
-
-                <!-- 登录按钮 -->
-
-                <button
-                    type="submit"
-                    class="login-submit-button"
-                >
-                    ♫ 登录并开始探索 →
-                </button>
-
+                <button class="mf-auth-submit" type="submit">♫ 登录并开始探索 <span aria-hidden="true">→</span></button>
             </form>
 
-
-            <!-- 注册入口 -->
-
-            <div class="login-register-area">
-
-                <p>
-                    还没有账号？
-                    <a href="{{ url_for('register') }}">
-                        立即注册 →
-                    </a>
-                </p>
-
+            <div class="mf-auth-register">
+                还没有账号？ <a href="{{ url_for('register') }}">立即注册 →</a>
             </div>
 
-
-            <!-- 底部提示 -->
-
-            <div class="login-card-footer">
-
-                <span>♪</span>
-
-                登录后可以保存评分记录，
-                获取属于自己的个性化音乐推荐。
-
+            <div class="mf-auth-security">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 8 4v6c0 5-3.3 8-8 10-4.7-2-8-5-8-10V6l8-4Z"/><path d="m9 12 2 2 4-4"/></svg>
+                <span>请妥善保管账号和密码。为保护账户安全，不建议在公共设备上保存登录信息。</span>
             </div>
-
         </section>
-
     </div>
+</main>
+
+<script>
+(function () {
+    const passwordInput = document.getElementById('mf-login-password');
+    const toggleButton = document.getElementById('mf-login-password-toggle');
+    if (!passwordInput || !toggleButton) return;
+
+    toggleButton.addEventListener('click', function () {
+        const showPassword = passwordInput.type === 'password';
+        passwordInput.type = showPassword ? 'text' : 'password';
+        const label = showPassword ? '隐藏密码' : '显示密码';
+        toggleButton.setAttribute('aria-label', label);
+        toggleButton.setAttribute('title', label);
+        toggleButton.setAttribute('aria-pressed', String(showPassword));
+        passwordInput.focus({ preventScroll: true });
+    });
+})();
+</script>
 
 
-    <!-- ========================= -->
-    <!-- 页面底部 -->
-    <!-- ========================= -->
+<style>
+/* ==========================================
+   MusicFlow 2.0 注册页左侧背景升级
+   仅在 register.html 中生效
+   ========================================== */
 
-    <div class="login-page-bottom">
+.login-intro {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
 
-        <span>♫</span>
+    background:
+        radial-gradient(
+            circle at 82% 31%,
+            rgba(186, 99, 255, 0.58) 0%,
+            rgba(132, 59, 218, 0.25) 28%,
+            transparent 58%
+        ),
+        radial-gradient(
+            circle at 16% 92%,
+            rgba(118, 65, 255, 0.42),
+            transparent 48%
+        ),
+        linear-gradient(
+            135deg,
+            #151b49 0%,
+            #281950 38%,
+            #55298a 75%,
+            #36155f 100%
+        ) !important;
 
-        用音乐记录心情，让推荐更懂你的喜好。
+    border: 1px solid rgba(176, 136, 255, 0.35);
+}
 
-    </div>
+/* 底部紫色流光曲线 */
 
-</div>
+.login-intro::before {
+    content: "";
+    position: absolute;
+
+    width: 155%;
+    height: 48%;
+
+    left: -25%;
+    bottom: -23%;
+
+    border-top: 2px solid rgba(211, 159, 255, 0.75);
+
+    border-radius: 55% 45% 0 0;
+
+    transform: rotate(-16deg);
+
+    background: linear-gradient(
+        to bottom,
+        rgba(173, 91, 255, 0.18),
+        rgba(107, 40, 209, 0.48)
+    );
+
+    box-shadow:
+        0 -8px 35px rgba(178, 94, 255, 0.25),
+        0 -2px 8px rgba(212, 164, 255, 0.35);
+
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* 顶部弧形渐变装饰 */
+
+.login-intro::after {
+    content: "";
+    position: absolute;
+
+    width: 150%;
+    height: 52%;
+
+    left: -19%;
+    top: -40%;
+
+    border-bottom: 2px solid rgba(175, 112, 255, 0.42);
+
+    border-radius: 0 0 55% 50%;
+
+    transform: rotate(-15deg);
+
+    background: linear-gradient(
+        to bottom,
+        rgba(16, 16, 58, 0.08),
+        rgba(26, 12, 76, 0.32)
+    );
+
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* 保证文字和图标位于装饰层上方 */
+
+.login-intro-content,
+.login-intro-decoration {
+    position: relative;
+    z-index: 1;
+}
+
+/* 原有音乐符号变得更加柔和 */
+
+.login-intro-decoration {
+    opacity: 0.28;
+    filter: drop-shadow(
+        0 0 24px rgba(187, 131, 255, 0.45)
+    );
+}
+</style>
 
 {% endblock %}

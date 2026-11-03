@@ -1,463 +1,276 @@
-
 {% extends "base.html" %}
 
-{% block title %}个性化背景设置{% endblock %}
+{% block title %}背景个性化设置 · MusicFlow{% endblock %}
 
 {% block content %}
+<style>
+/* MusicFlow 2.0 背景设置：全部样式限定在本页，不修改全站 CSS */
+.mf-bg-page, .mf-bg-page * { box-sizing: border-box; }
+.mf-bg-page { max-width: 1090px; margin: 34px auto 78px; color: #f5f3ff; font-family: inherit; }
+.mf-bg-page a { text-decoration: none; }
+.mf-bg-page button, .mf-bg-page input { font: inherit; }
+.mf-bg-page .mf-bg-eyebrow { display: inline-flex; align-items: center; gap: 8px; color: #c4a7ff; font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; }
+.mf-bg-page .mf-bg-eyebrow::before { content: ''; display: block; width: 8px; height: 8px; border-radius: 50%; background: #6fe7c9; box-shadow: 0 0 0 4px rgba(111,231,201,.1); }
+.mf-bg-page .mf-bg-hero { position: relative; display: flex; align-items: center; justify-content: space-between; min-height: 212px; overflow: hidden; padding: 35px 42px; border: 1px solid rgba(169,146,255,.24); border-radius: 25px; background: linear-gradient(115deg,#1c2444 0%,#292047 54%,#55327a 100%); }
+.mf-bg-page .mf-bg-hero::after { content: ''; position: absolute; right: -140px; top: -180px; width: 470px; height: 470px; border-radius: 50%; border: 1px solid rgba(222,204,255,.1); box-shadow: 0 0 0 60px rgba(208,167,255,.025),0 0 0 120px rgba(208,167,255,.02); pointer-events: none; }
+.mf-bg-page .mf-bg-hero-copy { max-width: 690px; position: relative; z-index: 1; }
+.mf-bg-page .mf-bg-hero h1 { font-size: clamp(29px,3.1vw,42px); line-height: 1.2; letter-spacing: -.8px; margin: 14px 0 11px; font-weight: 800; color: #fff; }
+.mf-bg-page .mf-bg-hero p { font-size: 14px; line-height: 1.85; margin: 0; color: #d1cdec; }
+.mf-bg-page .mf-bg-hero-art { position: relative; z-index: 1; width: 142px; height: 142px; flex-shrink: 0; border-radius: 50%; border: 8px solid #11142a; background: repeating-radial-gradient(circle at center,#16182f 0 7px,#22213f 8px 10px); box-shadow: 0 16px 36px rgba(0,0,0,.24); display: flex; justify-content: center; align-items: center; margin: 0 20px; }
+.mf-bg-page .mf-bg-hero-art::after { content: '♫'; display: grid; place-items: center; width: 60px; height: 60px; background: linear-gradient(150deg,#a58cff,#7250df); border-radius: 50%; font-size: 34px; color: white; }
+.mf-bg-page .mf-bg-main-grid { margin-top: 25px; display: grid; grid-template-columns: minmax(0,1.22fr) minmax(300px,.85fr); gap: 18px; align-items: start; }
+.mf-bg-page .mf-bg-panel { min-width: 0; border: 1px solid rgba(162,150,215,.16); border-radius: 21px; background: linear-gradient(155deg,#1d2440,#171b31); box-shadow: 0 16px 44px rgba(0,0,0,.075); padding: 26px; }
+.mf-bg-page .mf-bg-panel-top { display: flex; gap: 13px; align-items: center; margin-bottom: 20px; }
+.mf-bg-page .mf-bg-panel-icon { width: 45px; height: 45px; display: grid; place-items: center; border-radius: 13px; background: #393163; color: #baa0ff; font-size: 23px; flex-shrink: 0; }
+.mf-bg-page .mf-bg-panel-top h2 { margin: 0 0 5px; font-size: 19px; font-weight: 800; color: #fff; }
+.mf-bg-page .mf-bg-panel-top p { margin: 0; color: #aeb5d5; font-size: 12px; }
+.mf-bg-page .mf-bg-file-zone { display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; padding: 25px 20px; border: 1.5px dashed #7165ad; border-radius: 17px; background: linear-gradient(130deg,rgba(139,92,246,.11),rgba(139,92,246,.035)); }
+.mf-bg-page .mf-bg-upload-symbol { display: grid; place-items: center; width: 55px; height: 55px; border-radius: 15px; color: #fff; background: linear-gradient(130deg,#7960e0,#aa72ef); font-size: 28px; }
+.mf-bg-page .mf-bg-file-zone h3 { margin: 0; color: #fff; font-size: 17px; }
+.mf-bg-page .mf-bg-file-zone p { margin: -4px 0 2px; color: #bbc1df; font-size: 12px; line-height: 1.65; }
+.mf-bg-page .mf-bg-pick { display: inline-flex; justify-content: center; align-items: center; gap: 8px; padding: 11px 22px; border-radius: 11px; background: #34305d; border: 1px solid #7664b3; color: #e5ddff; font-size: 13px; font-weight: 800; cursor: pointer; transition: background .2s,transform .2s; }
+.mf-bg-page .mf-bg-pick:hover { background: #504087; transform: translateY(-1px); }
+.mf-bg-page .mf-bg-file-input { position: absolute; width: 1px; height: 1px; opacity: 0; overflow: hidden; clip-path: inset(50%); }
+.mf-bg-page .mf-bg-file-input:focus-visible + .mf-bg-pick { outline: 3px solid #c7afff; outline-offset: 3px; }
+.mf-bg-page .mf-bg-file-detail { color: #b3b9d6; font-size: 12px; max-width: 100%; overflow-wrap: anywhere; }
+.mf-bg-page .mf-bg-file-detail[data-state='error'] { color: #ff9ab1; }
+.mf-bg-page .mf-bg-file-detail[data-state='success'] { color: #83e6c4; }
+.mf-bg-page .mf-bg-preview { width: 100%; max-height: 180px; border: 1px solid rgba(177,154,251,.26); border-radius: 12px; overflow: hidden; background: #0b0e1f; }
+.mf-bg-page .mf-bg-preview[hidden] { display: none !important; }
+.mf-bg-page .mf-bg-preview img, .mf-bg-page .mf-bg-preview video { display: block; width: 100%; max-height: 180px; object-fit: contain; }
+.mf-bg-page .mf-bg-preview img[hidden], .mf-bg-page .mf-bg-preview video[hidden] { display:none !important; }
+.mf-bg-page .mf-bg-upload-submit { margin-top: 15px; display: block; width: 100%; min-height: 48px; border: 0; border-radius: 12px; color: #fff; font-size: 14px; font-weight: 800; cursor: pointer; background: linear-gradient(110deg,#7258dc,#a060ec); box-shadow: 0 10px 25px rgba(102,77,219,.16); transition: filter .2s,transform .2s; }
+.mf-bg-page .mf-bg-upload-submit:hover { filter: brightness(1.12); transform: translateY(-1px); }
+.mf-bg-page .mf-bg-upload-submit:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+.mf-bg-page .mf-bg-upload-note { color: #aeb3d0; margin: 12px 0 0; text-align: center; font-size: 11px; line-height: 1.7; }
+.mf-bg-page .mf-bg-current { display: flex; flex-direction: column; }
+.mf-bg-page .mf-bg-status { display: inline-flex; padding: 5px 10px; border: 1px solid rgba(160,144,232,.18); background: rgba(126,99,200,.17); color: #dccfff; font-size: 11px; border-radius: 50px; align-self: flex-start; }
+.mf-bg-page .mf-bg-current-media { width: 100%; min-height: 171px; max-height: 260px; margin: 17px 0; overflow: hidden; border-radius: 14px; background: linear-gradient(130deg,#0f1428,#242142); border: 1px solid rgba(163,148,224,.17); display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.mf-bg-page .mf-bg-current-media img, .mf-bg-page .mf-bg-current-media video { display: block; width: 100%; max-height: 258px; object-fit: contain; }
+.mf-bg-page .mf-bg-current-media .mf-bg-default-icon { display: grid; place-items: center; background: #393065; width: 72px; height: 72px; border-radius: 18px; color: #c7b0ff; font-size: 36px; margin-bottom: 15px; }
+.mf-bg-page .mf-bg-current-media strong { font-size: 15px; color: #f5f3ff; }
+.mf-bg-page .mf-bg-current-media span { font-size: 12px; color: #b2b6d4; margin: 7px 0 18px; text-align: center; padding: 0 12px; }
+.mf-bg-page .mf-bg-current-details { display: grid; gap: 10px; }
+.mf-bg-page .mf-bg-detail-line { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; font-size: 12px; color: #b7bcda; }
+.mf-bg-page .mf-bg-detail-line strong { color: #e8e4fc; text-align: right; max-width: 68%; overflow-wrap: anywhere; }
+.mf-bg-page .mf-bg-reset-wrap { margin-top: 20px; padding-top: 17px; border-top: 1px solid rgba(163,151,207,.19); display: flex; gap: 12px; align-items: center; justify-content: space-between; }
+.mf-bg-page .mf-bg-reset-hint { margin: 0; max-width: 190px; color: #aeb3d0; font-size: 11px; line-height: 1.6; }
+.mf-bg-page .mf-bg-reset-btn { padding: 10px 13px; border: 1px solid rgba(255,121,155,.42); border-radius: 10px; background: rgba(118,41,66,.24); color: #ffadbd; font-size: 12px; cursor: pointer; font-weight: 800; white-space: nowrap; }
+.mf-bg-page .mf-bg-reset-btn:hover { background: rgba(141,51,78,.38); }
+.mf-bg-page .mf-bg-formats { margin-top: 20px; border: 1px solid rgba(162,150,215,.16); border-radius: 19px; background: rgba(25,29,51,.88); padding: 21px 24px; }
+.mf-bg-page .mf-bg-formats-header { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 17px; }
+.mf-bg-page .mf-bg-formats-header h2 { color: #f8f6ff; margin: 0; font-size: 17px; }
+.mf-bg-page .mf-bg-formats-header p { color: #aeb5d3; font-size: 12px; margin: 0; }
+.mf-bg-page .mf-bg-format-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 10px; }
+.mf-bg-page .mf-bg-format { padding: 15px 16px; border-radius: 12px; border: 1px solid rgba(164,151,226,.16); background: #202640; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.mf-bg-page .mf-bg-format span { color: #b89aff; font-size: 19px; }
+.mf-bg-page .mf-bg-format strong { color: #f2eeff; font-size: 12px; }
+.mf-bg-page .mf-bg-format small { display: block; color: #aab2d5; font-size: 11px; width: 100%; }
+.mf-bg-page .mf-bg-bottom { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: 18px; color: #aeb5d0; font-size: 12px; }
+.mf-bg-page .mf-bg-back { display: inline-flex; padding: 10px 15px; background: rgba(126,102,215,.15); border: 1px solid rgba(168,150,240,.35); color: #d7c4ff; border-radius: 10px; font-size: 12px; font-weight: 700; }
+.mf-bg-page .mf-bg-back:hover { background: rgba(126,102,215,.28); }
+.mf-bg-page button:focus-visible, .mf-bg-page a:focus-visible, .mf-bg-page label:focus-visible { outline: 3px solid #c7afff; outline-offset: 3px; }
+@media(max-width:820px){
+  .mf-bg-page { margin: 22px auto 58px; }
+  .mf-bg-page .mf-bg-hero { padding: 29px 27px; min-height: auto; }
+  .mf-bg-page .mf-bg-hero-art { width: 106px; height: 106px; margin: 0 0 0 12px; }
+  .mf-bg-page .mf-bg-hero-art::after { width: 46px; height: 46px; font-size: 25px; }
+  .mf-bg-page .mf-bg-main-grid { grid-template-columns: 1fr; }
+}
+@media(max-width:540px){
+  .mf-bg-page .mf-bg-hero { padding: 27px 21px; }
+  .mf-bg-page .mf-bg-hero-art { display: none; }
+  .mf-bg-page .mf-bg-hero h1 { font-size: 29px; }
+  .mf-bg-page .mf-bg-panel { padding: 19px; }
+  .mf-bg-page .mf-bg-file-zone { padding: 20px 12px; }
+  .mf-bg-page .mf-bg-format-grid { grid-template-columns: 1fr; }
+  .mf-bg-page .mf-bg-formats { padding: 18px; }
+  .mf-bg-page .mf-bg-formats-header, .mf-bg-page .mf-bg-bottom { align-items: flex-start; flex-direction: column; }
+  .mf-bg-page .mf-bg-reset-wrap { align-items: flex-start; flex-direction: column; }
+}
+@media(prefers-reduced-motion:reduce){ .mf-bg-page .mf-bg-pick,.mf-bg-page .mf-bg-upload-submit { transition:none; } }
+</style>
 
-<div class="background-page">
-
-    <!-- ========================= -->
-    <!-- 顶部欢迎横幅 -->
-    <!-- ========================= -->
-
-    <section class="background-hero">
-
-        <div class="background-hero-content">
-
-            <span class="background-subtitle">
-                PERSONALIZE YOUR SPACE
-            </span>
-
-            <h1>
-                ♫ 打造专属音乐空间
-            </h1>
-
-            <p>
-                音乐有自己的风格，
-                你的音乐空间也可以与众不同。
-
-                上传喜欢的图片、GIF 动图或视频，
-                为网站设置属于自己的个性化背景。
-            </p>
-
-            <div class="background-hero-badge">
-                ♪ 让每一次聆听都有独特的氛围
-            </div>
-
+<div class="mf-bg-page">
+    <header class="mf-bg-hero">
+        <div class="mf-bg-hero-copy">
+            <span class="mf-bg-eyebrow">PERSONALIZE YOUR SPACE</span>
+            <h1>让音乐空间，更有你的风格。</h1>
+            <p>选择喜欢的图片、GIF 动图或视频作为背景。音乐是你的，氛围也由你决定。</p>
         </div>
+        <div class="mf-bg-hero-art" aria-hidden="true"></div>
+    </header>
 
-        <div class="background-hero-decoration"
-             aria-hidden="true">
-            ✦
-        </div>
-
-    </section>
-
-
-    <!-- ========================= -->
-    <!-- 背景上传设置 -->
-    <!-- ========================= -->
-
-    <section class="background-section">
-
-        <div class="background-section-heading">
-
-            <span class="background-subtitle">
-                CUSTOMIZE BACKGROUND
-            </span>
-
-            <h2>上传个性化背景</h2>
-
-            <p>
-                从你的电脑中选择喜欢的背景文件，
-                上传后即可应用到音乐推荐系统。
-            </p>
-
-        </div>
-
-
-        <div class="background-upload-panel">
-
-            <div class="background-panel-heading">
-
-                <div class="background-panel-icon">
-                    ♫
-                </div>
-
+    <div class="mf-bg-main-grid">
+        <!-- 表单字段与原版完全一致：POST / action=upload / background_file -->
+        <section class="mf-bg-panel" aria-labelledby="mf-bg-upload-title">
+            <div class="mf-bg-panel-top">
+                <div class="mf-bg-panel-icon" aria-hidden="true">↑</div>
                 <div>
-
-                    <h3>选择你的背景文件</h3>
-
-                    <p>
-                        支持静态图片、动态图片和视频背景。
-                    </p>
-
+                    <h2 id="mf-bg-upload-title">上传个性化背景</h2>
+                    <p>选择本地文件，上传后应用到你的音乐空间</p>
                 </div>
-
             </div>
-
-
-            <!-- 背景文件上传表单 -->
-
-            <form
-                class="background-upload-form"
-                method="POST"
-                enctype="multipart/form-data"
-            >
-
-                <input
-                    type="hidden"
-                    name="action"
-                    value="upload"
-                >
-
-
-                <div class="background-file-area">
-
-                    <div class="background-upload-icon">
-                        ↑
+            <form method="POST" enctype="multipart/form-data" class="mf-bg-upload-form" id="mf-bg-upload-form">
+                <input type="hidden" name="action" value="upload">
+                <div class="mf-bg-file-zone">
+                    <div class="mf-bg-upload-symbol" aria-hidden="true">⇧</div>
+                    <h3>选择你的专属背景</h3>
+                    <p>支持 JPG、JPEG、PNG、WEBP、GIF、MP4、WEBM</p>
+                    <div>
+                        <input class="mf-bg-file-input" type="file" id="background_file"
+                               name="background_file"
+                               accept=".jpg,.jpeg,.png,.webp,.gif,.mp4,.webm" required>
+                        <label class="mf-bg-pick" for="background_file">选择背景文件 →</label>
                     </div>
-
-                    <h3>
-                        上传你的专属背景
-                    </h3>
-
-                    <p>
-                        点击下面的“选择文件”，
-                        从电脑中选择一张图片、
-                        GIF 动图或视频。
-                    </p>
-
-
-                    <div class="background-file-input-wrap">
-
-                        <label for="background_file">
-                            选择背景文件
-                        </label>
-
-                        <input
-                            type="file"
-                            id="background_file"
-                            name="background_file"
-                            accept=".jpg,.jpeg,.png,.webp,.gif,.mp4,.webm"
-                            required
-                        >
-
+                    <div class="mf-bg-file-detail" id="mf-bg-file-detail" role="status" aria-live="polite">尚未选择文件</div>
+                    <div class="mf-bg-preview" id="mf-bg-selected-preview" hidden>
+                        <img id="mf-bg-selected-image" alt="待上传图片的预览" hidden>
+                        <video id="mf-bg-selected-video" controls muted playsinline preload="metadata" hidden></video>
                     </div>
-
                 </div>
-
-
-                <!-- 上传按钮 -->
-
-                <button
-                    type="submit"
-                    class="background-upload-button"
-                >
-                    ♫ 上传并应用背景 →
-                </button>
-
+                <button class="mf-bg-upload-submit" type="submit" id="mf-bg-upload-submit">上传并应用背景 →</button>
+                <p class="mf-bg-upload-note">单个文件最大 50 MB。上传成功后，本页会显示最新的背景状态。</p>
             </form>
+        </section>
 
-        </div>
-
-    </section>
-
-
-    <!-- ========================= -->
-    <!-- 支持的背景类型 -->
-    <!-- ========================= -->
-
-    <section class="background-section">
-
-        <div class="background-section-heading">
-
-            <span class="background-subtitle">
-                SUPPORTED FORMATS
-            </span>
-
-            <h2>支持的背景格式</h2>
-
-            <p>
-                根据个人喜好，
-                选择不同类型的背景文件。
-            </p>
-
-        </div>
-
-
-        <div class="background-format-grid">
-
-            <!-- 静态图片 -->
-
-            <div class="background-format-card">
-
-                <div class="background-format-icon background-icon-purple">
-                    ◈
+        <section class="mf-bg-panel mf-bg-current" aria-labelledby="mf-bg-current-title">
+            <div class="mf-bg-panel-top">
+                <div class="mf-bg-panel-icon" aria-hidden="true">◈</div>
+                <div>
+                    <h2 id="mf-bg-current-title">当前背景</h2>
+                    <p>查看目前正在使用的背景设置</p>
                 </div>
-
-                <h3>静态图片</h3>
-
-                <p>
-                    使用喜欢的照片、
-                    插画或风景图片作为背景。
-                </p>
-
-                <span class="background-format-type">
-                    JPG · JPEG · PNG · WEBP
-                </span>
-
             </div>
-
-
-            <!-- GIF 动图 -->
-
-            <div class="background-format-card">
-
-                <div class="background-format-icon background-icon-pink">
-                    ✦
-                </div>
-
-                <h3>GIF 动态背景</h3>
-
-                <p>
-                    使用动态图片，
-                    让你的音乐空间更加生动。
-                </p>
-
-                <span class="background-format-type">
-                    GIF
-                </span>
-
-            </div>
-
-
-            <!-- 视频背景 -->
-
-            <div class="background-format-card">
-
-                <div class="background-format-icon background-icon-blue">
-                    ▶
-                </div>
-
-                <h3>视频背景</h3>
-
-                <p>
-                    使用喜欢的视频，
-                    营造更丰富的视觉氛围。
-                </p>
-
-                <span class="background-format-type">
-                    MP4 · WEBM
-                </span>
-
-            </div>
-
-        </div>
-
-
-        <div class="background-file-notice">
-
-            <span class="background-notice-icon">
-                !
-            </span>
-
-            <div>
-
-                <strong>上传文件提示</strong>
-
-                <p>
-                    单个文件最大 50MB。
-                    建议优先使用大小适中的图片或视频，
-                    以减少加载等待时间。
-                </p>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- ========================= -->
-    <!-- 当前背景状态 -->
-    <!-- ========================= -->
-
-    <section class="background-section">
-
-        <div class="background-section-heading">
-
-            <span class="background-subtitle">
-                CURRENT APPEARANCE
-            </span>
-
-            <h2>当前背景设置</h2>
-
-            <p>
-                查看正在使用的背景，
-                或恢复系统默认外观。
-            </p>
-
-        </div>
-
-
-        <div class="background-current-panel">
 
             {% if background_type != "default" and background_file %}
-
-            <!-- 已设置个性化背景 -->
-
-            <div class="background-current-heading">
-
-                <div class="background-current-icon">
-                    ✓
+                <span class="mf-bg-status">✓ 已启用自定义背景</span>
+                <div class="mf-bg-current-media">
+                    {% if background_type in ['image', 'gif'] %}
+                        <img src="{{ url_for('static', filename='backgrounds/' ~ background_file) }}" alt="当前使用的背景预览" loading="lazy">
+                    {% elif background_type == 'video' %}
+                        <video controls muted playsinline preload="metadata">
+                            <source src="{{ url_for('static', filename='backgrounds/' ~ background_file) }}">
+                            你的浏览器不支持视频预览。
+                        </video>
+                    {% else %}
+                        <div class="mf-bg-default-icon" aria-hidden="true">♫</div>
+                        <strong>背景已设置</strong>
+                        <span>当前格式暂不支持在此预览</span>
+                    {% endif %}
                 </div>
-
-                <div>
-
-                    <h3>
-                        正在使用个性化背景
-                    </h3>
-
-                    <p>
-                        你的自定义背景已经保存。
-                    </p>
-
+                <div class="mf-bg-current-details">
+                    <div class="mf-bg-detail-line">
+                        <span>背景类型</span>
+                        <strong>
+                            {% if background_type == 'image' %}静态图片
+                            {% elif background_type == 'gif' %}GIF 动态图片
+                            {% elif background_type == 'video' %}视频背景
+                            {% else %}{{ background_type }}{% endif %}
+                        </strong>
+                    </div>
+                    <div class="mf-bg-detail-line">
+                        <span>文件名称</span>
+                        <strong>{{ background_file }}</strong>
+                    </div>
                 </div>
-
-            </div>
-
-
-            <div class="background-current-details">
-
-                <div class="background-detail-item">
-
-                    <span>背景类型</span>
-
-                    <strong>
-                        {% if background_type == "image" %}
-                            静态图片
-                        {% elif background_type == "gif" %}
-                            GIF 动态图片
-                        {% elif background_type == "video" %}
-                            视频背景
-                        {% else %}
-                            {{ background_type }}
-                        {% endif %}
-                    </strong>
-
+                <div class="mf-bg-reset-wrap">
+                    <p class="mf-bg-reset-hint">恢复默认后，可随时重新上传自己喜欢的背景。</p>
+                    <form method="POST" onsubmit="return window.confirm('确定恢复系统默认背景吗？');">
+                        <input type="hidden" name="action" value="reset">
+                        <button type="submit" class="mf-bg-reset-btn">恢复默认背景</button>
+                    </form>
                 </div>
-
-
-                <div class="background-detail-item">
-
-                    <span>当前背景文件</span>
-
-                    <strong class="background-file-name">
-                        {{ background_file }}
-                    </strong>
-
-                </div>
-
-            </div>
-
-
-            <!-- 恢复默认背景 -->
-
-            <div class="background-reset-area">
-
-                <div>
-
-                    <h3>想要恢复默认外观？</h3>
-
-                    <p>
-                        可以随时恢复系统原来的背景，
-                        以后也可以重新上传。
-                    </p>
-
-                </div>
-
-
-                <form
-                    method="POST"
-                    class="background-reset-form"
-                >
-
-                    <input
-                        type="hidden"
-                        name="action"
-                        value="reset"
-                    >
-
-                    <button
-                        type="submit"
-                        class="background-reset-button"
-                    >
-                        恢复默认背景
-                    </button>
-
-                </form>
-
-            </div>
-
-
             {% else %}
-
-            <!-- 当前使用默认背景 -->
-
-            <div class="background-default-state">
-
-                <div class="background-default-icon">
-                    ♫
+                <span class="mf-bg-status">● 系统默认背景</span>
+                <div class="mf-bg-current-media">
+                    <div class="mf-bg-default-icon" aria-hidden="true">♫</div>
+                    <strong>当前使用系统默认背景</strong>
+                    <span>上传一张图片、GIF 或视频，就能换成自己的音乐氛围。</span>
                 </div>
-
-                <h3>
-                    当前使用系统默认背景
-                </h3>
-
-                <p>
-                    你还没有启用自定义背景，
-                    或者已经恢复了系统默认外观。
-                </p>
-
-                <p class="background-muted">
-                    可以使用上方的文件上传功能，
-                    随时切换成喜欢的背景。
-                </p>
-
-            </div>
-
+                <p class="mf-bg-upload-note">目前没有启用自定义背景，无需恢复默认。</p>
             {% endif %}
+        </section>
+    </div>
 
+    <section class="mf-bg-formats" aria-labelledby="mf-bg-formats-title">
+        <div class="mf-bg-formats-header">
+            <h2 id="mf-bg-formats-title">支持的背景格式</h2>
+            <p>推荐选择尺寸适中、画面简洁的文件，以保证页面加载与文字可读性。</p>
         </div>
-
+        <div class="mf-bg-format-grid">
+            <div class="mf-bg-format"><span aria-hidden="true">▧</span><strong>静态图片</strong><small>JPG · JPEG · PNG · WEBP</small></div>
+            <div class="mf-bg-format"><span aria-hidden="true">✦</span><strong>GIF 动态图</strong><small>GIF</small></div>
+            <div class="mf-bg-format"><span aria-hidden="true">▶</span><strong>视频背景</strong><small>MP4 · WEBM</small></div>
+        </div>
     </section>
 
-
-    <!-- ========================= -->
-    <!-- 页面底部引导 -->
-    <!-- ========================= -->
-
-    <section class="background-bottom">
-
-        <div class="background-bottom-content">
-
-            <span class="background-subtitle">
-                MAKE IT YOURS
-            </span>
-
-            <h2>
-                让音乐空间更有个性
-            </h2>
-
-            <p>
-                一张图片、一段动画或一段视频，
-                都可以成为属于你的音乐氛围。
-            </p>
-
-
-            <a
-                class="background-back-button"
-                href="{{ url_for('profile') }}"
-            >
-                ← 返回个人中心
-            </a>
-
-        </div>
-
-    </section>
-
+    <div class="mf-bg-bottom">
+        <span>背景可随时替换；切换背景不会改变你的歌曲评分和推荐记录。</span>
+        <a class="mf-bg-back" href="{{ url_for('profile') }}">← 返回个人中心</a>
+    </div>
 </div>
 
+<script>
+(function () {
+    'use strict';
+    const fileInput = document.getElementById('background_file');
+    const fileDetail = document.getElementById('mf-bg-file-detail');
+    const preview = document.getElementById('mf-bg-selected-preview');
+    const image = document.getElementById('mf-bg-selected-image');
+    const video = document.getElementById('mf-bg-selected-video');
+    const submit = document.getElementById('mf-bg-upload-submit');
+    const form = document.getElementById('mf-bg-upload-form');
+    if (!fileInput || !fileDetail || !preview || !image || !video || !submit || !form) return;
+
+    const maxBytes = 50 * 1024 * 1024;
+    const allowed = new Set(['jpg', 'jpeg', 'png', 'webp', 'gif', 'mp4', 'webm']);
+    let previewUrl = null;
+    function resetPreview() {
+        video.pause();
+        image.removeAttribute('src');
+        video.removeAttribute('src');
+        video.load();
+        image.hidden = true;
+        video.hidden = true;
+        preview.hidden = true;
+        if (previewUrl) { URL.revokeObjectURL(previewUrl); previewUrl = null; }
+    }
+    fileInput.addEventListener('change', function () {
+        resetPreview();
+        submit.disabled = false;
+        fileDetail.dataset.state = '';
+        const file = fileInput.files && fileInput.files[0];
+        if (!file) { fileDetail.textContent = '尚未选择文件'; return; }
+        const ext = file.name.split('.').pop().toLowerCase();
+        if (!allowed.has(ext)) {
+            fileDetail.textContent = '不支持此文件格式，请选择图片、GIF 或视频。';
+            fileDetail.dataset.state = 'error';
+            submit.disabled = true;
+            return;
+        }
+        if (file.size > maxBytes) {
+            fileDetail.textContent = '文件超过 50 MB，请重新选择较小的文件。';
+            fileDetail.dataset.state = 'error';
+            submit.disabled = true;
+            return;
+        }
+        fileDetail.dataset.state = 'success';
+        fileDetail.textContent = file.name + ' · ' + (file.size / 1024 / 1024).toFixed(2) + ' MB';
+        previewUrl = URL.createObjectURL(file);
+        if (ext === 'mp4' || ext === 'webm') {
+            video.src = previewUrl;
+            video.hidden = false;
+        } else {
+            image.src = previewUrl;
+            image.hidden = false;
+        }
+        preview.hidden = false;
+    });
+    form.addEventListener('submit', function (event) {
+        if (submit.disabled) event.preventDefault();
+    });
+    window.addEventListener('pagehide', resetPreview, { once: true });
+})();
+</script>
 {% endblock %}

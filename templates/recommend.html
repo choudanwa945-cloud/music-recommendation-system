@@ -1,419 +1,528 @@
-
 {% extends "base.html" %}
 
-{% block title %}个性化音乐推荐{% endblock %}
+{% block title %}为你推荐 - MusicFlow{% endblock %}
 
 {% block content %}
 
-<div class="recommend-page">
+<style>
+/* MusicFlow 2.0 · 个性化推荐页。只作用于 .mf-rec，暂不修改全站 style.css。 */
+.mf-rec {
+    --rec-bg: #15182a;
+    --rec-panel: rgba(26, 30, 51, .94);
+    --rec-line: rgba(191, 187, 255, .13);
+    --rec-text: #f6f5ff;
+    --rec-muted: #abb0cb;
+    --rec-purple: #a78bfa;
+    --rec-pink: #e3a8eb;
+    color: var(--rec-text);
+    width: 100%;
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 30px 0 78px;
+    box-sizing: border-box;
+}
+.mf-rec *, .mf-rec *::before, .mf-rec *::after { box-sizing: border-box; }
+.mf-rec a { text-decoration: none; }
+.mf-rec button, .mf-rec select { font: inherit; }
+.mf-rec a:focus-visible, .mf-rec button:focus-visible, .mf-rec select:focus-visible {
+    outline: 3px solid #c4b5fd;
+    outline-offset: 3px;
+}
+.mf-rec-top {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    min-height: 232px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 250px;
+    align-items: center;
+    gap: 24px;
+    padding: 36px 44px;
+    border: 1px solid rgba(177, 151, 252, .26);
+    border-radius: 26px;
+    background: linear-gradient(117deg, #1b2244 0%, #222044 53%, #482870 100%);
+    box-shadow: 0 22px 52px rgba(0, 0, 0, .16);
+}
+.mf-rec-top::after {
+    content: "";
+    position: absolute;
+    inset: auto -100px -180px auto;
+    width: 440px;
+    height: 440px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(183, 134, 255, .24), transparent 69%);
+    z-index: -1;
+}
+.mf-rec-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #c7b8ff;
+    letter-spacing: .15em;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+.mf-rec-kicker::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    background: #6ee7be;
+    border-radius: 50%;
+    box-shadow: 0 0 0 4px rgba(110, 231, 190, .09);
+}
+.mf-rec-top h1 {
+    font-size: clamp(28px, 3.1vw, 42px);
+    margin: 14px 0 12px;
+    line-height: 1.22;
+    letter-spacing: -.035em;
+    font-weight: 850;
+    color: #fff;
+}
+.mf-rec-top h1 span { color: #bdadff; }
+.mf-rec-top p { font-size: 14px; line-height: 1.85; color: #c7c7de; margin: 0; max-width: 560px; }
+.mf-rec-top-bottom { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+.mf-rec-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 13px;
+    border-radius: 999px;
+    border: 1px solid rgba(225, 220, 255, .2);
+    background: rgba(255,255,255,.08);
+    color: #ece7ff;
+    font-size: 12px;
+}
+.mf-rec-chip strong { font-weight: 750; }
+.mf-rec-top-art { position: relative; min-height: 184px; display: grid; place-items: center; }
+.mf-rec-orbit {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    border: 1px solid rgba(213,193,255,.18);
+    border-radius: 50%;
+    transform: rotate(-22deg) scaleX(1.14);
+}
+.mf-rec-orbit::before, .mf-rec-orbit::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    background: #c7a8ff;
+}
+.mf-rec-orbit::before { top: 10px; right: 20px; width: 8px; height: 8px; }
+.mf-rec-orbit::after { bottom: 25px; left: 9px; width: 5px; height: 5px; }
+.mf-rec-disc {
+    width: 146px;
+    height: 146px;
+    border-radius: 50%;
+    background: repeating-radial-gradient(circle, #121427 0 3px, #1c1a32 4px 7px, #131627 8px 11px);
+    border: 6px solid #111327;
+    box-shadow: 0 12px 35px rgba(5, 7, 19, .45), 0 0 0 1px rgba(255,255,255,.1);
+    display: grid;
+    place-items: center;
+    transform: rotate(-13deg);
+}
+.mf-rec-disc-center {
+    width: 65px;
+    height: 65px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 28px;
+    background: linear-gradient(140deg, #ae8dff, #6554d4);
+}
+.mf-rec-section { margin-top: 30px; }
+.mf-rec-section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 17px;
+}
+.mf-rec-eyebrow { color: #b39afc; font-size: 11px; letter-spacing: .15em; font-weight: 800; }
+.mf-rec-section h2 { color: var(--rec-text); font-size: 25px; line-height: 1.3; margin: 6px 0 5px; letter-spacing: -.025em; }
+.mf-rec-section-note { color: var(--rec-muted); font-size: 13px; line-height: 1.6; margin: 0; }
+.mf-rec-textlink { color: #c9b6ff; font-size: 13px; font-weight: 700; }
+.mf-rec-textlink:hover { color: #fff; }
+.mf-rec-count {
+    padding: 8px 13px;
+    border: 1px solid var(--rec-line);
+    border-radius: 999px;
+    background: rgba(164, 142, 242, .1);
+    color: #d6c7ff;
+    font-size: 12px;
+    font-weight: 750;
+}
+.mf-rec-list { display: grid; gap: 12px; }
+.mf-rec-track {
+    display: grid;
+    grid-template-columns: 34px 80px minmax(0, 1fr) minmax(215px, 285px);
+    align-items: center;
+    gap: 18px;
+    border: 1px solid var(--rec-line);
+    border-radius: 20px;
+    padding: 18px 20px;
+    background: var(--rec-panel);
+    transition: border-color .2s ease, background .2s ease, transform .2s ease;
+}
+.mf-rec-track:hover {
+    border-color: rgba(177, 151, 252, .38);
+    background: rgba(34, 36, 63, .97);
+    transform: translateY(-1px);
+}
+.mf-rec-rank { color: #b4a6ee; font-size: 13px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.mf-rec-cover {
+    width: 80px;
+    height: 80px;
+    overflow: hidden;
+    border-radius: 13px;
+    background: linear-gradient(135deg, #373264, #6a4bad);
+    display: grid;
+    place-items: center;
+    color: #e2d4ff;
+    font-size: 27px;
+}
+.mf-rec-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.mf-rec-info { min-width: 0; }
+.mf-rec-titleline { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.mf-rec-songtitle {
+    color: var(--rec-text);
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.45;
+    font-weight: 800;
+    overflow-wrap: anywhere;
+}
+.mf-rec-label {
+    display: inline-block;
+    padding: 4px 7px;
+    border-radius: 6px;
+    background: rgba(161, 133, 249, .14);
+    color: #b8a4ff;
+    font-weight: 700;
+    font-size: 10px;
+}
+.mf-rec-artist { margin: 5px 0 10px; font-size: 13px; color: #bdc2dc; }
+.mf-rec-metadata { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.mf-rec-meta-pill { padding: 5px 8px; border-radius: 6px; background: #292a44; font-size: 11px; color: #d0c9f0; }
+.mf-rec-tags { font-size: 11px; color: var(--rec-muted); overflow-wrap: anywhere; }
+.mf-rec-reasons { display: flex; flex-wrap: wrap; gap: 8px 14px; margin-top: 12px; }
+.mf-rec-reason { font-size: 11px; color: #aeb4d3; }
+.mf-rec-reason b { color: #e0ccff; font-weight: 750; }
+.mf-rec-actions { min-width: 0; display: grid; gap: 12px; }
+.mf-rec-audio { width: 100%; height: 38px; display: block; color-scheme: dark; }
+.mf-rec-noaudio { font-size: 12px; color: #a9aec8; }
+.mf-rec-rate { display: flex; align-items: center; gap: 8px; margin: 0; }
+.mf-rec-rate label { font-size: 12px; white-space: nowrap; color: #b9bad0; }
+.mf-rec-rate select {
+    min-width: 0;
+    flex: 1 1 auto;
+    height: 36px;
+    color: #e9e8ff;
+    background: #22233d;
+    border: 1px solid rgba(200,192,255,.2);
+    border-radius: 9px;
+    padding: 0 7px;
+    font-size: 12px;
+}
+.mf-rec-rate button {
+    border: none;
+    border-radius: 9px;
+    height: 36px;
+    padding: 0 12px;
+    color: #21113f;
+    background: #b59aff;
+    font-size: 12px;
+    font-weight: 800;
+    white-space: nowrap;
+    cursor: pointer;
+}
+.mf-rec-rate button:hover { background: #cbb7ff; }
+.mf-rec-empty {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(240px, .85fr);
+    gap: 0;
+    background: linear-gradient(132deg, #1c203c, #22213d 80%);
+    border: 1px solid rgba(186, 161, 251, .24);
+    border-radius: 22px;
+    overflow: hidden;
+}
+.mf-rec-empty-main { padding: 35px 34px; }
+.mf-rec-empty-icon {
+    display: grid;
+    place-items: center;
+    width: 55px;
+    height: 55px;
+    background: linear-gradient(140deg, #7753d0, #9d79ea);
+    color: white;
+    border-radius: 16px;
+    font-size: 28px;
+    margin-bottom: 18px;
+}
+.mf-rec-empty h3 { color: #f5f3ff; font-size: 23px; margin: 0 0 10px; }
+.mf-rec-empty p { margin: 0; line-height: 1.85; color: #bfc0d8; font-size: 13px; }
+.mf-rec-buttons { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 23px; }
+.mf-rec-button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: 10px;
+    padding: 11px 16px;
+    font-weight: 800;
+    font-size: 13px;
+    background: #b39afb;
+    color: #1c1635 !important;
+    transition: background .18s ease;
+}
+.mf-rec-button:hover { background: #d2c1ff; }
+.mf-rec-button.secondary { color: #e9e5ff !important; background: rgba(255,255,255,.06); }
+.mf-rec-button.secondary:hover { background: rgba(255,255,255,.12); }
+.mf-rec-steps {
+    border-left: 1px solid rgba(200,190,255,.13);
+    background: rgba(13, 15, 33, .2);
+    padding: 32px 25px;
+}
+.mf-rec-steps h4 { color: #e6dcff; font-size: 13px; margin: 0 0 20px; }
+.mf-rec-step { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 21px; }
+.mf-rec-step:last-child { margin-bottom: 0; }
+.mf-rec-step-num {
+    flex: 0 0 29px;
+    width: 29px;
+    height: 29px;
+    display: grid;
+    place-items: center;
+    border-radius: 9px;
+    background: rgba(178,148,255,.12);
+    border: 1px solid rgba(178,148,255,.22);
+    color: #ccbbff;
+    font-weight: 800;
+    font-size: 11px;
+}
+.mf-rec-step strong { display: block; font-size: 13px; color: #f4f1ff; margin: 2px 0 5px; }
+.mf-rec-step small { display: block; line-height: 1.6; color: #acb1cb; font-size: 11px; }
+.mf-rec-insight {
+    border: 1px solid var(--rec-line);
+    border-radius: 18px;
+    padding: 23px 25px;
+    background: rgba(21,25,44,.94);
+}
+.mf-rec-similar { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px; }
+.mf-rec-person { display: flex; align-items: center; gap: 10px; padding: 14px; border-radius: 12px; background: #22253c; border: 1px solid rgba(180,160,255,.10); }
+.mf-rec-avatar { flex: 0 0 36px; width: 36px; height: 36px; border-radius: 11px; display: grid; place-items: center; background: #514188; color: #eee5ff; font-size: 17px; }
+.mf-rec-person strong { display: block; color: #f4f2ff; font-size: 13px; overflow-wrap: anywhere; }
+.mf-rec-person small { display: block; color: #aeb3d3; font-size: 11px; margin-top: 4px; }
+.mf-rec-similar-none { display: flex; align-items: center; gap: 10px; color: #acb3cf; font-size: 13px; line-height: 1.7; }
+.mf-rec-similar-none span { color: #bd9fff; font-size: 22px; }
+.mf-rec-footer-cta {
+    margin-top: 26px;
+    display: flex;
+    gap: 16px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 23px 27px;
+    background: rgba(79, 57, 119, .2);
+    border: 1px solid rgba(162, 142, 237, .19);
+    border-radius: 18px;
+}
+.mf-rec-footer-cta h3 { color: #f6f1ff; margin: 0 0 6px; font-size: 18px; }
+.mf-rec-footer-cta p { color: #b5b8d2; font-size: 12px; line-height: 1.7; margin: 0; }
+@media (max-width: 940px) {
+    .mf-rec-track { grid-template-columns: 25px 70px minmax(0,1fr); gap: 13px; }
+    .mf-rec-cover { width:70px; height:70px; }
+    .mf-rec-actions { grid-column: 3; }
+    .mf-rec-top { grid-template-columns: minmax(0,1fr) 170px; padding: 28px; }
+    .mf-rec-orbit { width:145px; height:145px; }
+    .mf-rec-disc { width:120px; height:120px; }
+}
+@media (max-width: 640px) {
+    .mf-rec { padding: 16px 0 56px; }
+    .mf-rec-top { min-height:0; grid-template-columns: 1fr; padding: 27px 22px; border-radius:19px; }
+    .mf-rec-top-art { display:none; }
+    .mf-rec-top h1 { font-size:29px; }
+    .mf-rec-section { margin-top:27px; }
+    .mf-rec-section h2 { font-size:21px; }
+    .mf-rec-track { grid-template-columns: 20px 62px minmax(0,1fr); padding:14px; gap:10px; border-radius:15px; }
+    .mf-rec-cover { width:62px; height:62px; border-radius:10px; }
+    .mf-rec-songtitle { font-size:15px; }
+    .mf-rec-actions { grid-column: 1 / -1; }
+    .mf-rec-rate { flex-wrap: wrap; }
+    .mf-rec-rate label { width:100%; }
+    .mf-rec-empty { grid-template-columns: 1fr; }
+    .mf-rec-empty-main { padding:26px 21px; }
+    .mf-rec-empty h3 { font-size:21px; }
+    .mf-rec-steps { border-left:0; border-top:1px solid var(--rec-line); padding:22px; }
+    .mf-rec-similar { grid-template-columns:1fr; }
+    .mf-rec-insight { padding:19px; }
+    .mf-rec-footer-cta { align-items:flex-start; flex-direction:column; padding:20px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .mf-rec-track, .mf-rec-button { transition:none; }
+    .mf-rec-track:hover { transform:none; }
+}
+</style>
 
-    <!-- ========================= -->
-    <!-- 顶部欢迎横幅 -->
-    <!-- ========================= -->
-    <section class="recommend-hero box">
+<div class="mf-rec">
 
-        <div class="recommend-hero-content">
-
-            <span class="recommend-subtitle">
-                MADE JUST FOR YOU
-            </span>
-
-            <h1>
-                ♫ 发现你的专属音乐
-            </h1>
-
-            <p>
-                基于用户协同过滤算法，
-                分析你的历史评分和相似用户的音乐偏好，
-                为你推荐可能喜欢的歌曲。
-            </p>
-
-            <div class="recommend-user-badge">
-                <span>♪</span>
-                当前用户：
-                {{ session.get('username') }}
+    <!-- 顶部信息：更短，让推荐内容优先进入视野 -->
+    <header class="mf-rec-top">
+        <div>
+            <div class="mf-rec-kicker">CURATED FOR YOU</div>
+            <h1>下一首喜欢的歌，<br><span>从这里开始。</span></h1>
+            <p>根据你的历史评分与系统已有的音乐偏好数据，为你发现可能喜欢的旋律。推荐方式以每首歌曲的实际结果为准。</p>
+            <div class="mf-rec-top-bottom">
+                <span class="mf-rec-chip">♫ 你好，<strong>{{ session.get('username', '音乐爱好者') }}</strong></span>
+                <span class="mf-rec-chip">{{ songs|length if songs else 0 }} 首当前推荐</span>
             </div>
-
         </div>
-
-        <div class="recommend-hero-decoration"
-             aria-hidden="true">
-            ♫
+        <div class="mf-rec-top-art" aria-hidden="true">
+            <div class="mf-rec-orbit"></div>
+            <div class="mf-rec-disc"><div class="mf-rec-disc-center">♫</div></div>
         </div>
+    </header>
 
-    </section>
-
-
-    <!-- ========================= -->
-    <!-- 相似用户分析 -->
-    <!-- ========================= -->
-    <section class="recommend-section">
-
-        <div class="recommend-section-heading">
-
+    <!-- 推荐结果是页面的第一重点 -->
+    <section class="mf-rec-section" aria-labelledby="rec-results-heading">
+        <div class="mf-rec-section-head">
             <div>
-
-                <span class="recommend-subtitle">
-                    LISTENERS LIKE YOU
-                </span>
-
-                <h2>与你兴趣相近的用户</h2>
-
-                <p class="recommend-section-description">
-                    系统根据历史评分计算用户之间的相似度。
-                </p>
-
+                <span class="mf-rec-eyebrow">YOUR DISCOVER MIX</span>
+                <h2 id="rec-results-heading">为你挑选的音乐</h2>
+                <p class="mf-rec-section-note">试听歌曲、查看推荐依据，并为喜欢的音乐留下评分。</p>
             </div>
-
-        </div>
-
-
-        <div class="recommend-similar-box box">
-
-            {% if similar_users %}
-
-            <div class="recommend-similar-grid">
-
-                {% for item in similar_users %}
-
-                <div class="recommend-similar-card">
-
-                    <div class="recommend-similar-avatar">
-                        ♫
-                    </div>
-
-                    <div class="recommend-similar-info">
-
-                        <strong>
-                            用户 {{ item.user_id }}
-                        </strong>
-
-                        <span>
-                            相似度：
-                            {{ item.score }}
-                        </span>
-
-                    </div>
-
-                </div>
-
-                {% endfor %}
-
-            </div>
-
-            {% else %}
-
-            <div class="recommend-similar-empty">
-
-                <span class="recommend-empty-icon">
-                    ♬
-                </span>
-
-                <p>
-                    暂时没有找到有效的相似用户。
-                </p>
-
-                <p class="recommend-muted">
-                    可以尝试为更多歌曲评分，
-                    丰富自己的音乐偏好数据。
-                </p>
-
-            </div>
-
-            {% endif %}
-
-        </div>
-
-    </section>
-
-
-    <!-- ========================= -->
-    <!-- 个性化推荐结果 -->
-    <!-- ========================= -->
-    <section class="recommend-section">
-
-        <div class="recommend-section-heading">
-
-            <div>
-
-                <span class="recommend-subtitle">
-                    RECOMMENDED FOR YOU
-                </span>
-
-                <h2>你的专属推荐歌单</h2>
-
-                <p class="recommend-section-description">
-                    每一首推荐，都来自对你音乐喜好的分析。
-                </p>
-
-            </div>
-
             {% if songs %}
-
-            <span class="recommend-result-count">
-                共 {{ songs | length }} 首推荐歌曲
-            </span>
-
+            <span class="mf-rec-count">{{ songs|length }} 首推荐</span>
             {% endif %}
-
         </div>
-
 
         {% if songs %}
-
-        <div class="recommend-song-list">
-
+        <div class="mf-rec-list">
             {% for song in songs %}
-
-            <div class="song recommend-song">
-
-                <!-- 推荐排名 -->
-                <div class="rank recommend-rank">
-                    {{ loop.index }}
-                </div>
-
-
-                <!-- 歌曲封面 -->
-                <div class="recommend-cover-wrap">
-
+            <article class="mf-rec-track">
+                <div class="mf-rec-rank">{{ '%02d'|format(loop.index) }}</div>
+                <div class="mf-rec-cover">
                     {% if song.cover_file %}
-
-                    <img
-                        class="cover recommend-cover"
-                        src="{{ url_for('static', filename=song.cover_file) }}"
-                        alt="{{ song.title }}"
-                        loading="lazy"
-                    >
-
+                    <img src="{{ url_for('static', filename=song.cover_file) }}" alt="{{ song.title }} 的封面" loading="lazy">
                     {% else %}
-
-                    <div class="recommend-cover-placeholder">
-                        ♫
-                    </div>
-
+                    <span aria-hidden="true">♫</span>
                     {% endif %}
-
                 </div>
-
-
-                <!-- 歌曲详细信息 -->
-                <div class="song-info recommend-song-info">
-
-                    <div class="recommend-song-heading">
-
-                        <h3>
-                            {{ song.title }}
-                        </h3>
-
-                        <span class="recommend-song-badge">
-                            为你推荐
-                        </span>
-
+                <div class="mf-rec-info">
+                    <div class="mf-rec-titleline">
+                        <h3 class="mf-rec-songtitle">{{ song.title }}</h3>
+                        <span class="mf-rec-label">为你推荐</span>
                     </div>
-
-
-                    <p class="recommend-artist">
-                        {{ song.artist }}
-                    </p>
-
-
-                    <!-- 类型和标签 -->
-                    <div class="recommend-song-tags">
-
-                        <span class="recommend-genre">
-                            {{ song.genre }}
-                        </span>
-
-                        {% if song.tags %}
-
-                        <span class="recommend-tags">
-                            {{ song.tags }}
-                        </span>
-
-                        {% endif %}
-
+                    <p class="mf-rec-artist">{{ song.artist }}</p>
+                    <div class="mf-rec-metadata">
+                        {% if song.genre %}<span class="mf-rec-meta-pill">{{ song.genre }}</span>{% endif %}
+                        {% if song.tags %}<span class="mf-rec-tags">{{ song.tags }}</span>{% endif %}
                     </div>
-
-
-                    <!-- 推荐信息 -->
-                    <div class="recommend-score-area">
-
+                    <div class="mf-rec-reasons">
                         {% if song.recommend_type %}
-
-                        <span class="recommend-method">
-                            推荐方式：
-                            {{ song.recommend_type }}
-                        </span>
-
+                        <span class="mf-rec-reason">推荐方式：<b>{{ song.recommend_type }}</b></span>
                         {% endif %}
-
-                        <span class="recommend-score">
-                            ★ 推荐评分：
-                            {{ "%.2f"|format(song.recommend_score) }}
-                        </span>
-
+                        {% if song.recommend_score is defined and song.recommend_score is not none %}
+                        <span class="mf-rec-reason">推荐评分：<b>★ {{ '%.2f'|format(song.recommend_score) }}</b></span>
+                        {% endif %}
                     </div>
-
-
-                    <!-- 在线试听 -->
-                    {% if song.audio_file %}
-
-                    <div class="recommend-audio">
-
-                        <audio controls preload="none">
-
-                            <source
-                                src="{{ url_for('static', filename=song.audio_file) }}"
-                            >
-
-                            你的浏览器不支持音频播放。
-
-                        </audio>
-
-                    </div>
-
-                    {% endif %}
-
-
-                    <!-- 当前用户评分 -->
-                    <form
-                        class="rate-form recommend-rate-form"
-                        action="{{ url_for('rate') }}"
-                        method="post"
-                    >
-
-                        <input
-                            type="hidden"
-                            name="music_id"
-                            value="{{ song.music_id }}"
-                        >
-
-                        <input
-                            type="hidden"
-                            name="next"
-                            value="{{ url_for('recommend') }}"
-                        >
-
-                        <label for="recommend-rating-{{ loop.index }}">
-                            给这首歌评分
-                        </label>
-
-                        <select
-                            id="recommend-rating-{{ loop.index }}"
-                            name="rating"
-                            required
-                        >
-
-                            <option value="">
-                                请选择评分
-                            </option>
-
-                            <option value="5">
-                                ★★★★★ 5 分
-                            </option>
-
-                            <option value="4">
-                                ★★★★ 4 分
-                            </option>
-
-                            <option value="3">
-                                ★★★ 3 分
-                            </option>
-
-                            <option value="2">
-                                ★★ 2 分
-                            </option>
-
-                            <option value="1">
-                                ★ 1 分
-                            </option>
-
-                        </select>
-
-                        <button type="submit">
-                            保存评分
-                        </button>
-
-                    </form>
-
                 </div>
-
-            </div>
-
+                <div class="mf-rec-actions">
+                    {% if song.audio_file %}
+                    <audio class="mf-rec-audio" controls preload="none" aria-label="试听 {{ song.title }}">
+                        <source src="{{ url_for('static', filename=song.audio_file) }}" type="audio/mpeg">
+                        你的浏览器不支持音频播放。
+                    </audio>
+                    {% else %}
+                    <span class="mf-rec-noaudio">这首歌曲暂未提供试听音频</span>
+                    {% endif %}
+                    <form class="mf-rec-rate" action="{{ url_for('rate') }}" method="post">
+                        <input type="hidden" name="music_id" value="{{ song.music_id }}">
+                        <input type="hidden" name="next" value="{{ url_for('recommend') }}">
+                        <label for="mf-rec-rating-{{ loop.index }}">我的评分</label>
+                        <select id="mf-rec-rating-{{ loop.index }}" name="rating" required>
+                            <option value="">选择星级</option>
+                            <option value="5">★★★★★ 5分</option>
+                            <option value="4">★★★★ 4分</option>
+                            <option value="3">★★★ 3分</option>
+                            <option value="2">★★ 2分</option>
+                            <option value="1">★ 1分</option>
+                        </select>
+                        <button type="submit">保存</button>
+                    </form>
+                </div>
+            </article>
             {% endfor %}
-
         </div>
-
-
         {% else %}
-
-        <!-- ========================= -->
-        <!-- 暂无推荐结果 -->
-        <!-- ========================= -->
-        <div class="recommend-empty-state box">
-
-            <div class="recommend-empty-symbol">
-                ♫
+        <!-- 无结果不是“后台正在生成”；清楚解释现状，并引导可执行操作。 -->
+        <div class="mf-rec-empty">
+            <div class="mf-rec-empty-main">
+                <div class="mf-rec-empty-icon" aria-hidden="true">♫</div>
+                <h3>暂时没有可展示的推荐歌曲</h3>
+                <p>这并不代表系统发生故障。当前账号可能还缺少可用的评分信息，或暂时没有符合推荐条件的歌曲。你可以先试听并评价几首音乐，再回来查看结果。</p>
+                <div class="mf-rec-buttons">
+                    <a class="mf-rec-button" href="{{ url_for('library') }}">前往歌曲库评分 ↗</a>
+                    <a class="mf-rec-button secondary" href="{{ url_for('interest') }}">按兴趣探索音乐 →</a>
+                </div>
             </div>
-
-            <h3>
-                你的专属歌单正在等待生成
-            </h3>
-
-            <p>
-                当前暂时没有可展示的个性化推荐结果。
-                可以先前往歌曲库试听音乐，
-                给喜欢的歌曲评分。
-            </p>
-
-            <p class="recommend-muted">
-                当系统积累足够的评分数据后，
-                就能更好地分析你的音乐偏好。
-            </p>
-
-            <a
-                class="button recommend-explore-button"
-                href="{{ url_for('library') }}"
-            >
-                ♫ 前往歌曲库评分 →
-            </a>
-
+            <aside class="mf-rec-steps" aria-label="获得推荐的小建议">
+                <h4>让推荐更了解你的三步</h4>
+                <div class="mf-rec-step">
+                    <div class="mf-rec-step-num">01</div>
+                    <div><strong>发现感兴趣的歌曲</strong><small>浏览已有歌曲，试听不同风格的音乐。</small></div>
+                </div>
+                <div class="mf-rec-step">
+                    <div class="mf-rec-step-num">02</div>
+                    <div><strong>留下真实的评分</strong><small>根据个人喜好给歌曲打分，积累偏好信息。</small></div>
+                </div>
+                <div class="mf-rec-step">
+                    <div class="mf-rec-step-num">03</div>
+                    <div><strong>返回查看推荐</strong><small>有可用结果时，推荐歌曲会显示在这里。</small></div>
+                </div>
+            </aside>
         </div>
-
         {% endif %}
-
     </section>
 
-
-    <!-- ========================= -->
-    <!-- 底部提示 -->
-    <!-- ========================= -->
-    <section class="recommend-bottom box">
-
-        <div class="recommend-bottom-content">
-
-            <span class="recommend-subtitle">
-                KEEP EXPLORING
-            </span>
-
-            <h2>
-                让音乐更懂你
-            </h2>
-
-            <p>
-                持续探索和评分喜欢的歌曲，
-                帮助系统不断更新你的音乐偏好。
-            </p>
-
-            <a
-                class="button recommend-bottom-button"
-                href="{{ url_for('library') }}"
-            >
-                继续探索音乐 →
-            </a>
-
+    <!-- 算法依据后置：仅显示真正由后端计算出的相似用户 -->
+    <section class="mf-rec-section" aria-labelledby="rec-similar-heading">
+        <div class="mf-rec-section-head">
+            <div>
+                <span class="mf-rec-eyebrow">BEHIND THE RECOMMENDATIONS</span>
+                <h2 id="rec-similar-heading">推荐依据 · 相似用户</h2>
+                <p class="mf-rec-section-note">系统根据已有的评分记录计算用户之间的相似程度。</p>
+            </div>
+            <a class="mf-rec-textlink" href="{{ url_for('about') }}">了解推荐原理 ↗</a>
         </div>
+        <div class="mf-rec-insight">
+            {% if similar_users %}
+            <div class="mf-rec-similar">
+                {% for item in similar_users %}
+                <div class="mf-rec-person">
+                    <span class="mf-rec-avatar" aria-hidden="true">♫</span>
+                    <div>
+                        <strong>用户 {{ item.user_id }}</strong>
+                        <small>相似度：{{ item.score }}</small>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="mf-rec-similar-none">
+                <span aria-hidden="true">◎</span>
+                <div>当前没有可展示的相似用户。随着可用评分信息增加，系统可能获得更多计算依据。</div>
+            </div>
+            {% endif %}
+        </div>
+    </section>
 
+    <section class="mf-rec-footer-cta" aria-label="继续探索音乐">
+        <div>
+            <h3>好音乐，值得慢慢发现。</h3>
+            <p>除了个性化推荐，也可以看看热门榜单，发现更多不同风格的歌曲。</p>
+        </div>
+        <a class="mf-rec-button secondary" href="{{ url_for('popular') }}">查看热门榜单 ↗</a>
     </section>
 
 </div>
