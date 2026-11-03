@@ -440,13 +440,32 @@ def save_rating(user_id, music_id, rating):
 
 
 # 数据统计
+
+# 数据统计
 def get_statistics(music, ratings, matrix):
+
+    # 获取歌曲库中全部歌曲编号
+    all_music_ids = (
+        music["music_id"]
+        .dropna()
+        .drop_duplicates()
+        .tolist()
+    )
+
+    # 仅用于统计展示的完整评分矩阵
+    # 没有评分的歌曲列会自动填充为 NaN
+    # 不修改推荐算法实际使用的 matrix
+    full_matrix = matrix.reindex(
+        columns=all_music_ids
+    )
+
+    # 根据完整矩阵重新计算密度
     density = 0
 
-    if matrix.size > 0:
+    if full_matrix.size > 0:
         density = (
-            matrix.notna().sum().sum()
-            / matrix.size
+            full_matrix.notna().sum().sum()
+            / full_matrix.size
             * 100
         )
 
@@ -470,14 +489,15 @@ def get_statistics(music, ratings, matrix):
             ratings["rating"].min(),
 
         "matrix_rows":
-            matrix.shape[0],
+            full_matrix.shape[0],
 
         "matrix_cols":
-            matrix.shape[1],
+            full_matrix.shape[1],
 
         "matrix_density":
             round(density, 2)
     }
+
 
 
 # 一次性初始化全部数据
